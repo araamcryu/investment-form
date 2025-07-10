@@ -1,534 +1,515 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./vars.css">
-  <link rel="stylesheet" href="./style.css">
-  
-  
-  <style>
-   a,
-   button,
-   input,
-   select,
-   h1,
-   h2,
-   h3,
-   h4,
-   h5,
-   * {
-       box-sizing: border-box;
-       margin: 0;
-       padding: 0;
-       border: none;
-       text-decoration: none;
-       background: none;
-   
-       -webkit-font-smoothing: antialiased;
-   }
-   
-   menu, ol, ul {
-       list-style-type: none;
-       margin: 0;
-       padding: 0;
-   }
-   </style>
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엔터테인먼트 투자 요청서 (Final Version)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #1f232d; /* Darker background for more contrast */
+            color: #e2e8f0;
+        }
+        
+        .form-container {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Final Neumorphic section style for a super clean, distinct look */
+        .form-section {
+            background: linear-gradient(145deg, #212530, #1d2129); /* Darker gradient */
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 12px 12px 24px #1a1e26, -12px -12px 24px #242834; /* Adjusted shadow for new background */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #303644; /* Slightly lighter border for subtle definition */
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%;
+            background-color: #1f232d;
+            border: 1px solid #2d3748;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: inset 6px 6px 12px #1a1e26, inset -6px -6px 12px #242834;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6366f1; /* Indigo accent */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), inset 6px 6px 12px #1a1e26, inset -6px -6px 12px #242834;
+        }
+
+        .auto-calc-field {
+            background-color: #1f232d !important;
+            color: #6ee7b7 !important; /* Emerald for calculated values */
+            font-weight: 700;
+            box-shadow: none !important;
+            border: 1px dashed #4a5568;
+        }
+        .auto-calc-field.negative {
+            color: #f87171 !important; /* Red for negative values */
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 8px 8px 16px #1a1e26, -8px -8px 16px #242834;
+        }
+        .btn:active, .btn.active {
+            box-shadow: inset 6px 6px 12px #1a1e26, inset -6px -6px 12px #242834;
+            transform: translateY(2px);
+            color: #a0aec0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #6366f1, #4f46e5);
+            color: white;
+        }
+        .btn-secondary {
+            background: #333a4c;
+            color: #cbd5e1;
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        
+        .bep-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 8px;
+        }
+    </style>
 </head>
-<body>
-  <div class="home-page-desktop">
-    <div class="component-1">
-      <div
-        class="hero-section"
-        style="
-          background: url(hero-section0.png) center;
-          background-size: cover;
-          background-repeat: no-repeat;
-        "
-      >
-        <div class="header">
-          <div class="logo">
-            <img class="isolation-mode" src="isolation-mode0.svg" />
-            <img
-              class="heading-1-strong-helping-non"
-              src="heading-1-strong-helping-non0.svg"
-            />
-          </div>
-          <div class="frame-1321314627">
-            <div class="button">
-              <div class="button2">Services</div>
-            </div>
-            <div class="button">
-              <div class="button2">About Us</div>
-            </div>
-            <div class="button">
-              <div class="button2">Contact Us</div>
-            </div>
-          </div>
-          <div class="button3">
-            <div class="button4">(987)-749-5403</div>
-          </div>
-        </div>
-        <div class="top-content">
-          <div class="heading">
-            <div class="heading-1-strong-helping-non2">
-              <span>
-                <span class="heading-1-strong-helping-non-2-span">
-                  Unlock Your Potential
-                </span>
-                <span class="heading-1-strong-helping-non-2-span2">
-                  <br />
-                  with Strategic Consulting
-                </span>
-              </span>
-            </div>
-            <div
-              class="guiding-your-success-journey-through-expertise-and-innovation"
-            >
-              Guiding Your Success Journey Through Expertise and Innovation
-            </div>
-          </div>
-          <div class="form">
-            <div class="text-field">
-              <div class="icons-email">
-                <img class="group" src="group0.svg" />
-              </div>
-              <div class="enter-your-email-to-get-started">
-                Enter your email to get started
-              </div>
-            </div>
-            <div class="button5">
-              <div class="get-started">Get Started</div>
-              <div class="arrow">
-                <img
-                  class="icons-arrow-up-right"
-                  src="icons-arrow-up-right0.svg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <img class="_2-removebg" src="_2-removebg0.png" />
-      </div>
-      <div class="_3-blocks-section">
-        <div class="heading-1-strong-helping-non3">
-          Are You Running Into These Problems?
-        </div>
-        <div class="_3-columns">
-          <div class="_1-column">
-            <div class="_01">01</div>
-            <div class="heading-1-strong-helping-non4">Stagnant Growth?</div>
-            <div class="heading-1-strong-helping-non5">
-              Unleash your business&#039;s true potential by identifying growth
-              barriers and implementing strategic solutions.
-            </div>
-          </div>
-          <div class="_2-column">
-            <div class="_02">02</div>
-            <div class="heading-1-strong-helping-non4">
-              Operational Inefficiencies?
-            </div>
-            <div class="heading-1-strong-helping-non5">
-              Streamline your operations with our consulting expertise, optimizing
-              processes for enhanced efficiency.
-            </div>
-          </div>
-          <div class="_3-column">
-            <div class="_03">03</div>
-            <div class="heading-1-strong-helping-non4">Market Challenges?</div>
-            <div class="heading-1-strong-helping-non5">
-              Overcome market challenges with tailored strategies designed to
-              position your business for success.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="headline">
-        <div class="heading-1-strong-helping-non6">
-          <span>
-            <span class="heading-1-strong-helping-non-6-span">
-              What we can do
-            </span>
-            <span class="heading-1-strong-helping-non-6-span2">for you?</span>
-          </span>
-        </div>
-      </div>
-      <div class="services">
-        <div class="frame-1000004955">
-          <div class="frame-1000004952">
-            <img class="icons-arrow-right-alt" src="icons-arrow-right-alt0.svg" />
-            <div class="frame-1000004959">
-              <div class="heading-1-strong-helping-non7">
-                Customized Strategy Development
-              </div>
-              <div class="heading-1-strong-helping-non8">
-                Tailor-made strategies to address your unique business challenges
-                and opportunities, ensuring sustainable growth and competitive
-                advantage.
-              </div>
-            </div>
-          </div>
-          <div class="frame-10000049552">
-            <img
-              class="icons-arrow-right-alt2"
-              src="icons-arrow-right-alt1.svg"
-            />
-            <div class="frame-1000004959">
-              <div class="heading-1-strong-helping-non7">
-                Operational Efficiency Optimization
-              </div>
-              <div class="heading-1-strong-helping-non8">
-                Streamline your processes and improve efficiency with our expert
-                guidance, helping you save time and resources.
-              </div>
-            </div>
-          </div>
-          <div class="frame-1000004956">
-            <img
-              class="icons-arrow-right-alt3"
-              src="icons-arrow-right-alt2.svg"
-            />
-            <div class="frame-1000004959">
-              <div class="heading-1-strong-helping-non7">
-                Market Analysis and Insights
-              </div>
-              <div class="heading-1-strong-helping-non8">
-                Gain valuable market insights and stay ahead of the competition
-                with our comprehensive analysis and data-driven recommendations.
-              </div>
-            </div>
-          </div>
-          <div class="frame-1000004957">
-            <img
-              class="icons-arrow-right-alt4"
-              src="icons-arrow-right-alt3.svg"
-            />
-            <div class="frame-1000004959">
-              <div class="heading-1-strong-helping-non7">
-                Leadership and Team Building
-              </div>
-              <div class="heading-1-strong-helping-non8">
-                Enhance your leadership capabilities and foster a high-performing
-                team through our specialized training and development programs.
-              </div>
-            </div>
-          </div>
-          <div class="frame-62">
-            <div class="free-consultation">Free consultation</div>
-            <div class="frame-1000005032">
-              <div class="button6">
-                <div class="button7">Schedule a free call</div>
-                <img
-                  class="icons-arrow-up-right2"
-                  src="icons-arrow-up-right1.svg"
-                />
-              </div>
-              <div class="frame-120">
-                <div class="worth-200-usd">worth 200 USD</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="about-us">
-        <div class="about-us2">
-          <div class="frame-1000005039">
-            <div class="frame-1000005038">
-              <div class="heading-1-strong-helping-non9">Our</div>
-              <img
-                class="icons-arrow-right-alt5"
-                src="icons-arrow-right-alt4.svg"
-              />
-            </div>
-            <div class="heading-1-strong-helping-non10">Approach</div>
-          </div>
-          <div class="frame-1000005037">
-            <div class="heading-1-strong-helping-non11">
-              <span>
-                <span class="heading-1-strong-helping-non-11-span">
-                  Discover our unique consulting methodology that combines
-                  in-depth industry knowledge, innovative thinking, and a
-                  client-centric approach.
-                </span>
-                <span class="heading-1-strong-helping-non-11-span2">
-                  We partner with you every step of the way to ensure your
-                  business reaches its full potential.
-                </span>
-              </span>
-            </div>
-          </div>
-          <img class="_3-removebg" src="_3-removebg0.png" />
-        </div>
-      </div>
-      <div class="testimonials">
-        <div class="frame-1000005041">
-          <div class="heading-1-strong-helping-non12">
-            <span>
-              <span class="heading-1-strong-helping-non-12-span">
-                Client
-                <br />
-              </span>
-              <span class="heading-1-strong-helping-non-12-span2">Success</span>
-              <span class="heading-1-strong-helping-non-12-span">Stories</span>
-            </span>
-          </div>
-          <div class="frame-10000049553">
-            <div class="frame-10000049562">
-              <div class="frame-1000005040">
-                <div class="div">”</div>
-                <div class="heading-1-strong-helping-non13">
-                  Working with Conscellence was a game-changer for us. Their
-                  market analysis and insights helped us navigate challenging
-                  market conditions and seize new opportunities. Thanks to their
-                  expertise, we achieved record-breaking sales last quarter.
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto form-container">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold text-white mb-3">Entertainment Investment Proposal</h1>
+            <p class="text-gray-400 text-lg">데이터 기반의 투자 제안서로 성공을 예측하세요.</p>
+        </header>
+
+        <form id="investment-form">
+            <!-- 1. 공연 정보 섹션 -->
+            <section class="form-section">
+                <h2 class="form-section-title">1. 공연 정보</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                    <div>
+                        <label for="performance-name">공연명 <span class="text-red-400">*</span></label>
+                        <input type="text" id="performance-name" placeholder="예: HALSEY LIVE 2026" required>
+                    </div>
+                    <div>
+                        <label for="venue">공연 장소 <span class="text-red-400">*</span></label>
+                        <input type="text" id="venue" placeholder="예: 인천 Inspire Arena" required>
+                    </div>
+                    <div>
+                        <label for="start-date">공연 시작일 <span class="text-red-400">*</span></label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div>
+                        <label for="artist-name">아티스트명 <span class="text-red-400">*</span></label>
+                        <input type="text" id="artist-name" placeholder="복수 입력 시 쉼표(,)로 구분" required>
+                    </div>
                 </div>
-              </div>
-              <div class="heading-1-strong-helping-non14">
-                Michael Thompson, Founder of EcoGreen Solutions
-              </div>
+            </section>
+            
+            <!-- 2. 투자 조건 및 수익 분석 섹션 -->
+            <section class="form-section">
+                <h2 class="form-section-title">2. 투자 조건 및 수익 분석</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                    <div>
+                        <label for="investment-amount">투자 요청 금액 <span class="text-red-400">*</span></label>
+                        <div class="flex">
+                            <input type="number" id="investment-amount" class="rounded-r-none" placeholder="금액 입력" required>
+                            <select id="currency" class="rounded-l-none">
+                                <option value="KRW">KRW</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
+                        <p id="converted-amount" class="text-sm text-gray-500 mt-2"></p>
+                    </div>
+                     <div>
+                        <label for="investment-period-start">총 투자기간 <span class="text-red-400">*</span></label>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="investment-period-start" required> ~ <input type="date" id="investment-period-end" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="repayment-period-start">원금상환기간 <span class="text-red-400">*</span></label>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="repayment-period-start" required> ~ <input type="date" id="repayment-period-end" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="distribution-period-start">수익분배기간 <span class="text-red-400">*</span></label>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="distribution-period-start" required> ~ <input type="date" id="distribution-period-end" required>
+                        </div>
+                    </div>
+                    <!-- BEP 시나리오 선택 섹션 -->
+                    <div class="md:col-span-2 space-y-4">
+                        <label>손익분기점(BEP) 시나리오</label>
+                        <div id="bep-scenario-buttons" class="flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-secondary bep-btn active" data-rate="auto">자동</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="50">50%</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="60">60%</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="70">70%</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="80">80%</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="90">90%</button>
+                            <button type="button" class="btn btn-secondary bep-btn" data-rate="100">100%</button>
+                        </div>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                            <div>
+                                <label>BEP 매출액</label>
+                                <input type="text" id="bep-amount-display" class="auto-calc-field" readonly>
+                            </div>
+                            <div>
+                                <label>BEP 달성률</label>
+                                <input type="text" id="bep-rate-display" class="auto-calc-field" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                         <div>
+                            <label>티켓 총 예상 매출</label>
+                            <input type="text" id="total-revenue-display" class="auto-calc-field" readonly>
+                        </div>
+                        <div>
+                            <label>예상 총 수익 (세전)</label>
+                            <input type="text" id="estimated-total-profit" class="auto-calc-field" readonly>
+                        </div>
+                        <div>
+                            <label>예상 수익률 (ROI)</label>
+                            <input type="text" id="roi-display" class="auto-calc-field" readonly>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 티켓 판매 계획 섹션 -->
+            <section class="form-section">
+                <h2 class="form-section-title">3. 티켓 판매 계획</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="p-4">구분</th>
+                                <th class="p-4">티켓 종류</th>
+                                <th class="p-4">수량</th>
+                                <th class="p-4">금액 (원)</th>
+                                <th class="p-4">합계</th>
+                                <th class="p-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticket-table-body"></tbody>
+                        <tfoot>
+                            <tr class="border-t-2 border-gray-600 font-bold">
+                                <td class="p-4" colspan="2">총 합계</td>
+                                <td class="p-4" id="total-quantity">0</td>
+                                <td class="p-4"></td>
+                                <td class="p-4" id="total-revenue">0 원</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <button type="button" id="add-ticket-btn" class="btn btn-secondary mt-6">+ 티켓 종류 추가</button>
+            </section>
+            
+            <!-- 4. 주요 비용 섹션 -->
+            <section class="form-section">
+                <h2 class="form-section-title">4. 주요 비용</h2>
+                 <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="p-4">항목</th>
+                                <th class="p-4">금액 (원)</th>
+                                <th class="p-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cost-table-body"></tbody>
+                        <tfoot>
+                            <tr class="border-t-2 border-gray-600 font-bold">
+                                <td class="p-4">총 예상 비용</td>
+                                <td class="p-4" id="total-cost">0 원</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <button type="button" id="add-cost-btn" class="btn btn-secondary mt-6">+ 비용 항목 추가</button>
+            </section>
+
+            <!-- 5. 기타 특이사항 / 추가 요청 -->
+            <section class="form-section">
+                <h2 class="form-section-title">5. 기타 특이사항 / 추가 요청</h2>
+                <div>
+                    <label for="special-notes">예외적 요청, 특수조건 등 자유롭게 서술해주세요.</label>
+                    <textarea id="special-notes" name="special_notes" rows="5" placeholder="예: 투자금의 일부는 특정 항목(예: 아티스트 개런티)에 우선적으로 사용되길 희망합니다."></textarea>
+                </div>
+            </section>
+
+            <!-- 6. 신청자 정보 섹션 -->
+            <section class="form-section">
+                <h2 class="form-section-title">6. 신청자 정보</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                    <div>
+                        <label for="company-name">사업자등록번호 / 법인명 <span class="text-red-400">*</span></label>
+                        <input type="text" id="company-name" required>
+                    </div>
+                    <div>
+                        <label for="contact-person">담당자 연락처 (전화/이메일) <span class="text-red-400">*</span></label>
+                        <input type="text" id="contact-person" placeholder="010-1234-5678 / contact@example.com" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="attachments">예산서 / 계약서 등 첨부파일</label>
+                        <input type="file" id="attachments" class="block w-full text-sm text-gray-400 file:mr-4 file:py-3 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200">
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center mt-16">
+                <button type="submit" class="btn btn-primary text-lg w-full md:w-auto">투자 요청서 제출</button>
             </div>
-            <div class="frame-10000049554">
-              <div class="frame-1000005040">
-                <div class="div2">”</div>
-                <div class="heading-1-strong-helping-non13">
-                  Conscellence transformed our business operations with their
-                  customized strategies. Their team identified key areas for
-                  improvement and provided actionable solutions that significantly
-                  boosted our efficiency and growth. We couldn&#039;t be happier
-                  with the results.
-                </div>
-              </div>
-              <div class="heading-1-strong-helping-non14">
-                Emma Rodriguez, CEO of TrendTech Innovations
-              </div>
-            </div>
-            <div class="frame-10000049572">
-              <div class="frame-1000005040">
-                <div class="div2">”</div>
-                <div class="heading-1-strong-helping-non13">
-                  The leadership training and team-building programs provided by
-                  Conscellence have been invaluable. Our team is now more cohesive
-                  and motivated, and our leaders are better equipped to drive the
-                  company forward. Cons truly understands our needs and delivers
-                  exceptional results.
-                </div>
-              </div>
-              <div class="heading-1-strong-helping-non14">
-                Lisa Nguyen, COO of HealthyBites Inc.
-              </div>
-            </div>
-          </div>
-          <div class="frame-1000005042">
-            <img
-              class="icons-arrow-right-alt6"
-              src="icons-arrow-right-alt5.svg"
-            />
-            <img
-              class="icons-arrow-right-alt7"
-              src="icons-arrow-right-alt6.svg"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="faq-contact-us">
-        <div class="faq-contact-us2">
-          <div class="faq">
-            <div class="heading-1-strong-helping-non15">
-              <span>
-                <span class="heading-1-strong-helping-non-15-span">FAQ</span>
-                <span class="heading-1-strong-helping-non-15-span2">s</span>
-              </span>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  What services does Conscellence offer?
-                </div>
-                <img
-                  class="icons-arrow-right-alt8"
-                  src="icons-arrow-right-alt7.svg"
-                />
-              </div>
-              <div class="answer">
-                <div class="heading-1-strong-helping-non17">
-                  We offer a range of services including Customized Strategy
-                  Development, Operational Efficiency Optimization, Market
-                  Analysis and Insights, and Leadership and Team Building
-                  programs. Each service is tailored to meet the specific needs of
-                  your business.
-                </div>
-              </div>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  How can Conscellence help my business grow?
-                </div>
-                <img
-                  class="icons-arrow-right-alt9"
-                  src="icons-arrow-right-alt8.svg"
-                />
-              </div>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  What industries do you specialize in?
-                </div>
-                <img
-                  class="icons-arrow-right-alt10"
-                  src="icons-arrow-right-alt9.svg"
-                />
-              </div>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  Are your services customized to my business needs?
-                </div>
-                <img
-                  class="icons-arrow-right-alt11"
-                  src="icons-arrow-right-alt10.svg"
-                />
-              </div>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  What is the typical duration of a consulting project?
-                </div>
-                <img
-                  class="icons-arrow-right-alt12"
-                  src="icons-arrow-right-alt11.svg"
-                />
-              </div>
-            </div>
-            <div class="question-and-answer">
-              <div class="question">
-                <div class="heading-1-strong-helping-non16">
-                  How do you ensure the confidentiality of our business
-                  information?
-                </div>
-                <img
-                  class="icons-arrow-right-alt13"
-                  src="icons-arrow-right-alt12.svg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="faq-contact-us3">
-        <div class="contact-us">
-          <div class="frame-1321314612">
-            <div class="frame-1321314626">
-              <div class="frame-1321314620">
-                <div class="frame-1321314619">
-                  <img
-                    class="icons-arrow-right-alt14"
-                    src="icons-arrow-right-alt13.svg"
-                  />
-                  <div class="contact">Contact</div>
-                </div>
-                <div class="us-today">us today</div>
-              </div>
-              <div class="frame-1321314586">
-                <div
-                  class="contact-us-today-to-schedule-a-consultation-and-discover-how-we-can-help-your-business-thrive"
-                >
-                  Contact us today to schedule a consultation and discover how we
-                  can help your business thrive.
-                </div>
-              </div>
-            </div>
-            <div class="frame-1000004987">
-              <div class="frame-1000004986">
-                <div class="fb">
-                  <img class="icon" src="icon0.svg" />
-                </div>
-                <div class="insta">
-                  <img class="icon2" src="icon1.svg" />
-                </div>
-                <div class="linked-in">
-                  <img class="icon3" src="icon2.svg" />
-                </div>
-                <div class="youtube">
-                  <img class="icon4" src="icon3.svg" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="frame-1321314611">
-            <div class="frame-1321314628">
-              <div class="get-a-free-consultation">Get a Free consultation</div>
-              <div class="frame-1321314625">
-                <div class="text-field2">
-                  <div class="icons-email">
-                    <img class="group2" src="group1.svg" />
-                  </div>
-                  <div class="enter-your-email-to-get-started">
-                    Enter your email to get started
-                  </div>
-                </div>
-                <div class="button5">
-                  <div class="get-started">Get Started</div>
-                  <div class="arrow">
-                    <img
-                      class="icons-arrow-up-right3"
-                      src="icons-arrow-up-right2.svg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="frame-1321314623">
-              <div class="frame-1000005142">
-                <img class="isolation-mode2" src="isolation-mode1.svg" />
-                <div class="nav-list-item-link-contacts">(987)-749-5403</div>
-              </div>
-              <div class="frame-1321314621">
-                <div class="icon5">
-                  <img class="vector" src="vector0.svg" />
-                  <img
-                    class="lets-icons-message-fill"
-                    src="lets-icons-message-fill0.svg"
-                  />
-                </div>
-                <div class="nav-list-item-link-contacts">
-                  info@conscellence.com
-                </div>
-              </div>
-              <div class="frame-1321314622">
-                <div class="isolation-mode3">
-                  <img class="vector2" src="vector1.svg" />
-                  <div class="mingcute-location-fill">
-                    <img class="group3" src="group2.svg" />
-                  </div>
-                </div>
-                <div class="nav-list-item-link-contacts">
-                  123 Business Road, Suite 456, City, State, ZIP Code
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="footer">
-        <div class="frame-1321314624">
-          <img class="isolation-mode4" src="isolation-mode3.svg" />
-          <div class="heading-1-strong-helping-non18">Conscellence</div>
-        </div>
-        <div
-          class="all-rights-reserved-2024-cons-consulting-privacy-policy-terms-of-service"
-        >
-          All rights reserved © 2024 Cons Consulting. Privacy Policy | Terms of
-          Service
-        </div>
-      </div>
+        </form>
     </div>
-  </div>
-  
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Element selectors
+            const form = document.getElementById('investment-form');
+            const ticketTableBody = document.getElementById('ticket-table-body');
+            const addTicketBtn = document.getElementById('add-ticket-btn');
+            const costTableBody = document.getElementById('cost-table-body');
+            const addCostBtn = document.getElementById('add-cost-btn');
+            const bepScenarioButtons = document.getElementById('bep-scenario-buttons');
+            
+            const investmentAmountInput = document.getElementById('investment-amount');
+            const currencySelect = document.getElementById('currency');
+
+            const totalQuantityDisplay = document.getElementById('total-quantity');
+            const totalRevenueDisplay = document.getElementById('total-revenue');
+            const totalRevenueDisplay2 = document.getElementById('total-revenue-display');
+            const totalCostDisplay = document.getElementById('total-cost');
+            const convertedAmountDisplay = document.getElementById('converted-amount');
+            const bepAmountDisplay = document.getElementById('bep-amount-display');
+            const bepRateDisplay = document.getElementById('bep-rate-display');
+            const estimatedProfitDisplay = document.getElementById('estimated-total-profit');
+            const roiDisplay = document.getElementById('roi-display');
+
+            // State and constants
+            let ticketRowCount = 0;
+            let bepMode = 'auto'; // 'auto' or 'manual'
+            let manualBepRate = 0;
+            const USD_KRW_RATE = 1350;
+
+            // --- Row Management ---
+            function addTicketRow(defaultType = '') {
+                ticketRowCount++;
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-800';
+                row.innerHTML = `
+                    <td class="p-4 font-semibold text-sm">티켓 ${ticketRowCount}</td>
+                    <td class="p-4"><input type="text" class="ticket-type" placeholder="예: VIP" value="${defaultType}"></td>
+                    <td class="p-4"><input type="number" class="ticket-quantity" placeholder="0" min="0"></td>
+                    <td class="p-4"><input type="number" class="ticket-price" placeholder="0" min="0"></td>
+                    <td class="p-4 ticket-subtotal text-gray-400">0 원</td>
+                    <td class="p-4 text-right">
+                        <button type="button" class="btn btn-danger px-3 py-1 text-xs rounded-lg remove-row-btn">삭제</button>
+                    </td>
+                `;
+                ticketTableBody.appendChild(row);
+            }
+
+            function addCostRow(defaultType = '', defaultAmount = '') {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-800';
+                row.innerHTML = `
+                    <td class="p-4"><input type="text" class="cost-item" placeholder="예: 대관료" value="${defaultType}"></td>
+                    <td class="p-4"><input type="number" class="cost-amount" placeholder="0" min="0" value="${defaultAmount}"></td>
+                    <td class="p-4 text-right">
+                        <button type="button" class="btn btn-danger px-3 py-1 text-xs rounded-lg remove-row-btn">삭제</button>
+                    </td>
+                `;
+                costTableBody.appendChild(row);
+            }
+
+            // --- Formatting ---
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(amount);
+            }
+            
+            function formatNumber(num) {
+                return num.toLocaleString('ko-KR');
+            }
+
+            // --- Core Calculation Logic ---
+            function updateAllCalculations() {
+                const totalRevenue = calculateTicketTotals();
+                const totalCost = calculateCostTotals();
+                updateFinancials(totalRevenue, totalCost);
+            }
+            
+            function calculateTicketTotals() {
+                let totalQuantity = 0;
+                let totalRevenue = 0;
+                ticketTableBody.querySelectorAll('tr').forEach(row => {
+                    const quantity = parseInt(row.querySelector('.ticket-quantity')?.value) || 0;
+                    const price = parseInt(row.querySelector('.ticket-price')?.value) || 0;
+                    const subtotal = quantity * price;
+                    totalQuantity += quantity;
+                    totalRevenue += subtotal;
+                    row.querySelector('.ticket-subtotal').textContent = formatCurrency(subtotal);
+                });
+                totalQuantityDisplay.textContent = formatNumber(totalQuantity);
+                totalRevenueDisplay.textContent = formatCurrency(totalRevenue);
+                totalRevenueDisplay2.value = formatCurrency(totalRevenue);
+                return totalRevenue;
+            }
+
+            function calculateCostTotals() {
+                let totalCost = 0;
+                costTableBody.querySelectorAll('tr').forEach(row => {
+                    const amount = parseInt(row.querySelector('.cost-amount')?.value) || 0;
+                    totalCost += amount;
+                });
+                totalCostDisplay.textContent = formatCurrency(totalCost);
+                return totalCost;
+            }
+            
+            function updateFinancials(totalRevenue, totalCost) {
+                // 1. Calculate Profit
+                const estimatedProfit = totalRevenue - totalCost;
+                estimatedProfitDisplay.value = formatCurrency(estimatedProfit);
+                estimatedProfitDisplay.classList.toggle('negative', estimatedProfit < 0);
+
+                // 2. Calculate BEP (based on mode)
+                if (bepMode === 'auto') {
+                    bepAmountDisplay.value = formatCurrency(totalCost);
+                    if (totalRevenue > 0) {
+                        const bepRate = (totalCost / totalRevenue) * 100;
+                        bepRateDisplay.value = `${bepRate.toFixed(2)}%`;
+                        bepRateDisplay.classList.toggle('negative', bepRate > 100);
+                    } else {
+                        bepRateDisplay.value = 'N/A';
+                        bepRateDisplay.classList.remove('negative');
+                    }
+                } else { // manual mode
+                    const bepAmount = totalRevenue * (manualBepRate / 100);
+                    bepAmountDisplay.value = formatCurrency(bepAmount);
+                    bepRateDisplay.value = `${manualBepRate.toFixed(2)}%`;
+                    bepRateDisplay.classList.remove('negative');
+                }
+
+                // 3. Calculate ROI
+                const investmentAmountKRW = getInvestmentAmountInKRW();
+                if (investmentAmountKRW > 0) {
+                    const roi = (estimatedProfit / investmentAmountKRW) * 100;
+                    roiDisplay.value = `${roi.toFixed(2)}%`;
+                    roiDisplay.classList.toggle('negative', roi < 0);
+                } else {
+                    roiDisplay.value = 'N/A';
+                    roiDisplay.classList.remove('negative');
+                }
+            }
+
+            function getInvestmentAmountInKRW() {
+                const amount = parseFloat(investmentAmountInput.value) || 0;
+                return currencySelect.value === 'USD' ? amount * USD_KRW_RATE : amount;
+            }
+
+            function handleCurrencyChange() {
+                const amount = parseFloat(investmentAmountInput.value) || 0;
+                if (currencySelect.value === 'USD' && amount > 0) {
+                    convertedAmountDisplay.textContent = `약 ${formatCurrency(amount * USD_KRW_RATE)}`;
+                } else {
+                    convertedAmountDisplay.textContent = '';
+                }
+                updateAllCalculations();
+            }
+
+            // --- Event Listeners ---
+            form.addEventListener('input', (e) => {
+                if(e.target.matches('.ticket-quantity, .ticket-price, .cost-amount, #investment-amount')) {
+                    updateAllCalculations();
+                }
+            });
+
+            addTicketBtn.addEventListener('click', () => addTicketRow());
+            addCostBtn.addEventListener('click', () => addCostRow());
+            currencySelect.addEventListener('change', handleCurrencyChange);
+
+            form.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-row-btn')) {
+                    e.target.closest('tr').remove();
+                    updateAllCalculations();
+                }
+            });
+
+            bepScenarioButtons.addEventListener('click', (e) => {
+                const target = e.target.closest('.bep-btn');
+                if (!target) return;
+
+                bepScenarioButtons.querySelectorAll('.bep-btn').forEach(btn => btn.classList.remove('active'));
+                target.classList.add('active');
+
+                const rate = target.dataset.rate;
+                if (rate === 'auto') {
+                    bepMode = 'auto';
+                } else {
+                    bepMode = 'manual';
+                    manualBepRate = parseFloat(rate);
+                }
+                updateAllCalculations();
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('투자 요청서가 성공적으로 제출되었습니다. (데모)');
+            });
+
+            // --- Initialization ---
+            addTicketRow('VIP');
+            addTicketRow('R석');
+            addTicketRow('S석');
+            addCostRow('대관료', '25000000');
+            addCostRow('아티스트 개런티', '50000000');
+            addCostRow('마케팅 및 홍보', '15000000');
+            addCostRow('무대 제작 및 운영', '30000000');
+            updateAllCalculations();
+        });
+    </script>
 </body>
 </html>
