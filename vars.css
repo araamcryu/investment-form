@@ -1,0 +1,123 @@
+/* Figma Styles of your File */
+:root {
+  /* Colors */
+  /* Fonts */
+  --heading-extralarge-font-family: Unbounded-Regular, sans-serif;
+  --heading-extralarge-font-size: 64px;
+  --heading-extralarge-line-height: 110%;
+  --heading-extralarge-font-weight: 400;
+  --heading-extralarge-font-style: normal;
+  --heading-extralargemob-font-family: Unbounded-Regular, sans-serif;
+  --heading-extralargemob-font-size: 48px;
+  --heading-extralargemob-line-height: 110%;
+  --heading-extralargemob-font-weight: 400;
+  --heading-extralargemob-font-style: normal;
+  --heading-h1-font-family: Unbounded-Regular, sans-serif;
+  --heading-h1-font-size: 56px;
+  --heading-h1-line-height: 110%;
+  --heading-h1-font-weight: 400;
+  --heading-h1-font-style: normal;
+  --heading-h1mob-font-family: Unbounded-Regular, sans-serif;
+  --heading-h1mob-font-size: 40px;
+  --heading-h1mob-line-height: 120%;
+  --heading-h1mob-font-weight: 400;
+  --heading-h1mob-font-style: normal;
+  --heading-h2-font-family: Unbounded-Regular, sans-serif;
+  --heading-h2-font-size: 40px;
+  --heading-h2-line-height: 120%;
+  --heading-h2-font-weight: 400;
+  --heading-h2-font-style: normal;
+  --heading-h2mob-font-family: Unbounded-Regular, sans-serif;
+  --heading-h2mob-font-size: 32px;
+  --heading-h2mob-line-height: 120%;
+  --heading-h2mob-font-weight: 400;
+  --heading-h2mob-font-style: normal;
+  --heading-h3-font-family: Montserrat-Bold, sans-serif;
+  --heading-h3-font-size: 24px;
+  --heading-h3-line-height: 150%;
+  --heading-h3-font-weight: 700;
+  --heading-h3-font-style: normal;
+  --heading-h4-font-family: Montserrat-Bold, sans-serif;
+  --heading-h4-font-size: 20px;
+  --heading-h4-line-height: 150%;
+  --heading-h4-font-weight: 700;
+  --heading-h4-font-style: normal;
+  --heading-h5-font-family: Montserrat-Bold, sans-serif;
+  --heading-h5-font-size: 16px;
+  --heading-h5-line-height: 140%;
+  --heading-h5-font-weight: 700;
+  --heading-h5-font-style: normal;
+  --heading-sub1-font-family: Montserrat-Medium, sans-serif;
+  --heading-sub1-font-size: 20px;
+  --heading-sub1-line-height: 150%;
+  --heading-sub1-font-weight: 500;
+  --heading-sub1-font-style: normal;
+  --heading-sub2-font-family: Montserrat-Medium, sans-serif;
+  --heading-sub2-font-size: 18px;
+  --heading-sub2-line-height: 150%;
+  --heading-sub2-font-weight: 500;
+  --heading-sub2-font-style: normal;
+  --body-l-font-family: Montserrat-Medium, sans-serif;
+  --body-l-font-size: 18px;
+  --body-l-line-height: 140%;
+  --body-l-font-weight: 500;
+  --body-l-font-style: normal;
+  --body-m-font-family: Montserrat-Medium, sans-serif;
+  --body-m-font-size: 16px;
+  --body-m-line-height: 140%;
+  --body-m-font-weight: 500;
+  --body-m-font-style: normal;
+  --body-s-font-family: Montserrat-Medium, sans-serif;
+  --body-s-font-size: 14px;
+  --body-s-line-height: 140%;
+  --body-s-font-weight: 500;
+  --body-s-font-style: normal;
+  --body-xs-font-family: Montserrat-Medium, sans-serif;
+  --body-xs-font-size: 12px;
+  --body-xs-line-height: 120%;
+  --body-xs-font-weight: 500;
+  --body-xs-font-style: normal;
+  --button-l-font-family: Montserrat-Bold, sans-serif;
+  --button-l-font-size: 16px;
+  --button-l-line-height: 130%;
+  --button-l-font-weight: 700;
+  --button-l-font-style: normal;
+  --button-m-font-family: Montserrat-Bold, sans-serif;
+  --button-m-font-size: 14px;
+  --button-m-line-height: 130%;
+  --button-m-font-weight: 700;
+  --button-m-font-style: normal;
+  --button-s-font-family: Montserrat-Bold, sans-serif;
+  --button-s-font-size: 12px;
+  --button-s-line-height: 130%;
+  --button-s-font-weight: 700;
+  --button-s-font-style: normal;
+  --button-xs-font-family: Montserrat-Bold, sans-serif;
+  --button-xs-font-size: 10px;
+  --button-xs-line-height: 120%;
+  --button-xs-font-weight: 700;
+  --button-xs-font-style: normal;
+
+  /* Effects */
+  --big-shadow-box-shadow: 40px 60px 100px 0px rgba(7, 11, 52, 0.3);
+  --small-shadow-box-shadow: 10px 20px 50px 0px rgba(7, 11, 52, 0.15);
+}
+/* Figma Color Variables of your File */
+:root,
+[data-collection-1-mode="mode-1"] {
+  /* mode-1 */
+  --blue-gray-900: #0f172a;
+  --blue-gray-800: #1e293b;
+  --blue-gray-700: #334155;
+  --blue-gray-600: #475569;
+  --blue-gray-500: #64748b;
+  --blue-gray-400: #94a3b8;
+  --blue-gray-300: #cbd5e1;
+  --blue-gray-200: #e2e8f0;
+  --blue-gray-100: #f1f5f9;
+  --blue-gray-50: #f8fafc;
+  --primary-main: #0019ff;
+  --base-white: #ffffff;
+  --primary-light: #4a5cff;
+  --base-black: #000000;
+}
