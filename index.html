@@ -1,238 +1,239 @@
-import React, { useState } from "react";
-import emailjs from "@emailjs/browser";
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>엔터테인먼트 투자제안 자동계산</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    body { background: #f7f9fa; font-family: "Noto Sans KR", sans-serif; padding: 20px; }
+    .form-box { max-width: 700px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 36px; box-shadow: 0 2px 8px #0001; }
+    h2 { margin-bottom: 16px; }
+    input, select { margin: 4px 0 10px 0; padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; }
+    .row { margin-bottom: 12px; }
+    label { min-width: 120px; display: inline-block; }
+    button { background: #006afe; color: #fff; border: none; border-radius: 10px; padding: 8px 28px; font-weight: 700; }
+    .result { background: #e8ffe8; margin-top: 24px; padding: 18px; border-radius: 12px; }
+    .flex { display: flex; gap: 12px; align-items: center; }
+    .cost-list, .rev-list, .ticket-list { margin-bottom: 10px; }
+    .cost-list input, .rev-list input, .ticket-list input { width: 90px; }
+    .ticket-list input[type="text"] { width: 60px; }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>엔터테인먼트 투자제안 자동계산·접수 (HTML Only)</h2>
+    <form id="mainForm">
+      <div class="row"><label>사업명:</label><input name="projectName" required></div>
+      <div class="row">
+        <label>사업유형:</label>
+        <input type="checkbox" name="type" value="콘서트">콘서트
+        <input type="checkbox" name="type" value="팬미팅">팬미팅
+        <input type="checkbox" name="type" value="MD수입">MD수입
+        <input type="checkbox" name="type" value="굿즈">굿즈
+        <input type="checkbox" name="type" value="기타">기타
+      </div>
+      <div class="row"><label>아티스트명:</label><input name="artist" required></div>
+      <div class="row"><label>콘서트장 위치:</label><input name="venue" required></div>
+      <div class="row"><label>좌석수:</label><input type="number" name="seatCount" required></div>
 
-const initialCost = [
-  { name: "아티스트 개런티", amount: "" },
-  { name: "대관비용", amount: "" },
-  { name: "연출비용", amount: "" }
-];
-const initialRevenue = [{ name: "티켓수익", amount: "" }];
+      <div class="row">
+        <label>티켓정보:</label>
+        <div class="ticket-list" id="ticketList"></div>
+        <button type="button" onclick="addTicket()">+ 티켓추가</button>
+      </div>
 
-export default function App() {
-  const [projectName, setProjectName] = useState("");
-  const [projectType, setProjectType] = useState([]);
-  const [artist, setArtist] = useState("");
-  const [venue, setVenue] = useState("");
-  const [seatCount, setSeatCount] = useState("");
-  const [ticketTypes, setTicketTypes] = useState([{ type: "", count: "", price: "" }]);
-  const [requestAmount, setRequestAmount] = useState("");
-  const [periods, setPeriods] = useState({
-    showStart: "", showEnd: "",
-    investStart: "", investEnd: "",
-    principalReturnStart: "", principalReturnEnd: "",
-    profitDistStart: "", profitDistEnd: "",
-  });
-  const [investorShare, setInvestorShare] = useState(70);
-  const [ownerShare, setOwnerShare] = useState(30);
-  const [costs, setCosts] = useState(initialCost);
-  const [revenues, setRevenues] = useState(initialRevenue);
-  const [files, setFiles] = useState([]);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+      <div class="row"><label>투자요청금액(KRW):</label><input type="number" name="requestAmount" required></div>
+      <div class="row flex">
+        <label>콘서트 시작:</label><input type="date" name="showStart">
+        <label>종료:</label><input type="date" name="showEnd">
+      </div>
+      <div class="row flex">
+        <label>투자금 운용:</label><input type="date" name="investStart">
+        <label>~</label><input type="date" name="investEnd">
+      </div>
+      <div class="row flex">
+        <label>원금회수:</label><input type="date" name="principalReturnStart">
+        <label>~</label><input type="date" name="principalReturnEnd">
+      </div>
+      <div class="row flex">
+        <label>수익분배:</label><input type="date" name="profitDistStart">
+        <label>~</label><input type="date" name="profitDistEnd">
+      </div>
+      <div class="row flex">
+        <label>수익배분:</label>
+        투자자 <input type="number" name="investorShare" min="0" max="100" value="70" style="width:50px">%
+        사업주체 <input type="number" name="ownerShare" min="0" max="100" value="30" style="width:50px">%
+      </div>
 
-  // 계산
-  const totalCost = costs.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-  const totalRevenue = revenues.reduce((acc, r) => acc + (Number(r.amount) || 0), 0);
-  const ROI = totalCost > 0 ? ((totalRevenue - totalCost) / totalCost * 100).toFixed(2) : 0;
-  const BEP = totalCost > 0 ? totalCost / (ticketTypes.reduce((acc, t) => acc + ((Number(t.price) || 0)), 0) || 1) : 0;
-  const investorProfit = totalRevenue * (investorShare / 100);
-  const ownerProfit = totalRevenue * (ownerShare / 100);
+      <div class="row">
+        <label>비용내역:</label>
+        <div class="cost-list" id="costList"></div>
+        <button type="button" onclick="addCost()">+ 비용추가</button>
+      </div>
+      <div class="row">
+        <label>수익내역:</label>
+        <div class="rev-list" id="revList"></div>
+        <button type="button" onclick="addRev()">+ 수익추가</button>
+      </div>
+      <div class="row">
+        <label>첨부파일:</label>
+        <input type="file" id="fileInput" name="files" multiple>
+      </div>
+      <div class="row">
+        <button type="button" onclick="calculate()">자동계산</button>
+        <button type="submit" id="submitBtn">접수</button>
+      </div>
+    </form>
 
-  // 핸들러
-  const handleType = (type) => {
-    setProjectType((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-  const handleTicketTypes = (idx, key, val) => {
-    const copy = [...ticketTypes];
-    copy[idx][key] = val;
-    setTicketTypes(copy);
-  };
-  const addTicketType = () => setTicketTypes([...ticketTypes, { type: "", count: "", price: "" }]);
-  const handleCost = (idx, key, val) => {
-    const copy = [...costs];
-    copy[idx][key] = val;
-    setCosts(copy);
-  };
-  const addCost = () => setCosts([...costs, { name: "", amount: "" }]);
-  const handleRevenue = (idx, key, val) => {
-    const copy = [...revenues];
-    copy[idx][key] = val;
-    setRevenues(copy);
-  };
-  const addRevenue = () => setRevenues([...revenues, { name: "", amount: "" }]);
-  const handleFile = (e) => setFiles(Array.from(e.target.files));
+    <div class="result" id="result" style="display:none"></div>
+    <div class="result" id="mailResult" style="display:none"></div>
+  </div>
+  <script>
+    // 동적 행 추가용
+    function addCost() {
+      const d = document.createElement("div");
+      d.innerHTML = `<input placeholder="비용명" class="costname"><input type="number" class="costval" placeholder="금액">`;
+      document.getElementById("costList").appendChild(d);
+    }
+    function addRev() {
+      const d = document.createElement("div");
+      d.innerHTML = `<input placeholder="수익명" class="revname"><input type="number" class="revval" placeholder="금액">`;
+      document.getElementById("revList").appendChild(d);
+    }
+    function addTicket() {
+      const d = document.createElement("div");
+      d.innerHTML = `<input type="text" placeholder="종류" class="ticketType">
+        <input type="number" placeholder="좌석수" class="ticketCount">
+        <input type="number" placeholder="금액" class="ticketPrice">`;
+      document.getElementById("ticketList").appendChild(d);
+    }
+    // 기본 비용/수익/티켓 한행
+    window.onload = function() {
+      addCost(); addRev(); addTicket();
+    }
 
-  // EmailJS 전송
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    // 자동계산
+    function calculate() {
+      let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
+      // 비용
+      document.querySelectorAll('.costval').forEach(x => totalCost += Number(x.value || 0));
+      // 수익
+      document.querySelectorAll('.revval').forEach(x => totalRevenue += Number(x.value || 0));
+      // 티켓
+      document.querySelectorAll('.ticketCount').forEach((el, i) => {
+        const price = Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
+        const count = Number(el.value || 0);
+        ticketRevenue += price * count;
+      });
+      totalRevenue += ticketRevenue;
+      // ROI
+      let ROI = totalCost > 0 ? (((totalRevenue - totalCost) / totalCost) * 100).toFixed(2) : "0";
+      // BEP
+      let seatSum = 0, priceSum = 0;
+      document.querySelectorAll('.ticketCount').forEach((el, i) => {
+        seatSum += Number(el.value || 0);
+        priceSum += Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
+      });
+      let BEP = priceSum > 0 ? Math.ceil(totalCost / priceSum) : "0";
+      // 수익배분
+      const investorShare = Number(document.querySelector('input[name=investorShare]').value || 0);
+      const ownerShare = 100 - investorShare;
+      document.querySelector('input[name=ownerShare]').value = ownerShare;
+      const investorProfit = Math.floor(totalRevenue * investorShare / 100);
+      const ownerProfit = Math.floor(totalRevenue * ownerShare / 100);
 
-    // 데이터 요약 생성
-    const formSummary = `
-[사업명] ${projectName}
-[사업유형] ${projectType.join(", ")}
-[아티스트] ${artist}
-[콘서트장] ${venue} (좌석수: ${seatCount})
-[티켓종류] ${ticketTypes.map(t=>`${t.type}: ${t.count}석 × ${t.price}원`).join("; ")}
-[투자요청금액] ${requestAmount}원
+      let html = `
+        총비용: <b>${totalCost.toLocaleString()}원</b><br>
+        총수익: <b>${totalRevenue.toLocaleString()}원</b><br>
+        ROI: <b>${ROI}%</b><br>
+        BEP(손익분기점): <b>${BEP}매(티켓단가별)</b><br>
+        투자자몫: <b>${investorProfit.toLocaleString()}원</b> / 사업주체몫: <b>${ownerProfit.toLocaleString()}원</b>
+      `;
+      document.getElementById("result").innerHTML = html;
+      document.getElementById("result").style.display = "block";
+    }
+
+    // EmailJS 초기화
+    emailjs.init("YOUR_PUBLIC_KEY"); // <-- 본인 EmailJS public key 입력
+
+    // 제출
+    document.getElementById("mainForm").onsubmit = async function(ev) {
+      ev.preventDefault();
+      document.getElementById("mailResult").style.display = "none";
+      // 입력 정리
+      const f = ev.target;
+      let types = [];
+      f.querySelectorAll("input[name=type]:checked").forEach(x=>types.push(x.value));
+      // 비용, 수익, 티켓
+      let costs = [], revs = [], tickets = [];
+      f.querySelectorAll('.cost-list div').forEach(d=>{
+        let name = d.querySelector('.costname').value, val = d.querySelector('.costval').value;
+        if(name && val) costs.push(name+": "+val+"원");
+      });
+      f.querySelectorAll('.rev-list div').forEach(d=>{
+        let name = d.querySelector('.revname').value, val = d.querySelector('.revval').value;
+        if(name && val) revs.push(name+": "+val+"원");
+      });
+      f.querySelectorAll('.ticket-list div').forEach(d=>{
+        let t = d.querySelector('.ticketType').value,
+            c = d.querySelector('.ticketCount').value,
+            p = d.querySelector('.ticketPrice').value;
+        if(t && c && p) tickets.push(`${t} - ${c}석 × ${p}원`);
+      });
+
+      // 계산
+      calculate();
+      let calcRes = document.getElementById("result").innerHTML.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
+      // 첨부파일 준비
+      const files = document.getElementById("fileInput").files;
+      // EmailJS 전송
+      const templateParams = {
+        message: `
+[사업명] ${f.projectName.value}
+[사업유형] ${types.join(",")}
+[아티스트] ${f.artist.value}
+[콘서트장] ${f.venue.value} (좌석수: ${f.seatCount.value})
+[티켓종류] ${tickets.join(";")}
+[투자요청금액] ${f.requestAmount.value}원
 [기간]
-- 콘서트: ${periods.showStart} ~ ${periods.showEnd}
-- 투자금 운용: ${periods.investStart} ~ ${periods.investEnd}
-- 원금회수: ${periods.principalReturnStart} ~ ${periods.principalReturnEnd}
-- 수익분배: ${periods.profitDistStart} ~ ${periods.profitDistEnd}
-[수익배분] 투자자 ${investorShare}%, 사업주체 ${ownerShare}%
-[비용] ${costs.map(c=>`${c.name}: ${c.amount}`).join("; ")}
-[수익] ${revenues.map(r=>`${r.name}: ${r.amount}`).join("; ")}
+- 콘서트: ${f.showStart.value} ~ ${f.showEnd.value}
+- 투자금 운용: ${f.investStart.value} ~ ${f.investEnd.value}
+- 원금회수: ${f.principalReturnStart.value} ~ ${f.principalReturnEnd.value}
+- 수익분배: ${f.profitDistStart.value} ~ ${f.profitDistEnd.value}
+[수익배분] 투자자 ${f.investorShare.value}%, 사업주체 ${f.ownerShare.value}%
+[비용] ${costs.join(";")}
+[수익] ${revs.join(";")}
 ----------------
 [자동계산]
-총비용: ${totalCost}원
-총수익: ${totalRevenue}원
-ROI: ${ROI}%
-BEP: ${BEP}매 (티켓 단가별)
-투자자 몫: ${investorProfit}원 / 사업주체 몫: ${ownerProfit}원
+${calcRes}
 ----------------
-`;
+        `
+      };
 
-    // 파일 첨부는 EmailJS 템플릿에서 input[file] 항목을 활용
-    const formData = new FormData();
-    formData.append("message", formSummary);
-    files.forEach((file, i) => formData.append(`file${i+1}`, file, file.name));
+      // 첨부파일 지원: EmailJS 템플릿에서 input[file] 항목 사용
+      let formData = new FormData();
+      formData.append("message", templateParams.message);
+      for(let i=0; i<files.length; i++) {
+        formData.append(`file${i+1}`, files[i], files[i].name);
+      }
 
-    try {
-      await emailjs.sendForm(
-        "YOUR_SERVICE_ID",     // EmailJS 서비스 ID
-        "YOUR_TEMPLATE_ID",    // EmailJS 템플릿 ID
-        formData,
-        "YOUR_PUBLIC_KEY"      // EmailJS public key
-      );
-      setSubmitted(true);
-    } catch (e) {
-      alert("메일 전송 오류:" + e.text);
+      document.getElementById("submitBtn").innerText = "전송중...";
+      document.getElementById("submitBtn").disabled = true;
+
+      try {
+        await emailjs.sendForm(
+          "YOUR_SERVICE_ID",  // EmailJS 서비스 ID
+          "YOUR_TEMPLATE_ID", // EmailJS 템플릿 ID
+          f // HTML Form 객체 (input[file] 자동 첨부됨)
+        );
+        document.getElementById("mailResult").innerHTML = "<b>접수완료!</b> 입력내용이 이메일로 전송되었습니다.";
+      } catch(e) {
+        document.getElementById("mailResult").innerHTML = "<b>오류:</b> "+e.text;
+      }
+      document.getElementById("mailResult").style.display = "block";
+      document.getElementById("submitBtn").innerText = "접수";
+      document.getElementById("submitBtn").disabled = false;
     }
-    setLoading(false);
-  };
-
-  return (
-    <div style={{ maxWidth: 800, margin: "40px auto", fontFamily: "Noto Sans KR, sans-serif", padding: 24, background: "#f8f9fa", borderRadius: 16 }}>
-      <h2>엔터테인먼트 투자제안 자동계산/접수</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <h4>1. 사업 기본정보</h4>
-        <div>
-          사업명: <input value={projectName} onChange={e => setProjectName(e.target.value)} style={{ width: 220 }}/>
-        </div>
-        <div>
-          사업유형: 
-          {["콘서트", "팬미팅", "MD수입", "굿즈", "기타"].map(type =>
-            <label key={type} style={{ marginLeft: 8 }}>
-              <input type="checkbox" checked={projectType.includes(type)} onChange={() => handleType(type)}/> {type}
-            </label>
-          )}
-        </div>
-        <div>
-          아티스트명: <input value={artist} onChange={e => setArtist(e.target.value)} style={{ width: 200 }}/>
-        </div>
-        <div>
-          콘서트장 위치/규모: <input value={venue} onChange={e => setVenue(e.target.value)} style={{ width: 240 }}/>
-          &nbsp;좌석수: <input value={seatCount} onChange={e => setSeatCount(e.target.value)} type="number" style={{ width: 80 }}/>
-        </div>
-
-        <h4>2. 티켓 설정</h4>
-        {ticketTypes.map((t, i) => (
-          <div key={i} style={{ marginBottom: 4 }}>
-            티켓종류: <input value={t.type} onChange={e => handleTicketTypes(i, "type", e.target.value)} style={{ width: 80 }}/>
-            좌석수: <input value={t.count} type="number" onChange={e => handleTicketTypes(i, "count", e.target.value)} style={{ width: 60 }}/>
-            금액: <input value={t.price} type="number" onChange={e => handleTicketTypes(i, "price", e.target.value)} style={{ width: 80 }}/>
-          </div>
-        ))}
-        <button type="button" onClick={addTicketType}>+ 티켓 추가</button>
-
-        <h4>3. 투자 요청</h4>
-        <div>
-          투자요청금액(KRW): <input value={requestAmount} onChange={e => setRequestAmount(e.target.value)} type="number" style={{ width: 160 }}/>
-        </div>
-        <div>
-          <span>콘서트 시작일: <input type="date" value={periods.showStart} onChange={e => setPeriods({ ...periods, showStart: e.target.value })}/></span>
-          <span style={{ marginLeft: 16 }}>콘서트 종료일: <input type="date" value={periods.showEnd} onChange={e => setPeriods({ ...periods, showEnd: e.target.value })}/></span>
-        </div>
-        <div>
-          투자금 운용기간: 
-          <input type="date" value={periods.investStart} onChange={e => setPeriods({ ...periods, investStart: e.target.value })}/> ~ 
-          <input type="date" value={periods.investEnd} onChange={e => setPeriods({ ...periods, investEnd: e.target.value })}/>
-        </div>
-        <div>
-          원금회수기간: 
-          <input type="date" value={periods.principalReturnStart} onChange={e => setPeriods({ ...periods, principalReturnStart: e.target.value })}/> ~ 
-          <input type="date" value={periods.principalReturnEnd} onChange={e => setPeriods({ ...periods, principalReturnEnd: e.target.value })}/>
-        </div>
-        <div>
-          투자수익분배기간: 
-          <input type="date" value={periods.profitDistStart} onChange={e => setPeriods({ ...periods, profitDistStart: e.target.value })}/> ~ 
-          <input type="date" value={periods.profitDistEnd} onChange={e => setPeriods({ ...periods, profitDistEnd: e.target.value })}/>
-        </div>
-        
-        <h4>4. 수익 배분</h4>
-        <div>
-          투자자: <input type="number" value={investorShare} min={0} max={100} onChange={e => {
-            let val = Math.min(100, Math.max(0, Number(e.target.value)));
-            setInvestorShare(val);
-            setOwnerShare(100 - val);
-          }} style={{ width: 60 }}/> %
-          &nbsp;사업주체: <input type="number" value={ownerShare} min={0} max={100} onChange={e => {
-            let val = Math.min(100, Math.max(0, Number(e.target.value)));
-            setOwnerShare(val);
-            setInvestorShare(100 - val);
-          }} style={{ width: 60 }}/> %
-          <span style={{ color: investorShare + ownerShare !== 100 ? "red" : "#222", marginLeft: 12 }}>
-            (합계: {investorShare + ownerShare}%)
-          </span>
-        </div>
-
-        <h4>5. 비용 내역</h4>
-        {costs.map((c, i) => (
-          <div key={i} style={{ marginBottom: 4 }}>
-            <input value={c.name} onChange={e => handleCost(i, "name", e.target.value)} placeholder="비용명" style={{ width: 120 }}/>
-            <input value={c.amount} type="number" onChange={e => handleCost(i, "amount", e.target.value)} placeholder="금액" style={{ width: 120 }}/>
-          </div>
-        ))}
-        <button type="button" onClick={addCost}>+ 비용 추가</button>
-
-        <h4>6. 수익 내역</h4>
-        {revenues.map((r, i) => (
-          <div key={i} style={{ marginBottom: 4 }}>
-            <input value={r.name} onChange={e => handleRevenue(i, "name", e.target.value)} placeholder="수익명" style={{ width: 120 }}/>
-            <input value={r.amount} type="number" onChange={e => handleRevenue(i, "amount", e.target.value)} placeholder="금액" style={{ width: 120 }}/>
-          </div>
-        ))}
-        <button type="button" onClick={addRevenue}>+ 수익 추가</button>
-
-        <h4>7. 첨부파일</h4>
-        <input type="file" multiple onChange={handleFile} />
-        {files.length > 0 && (
-          <ul>{Array.from(files).map((f, i) => <li key={i}>{f.name}</li>)}</ul>
-        )}
-
-        <hr style={{ margin: "24px 0" }}/>
-
-        <h4>자동 계산 결과</h4>
-        <div>총 비용: {totalCost.toLocaleString()} 원</div>
-        <div>총 수익: {totalRevenue.toLocaleString()} 원</div>
-        <div>ROI: {ROI}%</div>
-        <div>BEP(손익분기점): {BEP.toLocaleString(undefined, { maximumFractionDigits: 0 })} 매(티켓 단가별)</div>
-        <div>투자자 몫: {investorProfit.toLocaleString()} 원 / 사업주체 몫: {ownerProfit.toLocaleString()} 원</div>
-
-        <button type="submit" disabled={loading} style={{ marginTop: 24, fontWeight: 700, padding: "8px 24px" }}>
-          {loading ? "전송중..." : "접수"}
-        </button>
-      </form>
-
-      {submitted && (
-        <div style={{ background: "#e2ffe2", marginTop: 24, padding: 16, borderRadius: 10 }}>
-          <b>접수 완료!</b><br/>
-          입력하신 내용은 관리자 이메일로 전송되었습니다.
-        </div>
-      )}
-    </div>
-  );
-}
+  </script>
+</body>
+</html>
