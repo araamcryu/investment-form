@@ -1,95 +1,162 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>엔터테인먼트 투자제안 자동계산</title>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <meta charset="UTF-8">
+  <title>엔터테인먼트 투자제안 - 미니멀 3D 인터랙션</title>
+  <meta name="viewport" content="width=900, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { background: #f7f9fa; font-family: "Noto Sans KR", sans-serif; padding: 20px; }
-    .form-box { max-width: 700px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 36px; box-shadow: 0 2px 8px #0001; }
-    h2 { margin-bottom: 16px; }
-    input, select { margin: 4px 0 10px 0; padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; }
-    .row { margin-bottom: 12px; }
-    label { min-width: 120px; display: inline-block; }
-    button { background: #006afe; color: #fff; border: none; border-radius: 10px; padding: 8px 18px; font-weight: 700; margin-left: 4px;}
-    .result { background: #e8ffe8; margin-top: 24px; padding: 18px; border-radius: 12px; }
-    .flex { display: flex; gap: 12px; align-items: center; }
-    .cost-list, .rev-list, .ticket-list { margin-bottom: 10px; }
-    .cost-list input, .rev-list input, .ticket-list input { width: 90px; }
-    .ticket-list input[type="text"] { width: 60px; }
-    .cost-list > div, .rev-list > div, .ticket-list > div { display: flex; align-items: center; gap: 5px; margin-bottom: 2px;}
-    .cost-list button, .rev-list button, .ticket-list button { background: #e53e3e; color: #fff; padding: 4px 10px; font-size: 13px; }
-    .row > button { background: #006afe; padding: 4px 10px; font-size: 13px; }
+    body {
+      margin: 0; background: #f8fafc;
+      font-family: 'Noto Sans KR', sans-serif; color: #222;
+      min-height: 100vh;
+    }
+    .main-wrap {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 36px 10px;
+    }
+    .title {
+      font-size: 2.1rem; font-weight: bold; letter-spacing: -1.2px; margin: 36px 0 22px 0;
+      background: linear-gradient(90deg, #2176ff, #33c6ff); color: transparent; background-clip: text; -webkit-background-clip: text;
+    }
+    .card-3d {
+      background: #fff; border-radius: 28px; box-shadow: 0 10px 40px #2176ff20, 0 1.5px 7px #2222;
+      max-width: 670px; width: 100%; padding: 40px 40px 28px 40px; margin-bottom: 30px;
+      transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.3s;
+      will-change: transform;
+      perspective: 900px;
+      position: relative;
+      overflow: visible;
+    }
+    .card-3d:hover {
+      transform: rotateY(9deg) scale(1.03) translateY(-6px);
+      box-shadow: 0 16px 64px #33c6ff44, 0 4px 22px #0001;
+      cursor: pointer;
+    }
+    .form-section { margin-bottom: 26px; }
+    .form-row {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .form-label { min-width: 94px; font-size: 1.07rem; }
+    input, select, button, textarea {
+      font-family: inherit; font-size: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;
+      padding: 9px 12px; background: #f9fbff; transition: box-shadow 0.2s, border 0.2s;
+    }
+    input:focus, textarea:focus {
+      outline: none; border-color: #33c6ff; box-shadow: 0 0 0 2px #ccefff;
+    }
+    input[type="number"] { width: 88px; }
+    input[type="text"], input[type="date"] { width: 150px; }
+    .ticket-list input[type="text"] { width: 66px; }
+    .ticket-list input[type="number"] { width: 66px; }
+    .cost-list input, .rev-list input { width: 110px; }
+    .add-btn, .del-btn {
+      background: linear-gradient(90deg,#2176ff 60%,#33c6ff 100%);
+      color: #fff; border: none; padding: 6px 18px; border-radius: 9px; font-size: 1rem; font-weight: bold;
+      box-shadow: 0 1.5px 7px #2176ff20;
+      transition: transform 0.12s, box-shadow 0.22s;
+    }
+    .add-btn:hover { background: linear-gradient(90deg,#33c6ff 70%,#2176ff 100%); transform: scale(1.08); }
+    .del-btn {
+      background: #f96e51; margin-left: 8px; font-size: .93rem; padding: 6px 13px;
+      box-shadow: none;
+    }
+    .del-btn:hover { background: #c81c18; transform: scale(1.1);}
+    .result, .mailResult {
+      background: #e4f8ff; border-radius: 13px; padding: 16px 18px; margin-top: 22px;
+      font-size: 1.13rem; color: #2176ff; box-shadow: 0 2px 10px #33c6ff20;
+      opacity: 0; transform: translateY(40px); pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+    }
+    .result.visible, .mailResult.visible { opacity: 1; transform: none; pointer-events: auto;}
+    /* 스크롤 애니메이션 */
+    .fade-in { opacity: 0; transform: translateY(45px); transition: opacity 0.85s, transform 0.85s;}
+    .fade-in.visible { opacity: 1; transform: none;}
+    /* 체크박스, 파일 커스텀 */
+    input[type="checkbox"] { accent-color: #2176ff; margin-right: 2px;}
+    input[type="file"] { border: none; background: none;}
+    /* 미니멀 */
+    button:active { opacity: 0.8;}
+    @media (max-width: 600px) {
+      .card-3d { padding: 18px 5vw 12px 5vw; }
+      .form-label { min-width: 80px; font-size: 1rem;}
+    }
   </style>
 </head>
 <body>
-  <div class="form-box">
-    <h2>엔터테인먼트 투자제안 자동계산·접수 (HTML Only)</h2>
-    <form id="mainForm">
-      <div class="row"><label>사업명:</label><input name="projectName" required></div>
-      <div class="row">
-        <label>사업유형:</label>
-        <input type="checkbox" name="type" value="콘서트">콘서트
-        <input type="checkbox" name="type" value="팬미팅">팬미팅
-        <input type="checkbox" name="type" value="MD수입">MD수입
-        <input type="checkbox" name="type" value="굿즈">굿즈
-        <input type="checkbox" name="type" value="기타">기타
-      </div>
-      <div class="row"><label>아티스트명:</label><input name="artist" required></div>
-      <div class="row"><label>콘서트장 위치:</label><input name="venue" required></div>
-      <div class="row"><label>좌석수:</label><input type="number" name="seatCount" required></div>
-
-      <div class="row">
-        <label>티켓정보:</label>
-        <div class="ticket-list" id="ticketList"></div>
-        <button type="button" onclick="addTicket()">+ 티켓추가</button>
-      </div>
-
-      <div class="row"><label>투자요청금액(KRW):</label><input type="number" name="requestAmount" required></div>
-      <div class="row flex">
-        <label>콘서트 시작:</label><input type="date" name="showStart">
-        <label>종료:</label><input type="date" name="showEnd">
-      </div>
-      <div class="row flex">
-        <label>투자금 운용:</label><input type="date" name="investStart">
-        <label>~</label><input type="date" name="investEnd">
-      </div>
-      <div class="row flex">
-        <label>원금회수:</label><input type="date" name="principalReturnStart">
-        <label>~</label><input type="date" name="principalReturnEnd">
-      </div>
-      <div class="row flex">
-        <label>수익분배:</label><input type="date" name="profitDistStart">
-        <label>~</label><input type="date" name="profitDistEnd">
-      </div>
-      <div class="row flex">
-        <label>수익배분:</label>
-        투자자 <input type="number" name="investorShare" min="0" max="100" value="70" style="width:50px">%
-        사업주체 <input type="number" name="ownerShare" min="0" max="100" value="30" style="width:50px">%
-      </div>
-
-      <div class="row">
-        <label>비용내역:</label>
-        <div class="cost-list" id="costList"></div>
-        <button type="button" onclick="addCost()">+ 비용추가</button>
-      </div>
-      <div class="row">
-        <label>수익내역:</label>
-        <div class="rev-list" id="revList"></div>
-        <button type="button" onclick="addRev()">+ 수익추가</button>
-      </div>
-      <div class="row">
-        <label>첨부파일:</label>
-        <input type="file" id="fileInput" name="files" multiple>
-      </div>
-      <div class="row">
-        <button type="button" onclick="calculate()">자동계산</button>
-        <button type="submit" id="submitBtn">접수</button>
-      </div>
-    </form>
-
-    <div class="result" id="result" style="display:none"></div>
-    <div class="result" id="mailResult" style="display:none"></div>
+  <div class="main-wrap">
+    <div class="title">엔터테인먼트 투자제안 자동계산</div>
+    <div class="card-3d fade-in">
+      <form id="mainForm">
+        <!-- 1. 사업정보 -->
+        <div class="form-section">
+          <div class="form-row"><span class="form-label">사업명</span><input name="projectName" required></div>
+          <div class="form-row"><span class="form-label">사업유형</span>
+            <input type="checkbox" name="type" value="콘서트">콘서트
+            <input type="checkbox" name="type" value="팬미팅">팬미팅
+            <input type="checkbox" name="type" value="MD수입">MD수입
+            <input type="checkbox" name="type" value="굿즈">굿즈
+            <input type="checkbox" name="type" value="기타">기타
+          </div>
+          <div class="form-row"><span class="form-label">아티스트명</span><input name="artist" required></div>
+          <div class="form-row"><span class="form-label">콘서트장 위치</span><input name="venue" required></div>
+          <div class="form-row"><span class="form-label">좌석수</span><input type="number" name="seatCount" required></div>
+        </div>
+        <!-- 2. 티켓 -->
+        <div class="form-section">
+          <div class="form-row"><span class="form-label">티켓정보</span>
+            <div class="ticket-list" id="ticketList"></div>
+            <button type="button" class="add-btn" onclick="addTicket()">+ 티켓추가</button>
+          </div>
+        </div>
+        <!-- 3. 투자요청 -->
+        <div class="form-section">
+          <div class="form-row"><span class="form-label">투자요청금액</span><input type="number" name="requestAmount" required>원</div>
+          <div class="form-row">
+            <span class="form-label">콘서트일정</span>
+            <input type="date" name="showStart"> ~ <input type="date" name="showEnd">
+          </div>
+          <div class="form-row"><span class="form-label">투자금 운용</span>
+            <input type="date" name="investStart"> ~ <input type="date" name="investEnd">
+          </div>
+          <div class="form-row"><span class="form-label">원금회수</span>
+            <input type="date" name="principalReturnStart"> ~ <input type="date" name="principalReturnEnd">
+          </div>
+          <div class="form-row"><span class="form-label">수익분배</span>
+            <input type="date" name="profitDistStart"> ~ <input type="date" name="profitDistEnd">
+          </div>
+          <div class="form-row">
+            <span class="form-label">수익배분</span>
+            투자자 <input type="number" name="investorShare" min="0" max="100" value="70" style="width:54px;">%
+            사업주체 <input type="number" name="ownerShare" min="0" max="100" value="30" style="width:54px;">%
+          </div>
+        </div>
+        <!-- 4. 비용/수익 -->
+        <div class="form-section">
+          <div class="form-row"><span class="form-label">비용내역</span>
+            <div class="cost-list" id="costList"></div>
+            <button type="button" class="add-btn" onclick="addCost()">+ 비용추가</button>
+          </div>
+          <div class="form-row"><span class="form-label">수익내역</span>
+            <div class="rev-list" id="revList"></div>
+            <button type="button" class="add-btn" onclick="addRev()">+ 수익추가</button>
+          </div>
+        </div>
+        <!-- 5. 첨부 -->
+        <div class="form-section">
+          <div class="form-row"><span class="form-label">첨부파일</span>
+            <input type="file" id="fileInput" name="files" multiple>
+          </div>
+        </div>
+        <!-- 버튼 -->
+        <div class="form-section">
+          <button type="button" class="add-btn" onclick="calculate()">자동계산</button>
+          <button type="submit" class="add-btn" id="submitBtn">접수</button>
+        </div>
+      </form>
+      <div class="result" id="result"></div>
+      <div class="mailResult" id="mailResult"></div>
+    </div>
   </div>
   <script>
     // 동적 행 추가/삭제
@@ -98,7 +165,7 @@
       d.innerHTML = `
         <input placeholder="비용명" class="costname">
         <input type="number" class="costval" placeholder="금액">
-        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
       `;
       document.getElementById("costList").appendChild(d);
     }
@@ -107,7 +174,7 @@
       d.innerHTML = `
         <input placeholder="수익명" class="revname">
         <input type="number" class="revval" placeholder="금액">
-        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
       `;
       document.getElementById("revList").appendChild(d);
     }
@@ -117,39 +184,43 @@
         <input type="text" placeholder="종류" class="ticketType">
         <input type="number" placeholder="좌석수" class="ticketCount">
         <input type="number" placeholder="금액" class="ticketPrice">
-        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
       `;
       document.getElementById("ticketList").appendChild(d);
     }
-    // 기본 비용/수익/티켓 한행
+    // 기본 한행
     window.onload = function() {
+      document.querySelectorAll('.fade-in').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), 100 + 120 * i);
+      });
       addCost(); addRev(); addTicket();
     }
+    // 스크롤 애니메이션
+    window.addEventListener('scroll', function() {
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight-90) el.classList.add('visible');
+      });
+    });
 
     // 자동계산
     function calculate() {
       let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
-      // 비용
       document.querySelectorAll('.costval').forEach(x => totalCost += Number(x.value || 0));
-      // 수익
       document.querySelectorAll('.revval').forEach(x => totalRevenue += Number(x.value || 0));
-      // 티켓
       document.querySelectorAll('.ticketCount').forEach((el, i) => {
         const price = Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
         const count = Number(el.value || 0);
         ticketRevenue += price * count;
       });
       totalRevenue += ticketRevenue;
-      // ROI
       let ROI = totalCost > 0 ? (((totalRevenue - totalCost) / totalCost) * 100).toFixed(2) : "0";
-      // BEP
       let seatSum = 0, priceSum = 0;
       document.querySelectorAll('.ticketCount').forEach((el, i) => {
         seatSum += Number(el.value || 0);
         priceSum += Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
       });
       let BEP = priceSum > 0 ? Math.ceil(totalCost / priceSum) : "0";
-      // 수익배분
       const investorShare = Number(document.querySelector('input[name=investorShare]').value || 0);
       const ownerShare = 100 - investorShare;
       document.querySelector('input[name=ownerShare]').value = ownerShare;
@@ -163,22 +234,21 @@
         BEP(손익분기점): <b>${BEP}매(티켓단가별)</b><br>
         투자자몫: <b>${investorProfit.toLocaleString()}원</b> / 사업주체몫: <b>${ownerProfit.toLocaleString()}원</b>
       `;
-      document.getElementById("result").innerHTML = html;
-      document.getElementById("result").style.display = "block";
+      let r = document.getElementById("result");
+      r.innerHTML = html;
+      r.classList.add("visible");
     }
 
-    // EmailJS 초기화
-    emailjs.init("YOUR_PUBLIC_KEY"); // <-- 본인 EmailJS public key 입력
-
-    // 제출
+    // EmailJS (옵션) - 미설정시 삭제가능
+    // emailjs.init("YOUR_PUBLIC_KEY");
     document.getElementById("mainForm").onsubmit = async function(ev) {
       ev.preventDefault();
-      document.getElementById("mailResult").style.display = "none";
+      let mailBox = document.getElementById("mailResult");
+      mailBox.innerHTML = "";
       // 입력 정리
       const f = ev.target;
       let types = [];
       f.querySelectorAll("input[name=type]:checked").forEach(x=>types.push(x.value));
-      // 비용, 수익, 티켓
       let costs = [], revs = [], tickets = [];
       f.querySelectorAll('.cost-list div').forEach(d=>{
         let name = d.querySelector('.costname').value, val = d.querySelector('.costval').value;
@@ -195,12 +265,12 @@
         if(t && c && p) tickets.push(`${t} - ${c}석 × ${p}원`);
       });
 
-      // 계산
       calculate();
       let calcRes = document.getElementById("result").innerHTML.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
-      // 첨부파일 준비
+
+      // 실제 이메일 전송 연동 필요시 EmailJS 활성화
+      /*
       const files = document.getElementById("fileInput").files;
-      // EmailJS 전송 파라미터
       const templateParams = {
         message: `
 [사업명] ${f.projectName.value}
@@ -223,32 +293,29 @@ ${calcRes}
 ----------------
         `
       };
-
-      // 첨부파일 지원: EmailJS 템플릿에서 input[file] 항목 사용
       let formData = new FormData();
       formData.append("message", templateParams.message);
       for(let i=0; i<files.length; i++) {
         formData.append(`file${i+1}`, files[i], files[i].name);
       }
-
       document.getElementById("submitBtn").innerText = "전송중...";
       document.getElementById("submitBtn").disabled = true;
-
       try {
         await emailjs.sendForm(
           "YOUR_SERVICE_ID",  // EmailJS 서비스 ID
           "YOUR_TEMPLATE_ID", // EmailJS 템플릿 ID
           f // HTML Form 객체 (input[file] 자동 첨부됨)
         );
-        document.getElementById("mailResult").innerHTML = "<b>접수완료!</b> 입력내용이 이메일로 전송되었습니다.";
+        mailBox.innerHTML = "<b>접수완료!</b> 입력내용이 이메일로 전송되었습니다.";
       } catch(e) {
-        document.getElementById("mailResult").innerHTML = "<b>오류:</b> "+e.text;
+        mailBox.innerHTML = "<b>오류:</b> "+e.text;
       }
-      document.getElementById("mailResult").style.display = "block";
       document.getElementById("submitBtn").innerText = "접수";
       document.getElementById("submitBtn").disabled = false;
+      */
+      mailBox.innerHTML = "<b>접수 시 이메일로 자동전송됩니다.<br>(EmailJS 연동시 활성화)</b>";
+      mailBox.classList.add("visible");
     }
   </script>
 </body>
 </html>
-
