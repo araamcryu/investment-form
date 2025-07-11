@@ -11,12 +11,15 @@
     input, select { margin: 4px 0 10px 0; padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; }
     .row { margin-bottom: 12px; }
     label { min-width: 120px; display: inline-block; }
-    button { background: #006afe; color: #fff; border: none; border-radius: 10px; padding: 8px 28px; font-weight: 700; }
+    button { background: #006afe; color: #fff; border: none; border-radius: 10px; padding: 8px 18px; font-weight: 700; margin-left: 4px;}
     .result { background: #e8ffe8; margin-top: 24px; padding: 18px; border-radius: 12px; }
     .flex { display: flex; gap: 12px; align-items: center; }
     .cost-list, .rev-list, .ticket-list { margin-bottom: 10px; }
     .cost-list input, .rev-list input, .ticket-list input { width: 90px; }
     .ticket-list input[type="text"] { width: 60px; }
+    .cost-list > div, .rev-list > div, .ticket-list > div { display: flex; align-items: center; gap: 5px; margin-bottom: 2px;}
+    .cost-list button, .rev-list button, .ticket-list button { background: #e53e3e; color: #fff; padding: 4px 10px; font-size: 13px; }
+    .row > button { background: #006afe; padding: 4px 10px; font-size: 13px; }
   </style>
 </head>
 <body>
@@ -89,22 +92,33 @@
     <div class="result" id="mailResult" style="display:none"></div>
   </div>
   <script>
-    // 동적 행 추가용
+    // 동적 행 추가/삭제
     function addCost() {
       const d = document.createElement("div");
-      d.innerHTML = `<input placeholder="비용명" class="costname"><input type="number" class="costval" placeholder="금액">`;
+      d.innerHTML = `
+        <input placeholder="비용명" class="costname">
+        <input type="number" class="costval" placeholder="금액">
+        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+      `;
       document.getElementById("costList").appendChild(d);
     }
     function addRev() {
       const d = document.createElement("div");
-      d.innerHTML = `<input placeholder="수익명" class="revname"><input type="number" class="revval" placeholder="금액">`;
+      d.innerHTML = `
+        <input placeholder="수익명" class="revname">
+        <input type="number" class="revval" placeholder="금액">
+        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+      `;
       document.getElementById("revList").appendChild(d);
     }
     function addTicket() {
       const d = document.createElement("div");
-      d.innerHTML = `<input type="text" placeholder="종류" class="ticketType">
+      d.innerHTML = `
+        <input type="text" placeholder="종류" class="ticketType">
         <input type="number" placeholder="좌석수" class="ticketCount">
-        <input type="number" placeholder="금액" class="ticketPrice">`;
+        <input type="number" placeholder="금액" class="ticketPrice">
+        <button type="button" onclick="this.parentElement.remove()">삭제</button>
+      `;
       document.getElementById("ticketList").appendChild(d);
     }
     // 기본 비용/수익/티켓 한행
@@ -186,7 +200,7 @@
       let calcRes = document.getElementById("result").innerHTML.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
       // 첨부파일 준비
       const files = document.getElementById("fileInput").files;
-      // EmailJS 전송
+      // EmailJS 전송 파라미터
       const templateParams = {
         message: `
 [사업명] ${f.projectName.value}
