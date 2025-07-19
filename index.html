@@ -1,1166 +1,859 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>ARA 엔터테인먼트 투자계산기기</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>UJIN ENTERTAINMENT 전용 투자 제안서 생성기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            /* Enhanced Color System */
-            --primary-50: #eff6ff;
-            --primary-100: #dbeafe;
-            --primary-200: #bfdbfe;
-            --primary-300: #93c5fd;
-            --primary-400: #60a5fa;
-            --primary-500: #3b82f6;
-            --primary-600: #2563eb;
-            --primary-700: #1d4ed8;
-            --primary-800: #1e40af;
-            --primary-900: #1e3a8a;
-            
-            --accent-400: #fb7185;
-            --accent-500: #f43f5e;
-            --accent-600: #e11d48;
-            
-            --success-400: #4ade80;
-            --success-500: #22c55e;
-            --success-600: #16a34a;
-            
-            --warning-400: #fbbf24;
-            --warning-500: #f59e0b;
-            --warning-600: #d97706;
-            
-            --neutral-0: #ffffff;
-            --neutral-50: #f8fafc;
-            --neutral-100: #f1f5f9;
-            --neutral-200: #e2e8f0;
-            --neutral-300: #cbd5e1;
-            --neutral-400: #94a3b8;
-            --neutral-500: #64748b;
-            --neutral-600: #475569;
-            --neutral-700: #334155;
-            --neutral-800: #1e293b;
-            --neutral-900: #0f172a;
-            
-            /* Dynamic Theme Variables */
-            --bg-primary: var(--neutral-50);
-            --bg-secondary: var(--neutral-0);
-            --bg-accent: var(--primary-50);
-            --text-primary: var(--neutral-900);
-            --text-secondary: var(--neutral-600);
-            --text-accent: var(--primary-600);
-            --border-color: var(--neutral-200);
-            
-            /* Enhanced Shadows */
-            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            
-            /* Gradients */
-            --gradient-primary: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-600) 100%);
-            --gradient-success: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
-            --gradient-warning: linear-gradient(135deg, var(--warning-500) 0%, var(--warning-600) 100%);
-            
-            /* Enhanced Transitions */
-            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-elastic: 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --bg-color-start: #1D2B64;
+            --bg-color-end: #000000;
+            --card-bg-color: rgba(22, 24, 30, 0.6);
+            --input-bg-color: rgba(10, 12, 18, 0.7);
+            --primary-color: #8A3FFC; /* Vibrant Violet */
+            --primary-light-color: #BE95FF;
+            --text-color: #F8F9FA;
+            --text-muted-color: #ADB5BD;
+            --border-color: rgba(255, 255, 255, 0.15);
+            --error-color: #ff6384;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
 
-        /* Dark Mode */
-        [data-theme="dark"] {
-            --bg-primary: var(--neutral-900);
-            --bg-secondary: var(--neutral-800);
-            --bg-accent: var(--neutral-800);
-            --text-primary: var(--neutral-50);
-            --text-secondary: var(--neutral-300);
-            --text-accent: var(--primary-400);
-            --border-color: var(--neutral-700);
-        }
-
-        /* High Contrast Mode */
-        @media (prefers-contrast: high) {
-            :root {
-                --text-primary: #000000;
-                --bg-primary: #ffffff;
-                --border-color: #000000;
-                --primary-600: #0066cc;
-            }
-            
-            [data-theme="dark"] {
-                --text-primary: #ffffff;
-                --bg-primary: #000000;
-                --border-color: #ffffff;
-            }
-        }
-
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            transition: background-color var(--transition-base), color var(--transition-base);
-            overflow-x: hidden;
-            font-feature-settings: 'liga' 1, 'kern' 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
+            margin: 0;
+            background: linear-gradient(-45deg, #1D2B64, #F8CDDA, #1D2B64, #000000);
+            background-size: 400% 400%;
+            animation: gradientAnimation 25s ease infinite;
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            color: var(--text-color); min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            padding: 20px; overflow-x: hidden;
         }
-
-        /* Enhanced Layout */
-        .main-wrap {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 1rem;
-            position: relative;
-            contain: layout style paint;
-        }
-
-        /* Background Effects with GPU Acceleration */
-        .main-wrap::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 20%, var(--primary-100) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, var(--accent-100) 0%, transparent 50%),
-                radial-gradient(circle at 40% 70%, var(--success-100) 0%, transparent 50%);
-            opacity: 0.3;
-            z-index: -1;
-            transform: translateZ(0);
-            will-change: transform;
-            animation: backgroundFloat 20s ease-in-out infinite;
-        }
-
-        @keyframes backgroundFloat {
-            0%, 100% { 
-                transform: translateZ(0) scale(1) rotate(0deg); 
-            }
-            50% { 
-                transform: translateZ(0) scale(1.05) rotate(1deg); 
-            }
-        }
-
-        /* Enhanced Typography */
+        .main-wrap { width: 100%; max-width: 900px; }
         .title {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 900;
-            letter-spacing: -0.025em;
-            margin-bottom: 3rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-align: center;
-            position: relative;
-            transform: translateZ(0);
-            animation: titleSlideIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 2rem;
+            color: var(--text-color); text-shadow: 0 0 20px var(--primary-light-color), var(--text-shadow);
         }
-
-        @keyframes titleSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-40px) translateZ(0);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) translateZ(0);
-            }
-        }
-
-        .title::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--gradient-accent);
-            border-radius: 2px;
-            animation: lineExpand 0.8s ease-out 0.5s both;
-        }
-
-        @keyframes lineExpand {
-            from { width: 0; }
-            to { width: 80px; }
-        }
-
-        /* Theme Toggle Enhancement */
-        .theme-toggle {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            transition: all var(--transition-elastic);
-            backdrop-filter: blur(12px);
-            transform: translateZ(0);
-            will-change: transform;
-        }
-
-        .theme-toggle:hover {
-            transform: translateZ(0) scale(1.1);
-            box-shadow: var(--shadow-2xl);
-            border-color: var(--primary-600);
-        }
-
-        .theme-toggle:active {
-            transform: translateZ(0) scale(0.95);
-        }
-
-        .theme-toggle i {
-            font-size: 1.5rem;
-            color: var(--text-accent);
-            transition: all var(--transition-base);
-        }
-
-        /* Enhanced Glass Card */
         .glass-card {
-            background: var(--bg-secondary);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 2px solid var(--border-color);
-            border-radius: 32px;
-            max-width: 900px;
-            width: 100%;
-            padding: 3.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-2xl);
-            transition: all var(--transition-slow);
-            position: relative;
-            overflow: hidden;
-            transform: translateZ(0);
-            will-change: transform;
-            animation: cardSlideUp 1s ease-out 0.3s both;
-            contain: layout style paint;
+            background: var(--card-bg-color); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 25px; border: 1px solid var(--border-color); padding: 35px;
+            box-shadow: 0 16px 45px 0 var(--shadow-color);
         }
-
-        @keyframes cardSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px) translateZ(0);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) translateZ(0);
-            }
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-primary);
-            border-radius: 32px 32px 0 0;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-12px) translateZ(0);
-            box-shadow: 0 40px 80px -16px rgba(0, 0, 0, 0.25);
-            border-color: var(--primary-300);
-        }
-
-        /* Form Sections */
-        .form-section {
-            margin-bottom: 3rem;
-            position: relative;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all var(--transition-slow);
-        }
-
-        .form-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-        }
-
-        .section-title::before {
-            content: '';
-            width: 6px;
-            height: 32px;
-            background: var(--gradient-primary);
-            border-radius: 3px;
-            animation: sectionIndicator 0.6s ease-out;
-        }
-
-        @keyframes sectionIndicator {
-            from { height: 0; }
-            to { height: 32px; }
-        }
-
-        .section-title i {
-            font-size: 1.5rem;
-            color: var(--text-accent);
-        }
-
-        /* Enhanced Form Elements */
-        .form-row {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            position: relative;
-        }
-
-        .form-label {
-            min-width: 140px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-label .required {
-            color: var(--accent-500);
-            font-size: 0.875rem;
-        }
-
-        /* Input Group System */
-        .input-group {
-            position: relative;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 500;
-            background: var(--bg-primary);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1rem 1.25rem;
-            color: var(--text-primary);
-            transition: all var(--transition-base);
-            position: relative;
-            will-change: transform, box-shadow;
-            min-height: 48px; /* 모바일 터치 최적화 */
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-500);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-            transform: translateY(-2px);
-            background: var(--bg-secondary);
-        }
-
-        input:hover, textarea:hover, select:hover {
-            border-color: var(--primary-300);
-            transform: translateY(-1px);
-        }
-
-        /* Input States */
-        .input-group.success input {
-            border-color: var(--success-500);
-            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
-        }
-
-        .input-group.error input {
-            border-color: var(--accent-600);
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        /* Error Messages */
-        .error-message {
-            position: absolute;
-            bottom: -28px;
-            left: 0;
-            color: var(--accent-600);
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            transform: translateY(-10px);
-            animation: errorSlideIn 0.3s ease-out forwards;
-        }
-
-        @keyframes errorSlideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .error-message i {
-            font-size: 0.75rem;
-        }
-
-        /* Success Messages */
-        .success-message {
-            position: absolute;
-            bottom: -28px;
-            left: 0;
-            color: var(--success-600);
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            animation: successSlideIn 0.3s ease-out forwards;
-        }
-
-        @keyframes successSlideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Enhanced Button System */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 16px;
-            padding: 1rem 2rem;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            white-space: nowrap;
-            transform: translateZ(0);
-            will-change: transform;
-            min-height: 56px; /* 모바일 터치 최적화 */
-        }
-
-        /* Button Ripple Effect */
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px) translateZ(0);
-        }
-
-        .btn-success {
-            background: var(--gradient-success);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-warning {
-            background: var(--gradient-warning);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-warning:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-danger {
-            background: var(--gradient-accent);
-            color: white;
-            font-size: 0.95rem;
-            padding: 0.75rem 1.25rem;
-            margin-left: 0.75rem;
-            min-height: 48px;
-        }
-
-        .btn-danger:hover {
-            transform: scale(1.05) translateZ(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Loading State */
-        .btn.loading {
-            position: relative;
-            color: transparent;
-        }
-
-        .btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Enhanced Checkbox System */
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
-            min-width: 300px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            transition: all var(--transition-base);
-            position: relative;
-            transform: translateZ(0);
-            min-height: 48px; /* 모바일 터치 최적화 */
-        }
-
-        .checkbox-item:hover {
-            background: var(--bg-accent);
-            transform: translateY(-2px) translateZ(0);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary-600);
-            cursor: pointer;
-            transform: scale(1.1);
-        }
-
-        .checkbox-item label {
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--text-primary);
-        }
-
-        /* Dynamic Lists Enhancement */
-        .dynamic-list {
-            background: var(--bg-primary);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            transition: all var(--transition-base);
-        }
-
-        .dynamic-list:hover {
-            border-color: var(--primary-300);
-            box-shadow: var(--shadow-md);
-        }
-
-        .dynamic-list-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            align-items: center;
-            padding: 1rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            transition: all var(--transition-base);
-            transform: translateZ(0);
-            animation: itemSlideIn 0.4s ease-out;
-            position: relative;
-        }
-
-        @keyframes itemSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px) translateZ(0);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) translateZ(0);
-            }
-        }
-
-        .dynamic-list-item:hover {
-            transform: translateY(-2px) translateZ(0);
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-300);
-        }
-
-        .dynamic-list-item:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Enhanced Result Display */
-        .result {
-            background: var(--bg-accent);
-            border: 3px solid var(--primary-200);
-            border-radius: 24px;
-            padding: 2.5rem;
-            margin-top: 3rem;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all var(--transition-slow);
-            position: relative;
-            overflow: hidden;
-            contain: layout style paint;
-        }
-
-        .result::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: var(--gradient-primary);
-            border-radius: 24px 24px 0 0;
-        }
-
-        .result.visible {
-            opacity: 1;
-            transform: translateY(0);
-            animation: resultReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes resultReveal {
-            0% { 
-                opacity: 0;
-                transform: translateY(40px) scale(0.95); 
-            }
-            60% { 
-                transform: translateY(-5px) scale(1.02); 
-            }
-            100% { 
-                opacity: 1;
-                transform: translateY(0) scale(1); 
-            }
-        }
-
-        .result-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            color: var(--text-primary);
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            transition: all var(--transition-base);
-            transform: translateZ(0);
-            animation: resultItemAppear 0.6s ease-out var(--delay, 0s) both;
-        }
-
-        @keyframes resultItemAppear {
-            from {
-                opacity: 0;
-                transform: translateY(20px) translateZ(0);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) translateZ(0);
-            }
-        }
-
-        .result-item:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-400);
-        }
-
-        .result-label {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-value {
-            font-weight: 800;
-            font-size: 1.25rem;
-            color: var(--text-accent);
-            text-align: right;
-        }
-
-        .result-value.positive {
-            color: var(--success-600);
-        }
-
-        .result-value.negative {
-            color: var(--accent-600);
-        }
-
-        /* Chart Container */
-        .chart-section {
-            margin-top: 3rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all var(--transition-slow);
-        }
-
-        .chart-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .chart-container {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all var(--transition-base);
-            transform: translateZ(0);
-        }
-
-        .chart-container:hover {
-            transform: translateY(-5px) translateZ(0);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-300);
-        }
-
-        .chart-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        /* Button Groups */
-        .btn-group {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 3rem;
-        }
-
-        /* Progress System */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--neutral-200);
-            z-index: 999;
-        }
-
         .progress-bar {
-            height: 100%;
-            background: var(--gradient-primary);
-            width: 0%;
-            transition: width var(--transition-base);
+            display: flex; justify-content: space-between; margin-bottom: 2rem; position: relative;
+            transition: opacity 0.5s ease;
         }
-
-        .progress-dots {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 3rem 0 2rem 0;
+        .progress-bar::before {
+            content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%);
+            height: 4px; width: 100%; background: var(--input-bg-color); border-radius: 2px; z-index: 1;
         }
-
-        .progress-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--neutral-300);
-            transition: all var(--transition-base);
-            cursor: pointer;
-            position: relative;
+        .progress-bar .progress {
+            position: absolute; top: 50%; left: 0; transform: translateY(-50%);
+            height: 4px; background: var(--primary-color); z-index: 2; border-radius: 2px;
+            width: 0%; transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
-        .progress-dot.active {
-            background: var(--primary-600);
-            transform: scale(1.4);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        .progress-step {
+            width: 38px; height: 38px; background: var(--input-bg-color); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-weight: 600;
+            border: 2px solid var(--border-color); z-index: 3; transition: all 0.4s ease;
         }
-
-        .progress-dot.completed {
-            background: var(--success-600);
+        .progress-step.active {
+            background: var(--primary-color); border-color: var(--primary-light-color);
+            color: #fff; transform: scale(1.15); box-shadow: 0 0 15px var(--primary-color);
         }
-
-        /* Auto Save Indicator */
-        .save-indicator {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--success-500);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all var(--transition-base);
-            z-index: 1000;
+        .form-step { display: none; animation: fadeIn 0.6s ease-out; }
+        .form-step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .form-section h2 {
+            font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 1rem;
+            color: var(--primary-light-color); text-shadow: var(--text-shadow);
+            border-bottom: 1px solid var(--border-color);
         }
-
-        .save-indicator.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .error-message { color: var(--error-color); margin-bottom: 1rem; display: none; font-size: 0.9rem; font-weight: 500; }
+        .form-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+        .form-label { min-width: 140px; font-size: 1rem; font-weight: 500; color: var(--text-muted-color); text-shadow: var(--text-shadow); }
+        input, select, textarea {
+            font-family: inherit; font-size: 1rem; border-radius: 10px; border: 1px solid var(--border-color);
+            padding: 13px 16px; background: var(--input-bg-color); color: var(--text-color);
+            transition: all 0.3s ease; flex-grow: 1;
         }
-
-        /* Notification System */
-        .notification {
-            position: fixed;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1rem 2rem;
-            box-shadow: var(--shadow-xl);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: transform var(--transition-elastic);
-            backdrop-filter: blur(12px);
+        textarea { min-height: 80px; resize: vertical; }
+        input:focus, textarea:focus {
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(138, 63, 252, 0.3);
         }
-
-        .notification.visible {
-            transform: translateX(-50%) translateY(0);
+        .input-group {
+            display: flex; align-items: center; flex-grow: 1; background: var(--input-bg-color);
+            border-radius: 10px; border: 1px solid var(--border-color); transition: all 0.3s ease;
         }
-
-        .notification.success {
-            border-color: var(--success-500);
-            color: var(--success-600);
+        .input-group input { border: none; background: transparent; }
+        .input-group input:focus { box-shadow: none; }
+        .input-group:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(138, 63, 252, 0.3); }
+        .input-unit { padding-right: 16px; color: var(--text-muted-color); font-weight: 500; }
+        .btn {
+            background: var(--primary-color); color: #fff; border: none; padding: 13px 26px;
+            border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(138, 63, 252, 0.2);
         }
-
-        .notification.error {
-            border-color: var(--accent-500);
-            color: var(--accent-600);
+        .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 25px rgba(138, 63, 252, 0.3); }
+        .btn:disabled { background: var(--text-muted-color); cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-group { display: flex; justify-content: space-between; margin-top: 2rem; gap: 1rem; }
+        .btn.btn-secondary { background: var(--input-bg-color); box-shadow: none; border: 1px solid var(--border-color); }
+        .btn.btn-secondary:hover { background: var(--primary-color); border-color: var(--primary-color); }
+        .btn.add-item-btn { width: auto; flex-grow: 0; }
+        .dynamic-list-container { padding: 1rem 0; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; }
+        .dynamic-list-container:last-of-type { border-bottom: none; }
+        .dynamic-list-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+        .del-btn {
+            background: rgba(255, 99, 132, 0.2); border: 1px solid rgba(255, 99, 132, 0.5);
+            color: #ff6384; padding: 10px 16px; border-radius: 8px; font-size: 0.8rem; flex-shrink: 0;
         }
-
-        .notification.warning {
-            border-color: var(--warning-500);
-            color: var(--warning-600);
+        .del-btn:hover { background: #ff6384; color: #fff; }
+        
+        /* Bento Grid Layout */
+        #bento-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto;
         }
-
-        /* Tooltip Styling */
-        .tippy-box[data-theme~='custom'] {
-            background-color: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(12px);
+        .bento-item {
+            background: var(--input-bg-color); border-radius: 12px; padding: 20px;
+            border: 1px solid var(--border-color); font-size: 1.05rem;
         }
+        .bento-item h3 { margin-top: 0; font-size: 1.1rem; color: var(--primary-light-color); }
+        .bento-item-1 { grid-column: span 3; } /* Project Name */
+        .bento-item-2 { grid-column: span 2; grid-row: span 2; } /* Overview */
+        .bento-item-3 { grid-column: span 1; } /* Attachments */
+        .bento-item-4 { grid-column: span 1; } /* Summary */
+        .bento-item-5 { grid-column: span 3; } /* Advanced Analytics */
+        .bento-item-6 { grid-column: span 3; } /* AI Risk Analysis */
+        .bento-item-7 { grid-column: span 3; } /* AI Summary */
+        
+        .result-card b { color: var(--primary-light-color); font-weight: 600; }
+        .slider-row { display: flex; align-items: center; gap: 1rem; }
+        .slider-row input[type=range] { flex-grow: 1; }
+        details summary { font-weight: 600; cursor: pointer; }
+        .bep-table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+        .bep-table th, .bep-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        #fileList { margin-top: 10px; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-radius: 5px; background-color: var(--bg-color); margin-bottom: 5px; }
+        .pdf-export-mode .glass-card { background: #ffffff !important; color: #000000 !important; --text-color: #000000; --text-muted-color: #444444; --primary-light-color: #0056b3; --input-bg-color: #f8f9fa; --border-color: #dee2e6; }
+        .pdf-export-mode h1, .pdf-export-mode h2, .pdf-export-mode h3, .pdf-export-mode .form-label, .pdf-export-mode .input-unit, .pdf-export-mode .bento-item { text-shadow: none !important; }
+        
+        #submission-success { text-align: center; }
+        #submission-success h2 { color: var(--primary-light-color); font-size: 2.2rem; margin-bottom: 1rem; }
+        #submission-success p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted-color); margin-bottom: 2.5rem; }
 
-        .tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
-            border-top-color: var(--border-color);
-        }
-
-        /* Enhanced Mobile Styles */
+        /* Mobile Optimization */
         @media (max-width: 768px) {
-            .main-wrap {
-                padding: 1rem 0.5rem;
-            }
-
-            .glass-card {
-                padding: 2rem 1rem; /* 모바일 패딩 축소 */
-                margin: 1rem;
-                border-radius: 24px;
-            }
-
-            .form-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .form-label {
-                min-width: auto;
-                font-weight: 600;
-                font-size: 1rem; /* 모바일 폰트 크기 조정 */
-            }
-
-            .input-group {
-                min-width: 100%;
-            }
-
-            .btn-group {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-                min-height: 48px; /* 터치 영역 확대 */
-            }
-
-            .result-content {
-                grid-template-columns: 1fr;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .theme-toggle {
-                top: 1rem;
-                right: 1rem;
-                width: 56px;
-                height: 56px;
-            }
-
-            .title {
-                font-size: clamp(1.8rem, 8vw, 2.5rem); /* 모바일 타이틀 크기 최적화 */
-                margin-bottom: 2rem;
-            }
-
-            .checkbox-group {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                font-size: 0.9rem; /* 작은 화면 폰트 축소 */
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .btn {
-                padding: 0.8rem 1.5rem;
-            }
-        }
-
-        /* Touch Enhancements */
-        @media (hover: none) and (pointer: coarse) {
-            .btn {
-                min-height: 48px;
-            }
-
-            input, select, textarea {
-                min-height: 48px;
-            }
-
-            .checkbox-item {
-                min-height: 48px;
-            }
-        }
-
-        /* PDF Export Styles */
-        .pdf-mode {
-            background: white !important;
-            color: black !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            transform: none !important;
-            border: none !important;
-        }
-
-        .pdf-mode * {
-            background: white !important;
-            color: black !important;
-            border-color: #ccc !important;
-        }
-
-        .pdf-mode .title {
-            background: none !important;
-            color: #2563eb !important;
-            -webkit-background-clip: unset !important;
-            background-clip: unset !important;
-        }
-
-        .pdf-mode .result {
-            background: #f8f9fa !important;
-            color: #333 !important;
-            border-color: #dee2e6 !important;
-        }
-
-        .pdf-mode .result-value {
-            color: #2563eb !important;
-        }
-
-        /* Print Optimization */
-        @media print {
-            .theme-toggle,
-            .save-indicator,
-            .notification,
-            .btn-group {
-                display: none !important;
-            }
-
-            .glass-card {
-                box-shadow: none !important;
-                border: 2px solid #ccc !important;
-            }
-        }
-
-        /* Scroll Optimizations */
-        .scroll-smooth {
-            scroll-behavior: smooth;
-        }
-
-        .scroll-container {
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-        }
-
-        /* Focus Management */
-        :focus-visible {
-            outline: 3px solid var(--primary-600) !important;
-            outline-offset: 2px !important;
-        }
-
-        /* Skip Link */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: var(--primary-600);
-            color: white;
-            padding: 8px;
-            text-decoration: none;
-            border-radius: 4px;
-            z-index: 1000;
-        }
-
-        .skip-link:focus {
-            top: 6px;
+            body { padding: 10px; }
+            .title { font-size: 2rem; }
+            .glass-card { padding: 20px; }
+            .form-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .form-label { min-width: 100%; margin-bottom: 4px; }
+            .btn-group { flex-direction: column; gap: 1rem; }
+            #bento-grid { grid-template-columns: 1fr; }
+            .bento-item-1, .bento-item-2, .bento-item-3, .bento-item-4, .bento-item-5, .bento-item-6, .bento-item-7 { grid-column: span 1; grid-row: span 1; }
+            .dynamic-list-item { flex-direction: column; align-items: stretch; }
+            .dynamic-list-item > * { width: 100% !important; }
+            .dynamic-list-item .del-btn { margin-top: 8px; }
         }
     </style>
-    <!-- JavaScript 부분은 기존 코드와 동일하게 유지 (생략) -->
 </head>
 <body>
-    <!-- Body 내용은 기존 코드와 동일하게 유지, 타이틀 변경 -->
-    <div class="main-wrap">
-        <h1 class="title">ARA 엔터테인먼트 투자계산기기</h1>
-        <!-- 나머지 HTML 구조는 기존과 동일 (생략) -->
+<div class="main-wrap">
+    <h1 class="title">UJIN ENTERTAINMENT 전용</h1>
+    <div class="glass-card" id="main-card">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+            <div class="progress-step active" data-step="1">1</div>
+            <div class="progress-step" data-step="2">2</div>
+            <div class="progress-step" data-step="3">3</div>
+        </div>
+        <form id="mainForm">
+            <!-- Step 1: 기본 정보 -->
+            <div class="form-step active" id="step-1">
+                <div class="form-section">
+                    <h2>1단계: 사업 개요</h2>
+                    <div class="error-message"></div>
+                    <div class="form-row"><span class="form-label">사업명</span><input name="projectName" required></div>
+                    <div class="form-row"><span class="form-label">아티스트명</span><input name="artist" required></div>
+                    <div class="form-row"><span class="form-label">프로젝트 개요</span><textarea name="projectOverview" placeholder="프로젝트의 목표, 비전, 핵심 내용을 요약합니다."></textarea></div>
+                    <div class="form-row"><span class="form-label">특이사항 및 기대효과</span><textarea name="specialNotes" placeholder="본 사업의 차별점, 강점, 예상되는 긍정적 효과를 기술합니다."></textarea></div>
+                    <div class="form-row">
+                        <span class="form-label"></span>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="generateOverviewBtn">✨ AI로 개요 자동 작성</button>
+                    </div>
+                    <div class="form-row"><span class="form-label">첨부 파일</span>
+                        <div style="flex-grow: 1;">
+                            <input type="file" id="fileUpload" multiple style="display:none;">
+                            <button type="button" class="btn btn-secondary add-item-btn" onclick="document.getElementById('fileUpload').click();">파일 선택</button>
+                            <div id="fileList"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <span></span>
+                    <button type="button" class="btn" data-next>다음 단계 &rarr;</button>
+                </div>
+            </div>
+
+            <!-- Step 2: 비용 및 수익 -->
+            <div class="form-step" id="step-2">
+                <div class="form-section">
+                    <h2>2단계: 재무 정보</h2>
+                    <div class="error-message"></div>
+                    <div class="form-row"><span class="form-label">콘서트장 위치</span><input name="venue" required></div>
+                    <div class="form-row"><span class="form-label">총 좌석수</span><input type="text" inputmode="numeric" name="seatCount" class="auto-format" required></div>
+                    <div class="form-row"><span class="form-label">콘서트일정</span><input type="date" name="showStart"> ~ <input type="date" name="showEnd"></div>
+                    <div class="form-row">
+                        <span class="form-label">투자요청금액</span>
+                        <div class="input-group"><input type="text" inputmode="numeric" name="requestAmount" class="auto-format" required placeholder="예: 10,000"><span class="input-unit">만원</span></div>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">수익배분 (투자자)</span>
+                        <div class="input-group"><input type="number" name="investorShare" min="0" max="100" value="70" required><span class="input-unit">%</span></div>
+                    </div>
+                    
+                    <div class="dynamic-list-container">
+                        <h3 style="font-weight: 500; margin-bottom: 0.5rem;">티켓 정보</h3>
+                        <div class="ticket-list" id="ticketList"></div>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="addTicketBtn" style="margin-top: 1rem;">+ 티켓추가</button>
+                    </div>
+                    
+                    <div class="dynamic-list-container">
+                        <h3 style="font-weight: 500; margin-bottom: 0.5rem;">비용 내역</h3>
+                        <div class="form-row">
+                            <span class="form-label">아티스트 개런티</span>
+                            <div class="input-group"><input type="text" inputmode="numeric" name="artistFee" class="auto-format" required placeholder="가장 큰 비중을 차지하는 비용"><span class="input-unit">만원</span></div>
+                        </div>
+                        <div class="form-row">
+                            <span class="form-label">베뉴 (대관) 비용</span>
+                            <div class="input-group"><input type="text" inputmode="numeric" name="venueFee" class="auto-format" required placeholder="공연장 대관료 등"><span class="input-unit">만원</span></div>
+                        </div>
+                        <div class="cost-list" id="costList"></div>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="addCostBtn" style="margin-top: 1rem;">+ 기타 비용추가</button>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="generateCostItemsBtn" style="margin-top: 1rem; margin-left: 10px;">✨ AI 예상 비용 추천</button>
+                    </div>
+                    
+                    <div class="dynamic-list-container">
+                        <h3 style="font-weight: 500; margin-bottom: 0.5rem;">기타 수익 내역</h3>
+                        <div class="rev-list" id="revList"></div>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="addRevBtn" style="margin-top: 1rem;">+ 수익추가</button>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="generateRevenueItemsBtn" style="margin-top: 1rem; margin-left: 10px;">✨ AI 추가 수익원 추천</button>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" data-prev>&larr; 이전 단계</button>
+                    <button type="button" class="btn" data-next>결과 확인 &rarr;</button>
+                </div>
+            </div>
+
+            <!-- Step 3: 결과 확인 -->
+            <div class="form-step" id="step-3">
+                <div id="result">
+                    <div id="pdf-content">
+                        <div id="bento-grid">
+                            <div class="bento-item bento-item-1">
+                                <h2 id="finalProjectName" style="border:none; padding-bottom: 0; margin-bottom: 0.5rem; text-align: center;"></h2>
+                                <p id="finalArtistName" style="margin:0; color: var(--text-muted-color); text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;"></p>
+                            </div>
+                            <div class="bento-item bento-item-2">
+                                <h3>프로젝트 개요</h3>
+                                <p id="finalProjectOverview"></p>
+                                <h3>특이사항 및 기대효과</h3>
+                                <p id="finalSpecialNotes"></p>
+                            </div>
+                             <div class="bento-item bento-item-3">
+                                <h3>첨부 파일 목록</h3>
+                                <ul id="finalAttachmentsList" style="list-style-type: none; padding-left: 0;"></ul>
+                            </div>
+                            <div class="bento-item bento-item-4 result-card" id="result-summary"></div>
+                             <div class="bento-item bento-item-7">
+                                <h3>AI 투자 제안 요약</h3>
+                                <button type="button" class="btn btn-secondary" id="generateSummaryBtn">✨ AI로 요약 생성하기</button>
+                                <p id="aiSummary" style="margin-top: 1rem; white-space: pre-wrap;"></p>
+                            </div>
+                            <div class="bento-item bento-item-5">
+                                <details>
+                                    <summary>고급 분석 보기</summary>
+                                    <div id="advanced-analytics" style="margin-top:1rem;">
+                                        <h4>시나리오 시뮬레이션</h4>
+                                        <div class="slider-row">
+                                            <label>티켓 판매율:</label>
+                                            <input type="range" id="salesRateSlider" min="50" max="120" value="100">
+                                            <span id="salesRateLabel">100%</span>
+                                        </div>
+                                        <div id="simulationResult"></div>
+                                        <h4 style="margin-top: 1.5rem;">등급별 손익분기점(BEP) 분석</h4>
+                                        <table class="bep-table" id="bepTable"></table>
+                                    </div>
+                                </details>
+                            </div>
+                             <div class="bento-item bento-item-6">
+                                <h3>AI 리스크 분석</h3>
+                                <button type="button" class="btn btn-secondary" id="analyzeRiskBtn">✨ AI로 리스크 분석하기</button>
+                                <div id="riskAnalysisResult" style="margin-top: 1rem; white-space: pre-wrap;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" data-prev>&larr; 이전 단계</button>
+                    <button type="button" class="btn" id="savePdfBtn">PDF로 저장</button>
+                </div>
+                 <button type="button" class="btn" id="submitBtn" style="margin-top: 1rem; width: 100%;">제출하기</button>
+            </div>
+        </form>
+        <div id="submission-success" style="display: none; animation: fadeIn 0.6s ease-out;">
+            <h2>제출 완료</h2>
+            <p id="submission-message"></p>
+            <button type="button" class="btn" id="startNewBtn">새 제안서 작성하기</button>
+        </div>
     </div>
-    <!-- JavaScript 스크립트는 기존 코드와 동일 (생략) -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mainForm = document.getElementById('mainForm');
+    
+    // --- 자동 포맷팅 함수 ---
+    const formatNumberInput = (input) => {
+        if (!input) return;
+        let value = input.value.replace(/,/g, '');
+        if (isNaN(value) || value.trim() === '') {
+            input.value = '';
+        } else {
+            input.value = parseInt(value, 10).toLocaleString('en-US');
+        }
+    };
+    const getUnformattedValue = (value) => {
+        return value.replace(/,/g, '') || '0';
+    };
+    mainForm.addEventListener('input', (e) => {
+        if (e.target.classList.contains('auto-format')) {
+            formatNumberInput(e.target);
+        }
+    });
+
+    // --- Navigation ---
+    const prevBtns = document.querySelectorAll('[data-prev]');
+    const nextBtns = document.querySelectorAll('[data-next]');
+    const progress = document.getElementById('progress');
+    const steps = document.querySelectorAll('.form-step');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    let currentStep = 1;
+
+    nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                currentStep++;
+                updateFormSteps();
+            }
+        });
+    });
+    prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentStep--;
+            updateFormSteps();
+        });
+    });
+
+    const updateFormSteps = () => {
+        steps.forEach(step => step.classList.remove('active'));
+        const currentStepEl = document.querySelector(`#step-${currentStep}`);
+        if (currentStepEl) {
+            currentStepEl.classList.add('active');
+        }
+        
+        progressSteps.forEach((step, idx) => {
+            step.classList.toggle('active', idx < currentStep);
+        });
+        
+        progress.style.width = `${((currentStep - 1) / (steps.length - 1)) * 100}%`;
+        
+        if (currentStep === 3) {
+            displayFinalResults();
+        }
+    };
+    
+    const validateStep = (stepNumber) => {
+        const currentStepEl = document.getElementById(`step-${stepNumber}`);
+        const errorDiv = currentStepEl.querySelector('.error-message');
+        const inputs = currentStepEl.querySelectorAll('input[required], textarea[required]');
+        let isValid = true;
+        errorDiv.style.display = 'none';
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.style.borderColor = 'var(--error-color)';
+                isValid = false;
+            } else {
+                input.style.borderColor = 'var(--border-color)';
+            }
+        });
+        if (!isValid) {
+            errorDiv.textContent = '현재 단계의 모든 필수 항목을 입력해주세요.';
+            errorDiv.style.display = 'block';
+        }
+        return isValid;
+    };
+    
+    mainForm.addEventListener('input', (e) => {
+        const target = e.target;
+        if ((target.tagName === 'INPUT' && target.hasAttribute('required')) || (target.tagName === 'TEXTAREA' && target.hasAttribute('required'))) {
+            if (target.value.trim()) {
+                target.style.borderColor = 'var(--border-color)';
+                const errorDiv = target.closest('.form-step').querySelector('.error-message');
+                if (errorDiv) errorDiv.style.display = 'none';
+            }
+        }
+    });
+
+    // --- File Upload ---
+    const fileUpload = document.getElementById('fileUpload');
+    const fileListDiv = document.getElementById('fileList');
+    let attachedFiles = [];
+
+    fileUpload.addEventListener('change', function() {
+        attachedFiles = Array.from(this.files);
+        updateFileListUI();
+        saveData();
+    });
+
+    function updateFileListUI() {
+        fileListDiv.innerHTML = '';
+        attachedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `<span>${file.name}</span><button type="button" class="del-btn" data-index="${index}">삭제</button>`;
+            fileListDiv.appendChild(fileItem);
+        });
+    }
+
+    fileListDiv.addEventListener('click', function(e) {
+        if (e.target.classList.contains('del-btn')) {
+            const index = parseInt(e.target.dataset.index, 10);
+            attachedFiles.splice(index, 1);
+            updateFileListUI();
+            saveData();
+        }
+    });
+
+    // --- Data, Calc ---
+    const STORAGE_KEY = 'investmentProposalData_v12_final';
+
+    const saveData = () => {
+        const data = {};
+        const inputs = mainForm.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type !== 'file' && input.name) data[input.name] = input.value;
+        });
+        data.fileNames = attachedFiles.map(f => f.name);
+        data.otherCosts = Array.from(document.getElementById('costList').querySelectorAll('.dynamic-list-item')).map(item => ({ name: item.querySelector('.costname').value, value: item.querySelector('.costval').value }));
+        data.revenues = Array.from(document.getElementById('revList').querySelectorAll('.dynamic-list-item')).map(item => ({ name: item.querySelector('.revname').value, value: item.querySelector('.revval').value }));
+        data.tickets = Array.from(document.getElementById('ticketList').querySelectorAll('.dynamic-list-item')).map(item => ({ type: item.querySelector('.ticketType').value, count: item.querySelector('.ticketCount').value, price: item.querySelector('.ticketPrice').value }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    };
+
+    const loadData = (data) => {
+        const inputs = mainForm.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type !== 'file' && input.name && data[input.name] !== undefined) input.value = data[input.name];
+        });
+        
+        if (data.fileNames) {
+            fileListDiv.innerHTML = '<p style="font-size:0.9rem; color: var(--text-muted-color);">저장된 파일 목록입니다. (파일은 보안상 자동 저장되지 않으므로 필요 시 다시 선택해주세요.)</p>';
+            data.fileNames.forEach(name => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `<span>${name}</span>`;
+                fileListDiv.appendChild(fileItem);
+            });
+        }
+
+        const costList = document.getElementById('costList');
+        costList.innerHTML = '';
+        if (data.otherCosts) data.otherCosts.forEach(item => addListItem(costList, '비용명', 'costname', '금액', 'costval', item.name, item.value));
+        const revList = document.getElementById('revList');
+        revList.innerHTML = '';
+        if (data.revenues) data.revenues.forEach(item => addListItem(revList, '수익명', 'revname', '금액', 'revval', item.name, item.value));
+        const ticketList = document.getElementById('ticketList');
+        ticketList.innerHTML = '';
+        if (data.tickets) data.tickets.forEach(item => addTicketItem(item.type, item.count, item.price));
+        mainForm.querySelectorAll('.auto-format').forEach(formatNumberInput);
+    };
+
+    const addListItem = (listEl, p1, c1, p2, c2, val1 = '', val2 = '') => {
+        const item = document.createElement("div"); item.className = 'dynamic-list-item';
+        item.innerHTML = `<input placeholder="${p1}" class="${c1}" value="${val1}" style="flex-grow: 2;"><div class="input-group" style="flex-grow: 1;"><input type="text" inputmode="numeric" placeholder="${p2}" class="${c2} auto-format" value="${val2}"><span class="input-unit">만원</span></div><button type="button" class="del-btn" title="삭제">삭제</button>`;
+        listEl.appendChild(item);
+    };
+    const addTicketItem = (type = '', count = '', price = '') => {
+        const item = document.createElement("div"); item.className = 'dynamic-list-item';
+        item.innerHTML = `<input type="text" placeholder="티켓종류" class="ticketType" value="${type}"><input type="text" inputmode="numeric" placeholder="판매수" class="ticketCount auto-format" value="${count}"><div class="input-group"><input type="text" inputmode="numeric" placeholder="가격" class="ticketPrice auto-format" value="${price}"><span class="input-unit">만원</span></div><button type="button" class="del-btn" title="삭제">삭제</button>`;
+        ticketList.appendChild(item);
+    };
+
+    const calculate = (salesRate = 100) => {
+        const MAN_WON = 10000;
+        let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
+        let totalTicketCount = 0;
+        const ticketDetails = [];
+        
+        const artistFee = parseFloat(getUnformattedValue(mainForm.elements.artistFee.value)) * MAN_WON;
+        const venueFee = parseFloat(getUnformattedValue(mainForm.elements.venueFee.value)) * MAN_WON;
+        totalCost += artistFee + venueFee;
+
+        document.querySelectorAll('.costval').forEach(input => totalCost += parseFloat(getUnformattedValue(input.value)) * MAN_WON);
+        document.querySelectorAll('.revval').forEach(input => totalRevenue += parseFloat(getUnformattedValue(input.value)) * MAN_WON);
+        document.querySelectorAll('.ticket-list .dynamic-list-item').forEach(item => {
+            const price = parseFloat(getUnformattedValue(item.querySelector('.ticketPrice').value));
+            const count = parseFloat(getUnformattedValue(item.querySelector('.ticketCount').value));
+            const type = item.querySelector('.ticketType').value || '미분류 티켓';
+            ticketRevenue += price * count * MAN_WON;
+            totalTicketCount += count;
+            if (price > 0 && count > 0) ticketDetails.push({ type, price, count });
+        });
+        
+        ticketRevenue *= (salesRate / 100);
+        totalRevenue += ticketRevenue;
+        const averageTicketPrice = totalTicketCount > 0 ? (ticketRevenue / (totalTicketCount * (salesRate/100))) : 0;
+        const netProfit = totalRevenue - totalCost;
+        const ROI = totalCost > 0 ? ((netProfit / totalCost) * 100).toFixed(2) : 0;
+        const BEP = averageTicketPrice > 0 ? Math.ceil(totalCost / averageTicketPrice) : 0;
+        const investorShare = Number(document.querySelector('input[name=investorShare]').value || 0);
+        const investorProfit = netProfit > 0 ? Math.floor(netProfit * (investorShare / 100)) : 0;
+        const ownerProfit = netProfit > 0 ? netProfit - investorProfit : 0;
+        
+        return { totalCost, totalRevenue, netProfit, ROI, BEP, investorProfit, ownerProfit, investorShare, ticketDetails };
+    };
+
+    const displayFinalResults = () => {
+        const resultDiv = document.getElementById('result');
+        if (!resultDiv) return;
+
+        const resultData = calculate();
+        document.getElementById('finalProjectName').textContent = mainForm.elements.projectName.value;
+        document.getElementById('finalArtistName').textContent = `아티스트: ${mainForm.elements.artist.value}`;
+        document.getElementById('finalProjectOverview').textContent = mainForm.elements.projectOverview.value || '입력된 개요가 없습니다.';
+        document.getElementById('finalSpecialNotes').textContent = mainForm.elements.specialNotes.value || '입력된 특이사항이 없습니다.';
+
+        const finalAttachmentsList = document.getElementById('finalAttachmentsList');
+        finalAttachmentsList.innerHTML = '';
+        const fileNames = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}').fileNames || [];
+        if (fileNames.length > 0) {
+            fileNames.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = `📄 ${name}`;
+                finalAttachmentsList.appendChild(li);
+            });
+        } else {
+            finalAttachmentsList.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
+        }
+
+
+        const formatToKrwManwon = (amount) => `KRW ${(amount / 10000).toLocaleString('ko-KR', { maximumFractionDigits: 0 })} 만원`;
+        document.getElementById('result-summary').innerHTML = `
+            <h3>재무 요약</h3>
+            <div>총비용: <b>${formatToKrwManwon(resultData.totalCost)}</b></div>
+            <div>총수익: <b>${formatToKrwManwon(resultData.totalRevenue)}</b></div>
+            <div>순수익: <b>${formatToKrwManwon(resultData.netProfit)}</b></div>
+            <div>ROI: <b>${resultData.ROI}%</b></div>
+            <div>BEP (평균): <b>약 ${resultData.BEP.toLocaleString('ko-KR')}매 판매 필요</b></div>
+            <hr style="border:0; border-top:1px solid var(--border-color); margin: 12px 0;">
+            <div>투자자 예상 수익: <b>${formatToKrwManwon(resultData.investorProfit)}</b> (${resultData.investorShare}%)</div>
+            <div>사업주체 예상 수익: <b>${formatToKrwManwon(resultData.ownerProfit)}</b> (${100 - resultData.investorShare}%)</div>
+        `;
+        runSimulation();
+        updateBepTable(resultData.totalCost, resultData.ticketDetails);
+        resultDiv.classList.add('visible');
+    };
+
+    // --- Advanced Analytics ---
+    const salesRateSlider = document.getElementById('salesRateSlider');
+    const salesRateLabel = document.getElementById('salesRateLabel');
+    const simulationResultDiv = document.getElementById('simulationResult');
+    const bepTable = document.getElementById('bepTable');
+
+    const runSimulation = () => {
+        const salesRate = parseInt(salesRateSlider.value);
+        salesRateLabel.textContent = `${salesRate}%`;
+        const resultData = calculate(salesRate);
+        const formatToKrwManwon = (amount) => `KRW ${(amount / 10000).toLocaleString('ko-KR', { maximumFractionDigits: 0 })} 만원`;
+        simulationResultDiv.innerHTML = `판매율 ${salesRate}% 적용 시, 예상 순수익: <b>${formatToKrwManwon(resultData.netProfit)}</b>, ROI: <b>${resultData.ROI}%</b>`;
+    };
+
+    const updateBepTable = (totalCost, ticketDetails) => {
+        let tableHTML = '<thead><tr><th>티켓 등급</th><th>단가 (만원)</th><th>BEP 달성 판매량</th></tr></thead><tbody>';
+        if (ticketDetails.length === 0) {
+            tableHTML += '<tr><td colspan="3">티켓 정보를 입력하세요.</td></tr>';
+        } else {
+            ticketDetails.forEach(ticket => {
+                const bepForTicket = ticket.price > 0 ? Math.ceil((totalCost / 10000) / ticket.price) : 'N/A';
+                tableHTML += `<tr><td>${ticket.type}</td><td>${ticket.price.toLocaleString('en-US')}</td><td>${bepForTicket.toLocaleString('en-US')} 매</td></tr>`;
+            });
+        }
+        tableHTML += '</tbody>';
+        bepTable.innerHTML = tableHTML;
+    };
+
+    salesRateSlider.addEventListener('input', runSimulation);
+
+     // --- Gemini API Integration ---
+    const callGemini = async (prompt) => {
+        const apiKey = ""; // API 키는 비워두세요.
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+            contents: [{
+                parts: [{ text: prompt }]
+            }]
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error(`API 요청 실패: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts) {
+                return result.candidates[0].content.parts[0].text;
+            }
+            return "AI로부터 응답을 받지 못했습니다.";
+        } catch (error) {
+            console.error("Gemini API 호출 중 오류:", error);
+            return "AI 호출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+        }
+    };
+
+    document.getElementById('generateOverviewBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '생성 중...';
+        btn.disabled = true;
+
+        const projectName = mainForm.elements.projectName.value || '미정';
+        const artist = mainForm.elements.artist.value || '미정';
+        
+        const prompt = `아래 정보를 바탕으로, 엔터테인먼트 투자자에게 매력적으로 보일 수 있는 '프로젝트 개요'와 '특이사항 및 기대효과'를 각각 2-3문장의 전문가 톤으로 작성해줘. 결과는 아래 형식을 반드시 지켜서 구분해줘:
+
+[개요]
+(여기에 프로젝트 개요 작성)
+
+[특이사항]
+(여기에 특이사항 및 기대효과 작성)
+
+---
+- 사업명: ${projectName}
+- 아티스트: ${artist}
+`;
+        const responseText = await callGemini(prompt);
+        
+        const overviewMatch = responseText.match(/\[개요\]\s*([\s\S]*?)\s*\[특이사항\]/);
+        const notesMatch = responseText.match(/\[특이사항\]\s*([\s\S]*)/);
+
+        if (overviewMatch && overviewMatch[1]) {
+            mainForm.elements.projectOverview.value = overviewMatch[1].trim();
+        }
+        if (notesMatch && notesMatch[1]) {
+            mainForm.elements.specialNotes.value = notesMatch[1].trim();
+        }
+
+        btn.textContent = '✨ AI로 개요 자동 작성';
+        btn.disabled = false;
+        saveData(); // Save generated text
+    });
+
+    document.getElementById('analyzeRiskBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '분석 중...';
+        btn.disabled = true;
+        const riskResultDiv = document.getElementById('riskAnalysisResult');
+        riskResultDiv.textContent = 'AI가 리스크를 분석하고 있습니다...';
+
+        const resultData = calculate();
+        const ticketInfo = resultData.ticketDetails.map(t => `${t.type}: ${t.count}석 x ${t.price}만원`).join(', ');
+
+        const prompt = `당신은 전문 엔터테인먼트 투자 분석가입니다. 아래의 공연 투자 제안서 데이터를 바탕으로, 발생할 수 있는 잠재적 리스크 3가지와 그에 대한 완화 방안을 전문가의 관점에서 분석해주세요. 결과는箇条書き(bullet points) 형식으로 명확하게 제시해주세요.
+
+- 사업명: ${mainForm.elements.projectName.value}
+- 아티스트: ${mainForm.elements.artist.value}
+- 총 비용: ${ (resultData.totalCost / 10000).toLocaleString() }만원
+- 예상 총 수익: ${ (resultData.totalRevenue / 10000).toLocaleString() }만원
+- 티켓 정보: ${ticketInfo}
+- 순수익: ${ (resultData.netProfit / 10000).toLocaleString() }만원
+`;
+        const analysis = await callGemini(prompt);
+        riskResultDiv.textContent = analysis;
+
+        btn.textContent = '✨ AI로 리스크 분석하기';
+        btn.disabled = false;
+    });
+
+    document.getElementById('generateCostItemsBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '추천 중...';
+        btn.disabled = true;
+        const prompt = `엔터테인먼트 콘서트나 팬미팅에서 일반적으로 발생하는 주요 비용 항목 5가지를 리스트업해줘. 아티스트 개런티와 베뉴 비용은 이미 있으니 제외하고, "항목명" 형식으로 쉼표로 구분해서 한 줄로만 답변해줘. 예: 무대 제작비,음향/조명 장비 렌탈,경호 및 안전,홍보 마케팅,스태프 인건비`;
+        const response = await callGemini(prompt);
+        response.split(',').forEach(item => {
+            if (item.trim()) {
+                addListItem(document.getElementById('costList'), '기타 비용', 'costname', '금액', 'costval', item.trim());
+            }
+        });
+        btn.textContent = '✨ AI 예상 비용 추천';
+        btn.disabled = false;
+        saveData();
+    });
+
+    document.getElementById('generateRevenueItemsBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '추천 중...';
+        btn.disabled = true;
+        const prompt = `엔터테인먼트 콘서트나 팬미팅에서 티켓 판매 외에 발생할 수 있는 추가 수익원 아이디어 3가지를 리스트업해줘. "항목명" 형식으로 쉼표로 구분해서 한 줄로만 답변해줘. 예: 공식 MD 상품 판매,온라인 스트리밍 유료 중계,현장 광고 및 스폰서십`;
+        const response = await callGemini(prompt);
+        response.split(',').forEach(item => {
+            if (item.trim()) {
+                addListItem(document.getElementById('revList'), '기타 수익', 'revname', '금액', 'revval', item.trim());
+            }
+        });
+        btn.textContent = '✨ AI 추가 수익원 추천';
+        btn.disabled = false;
+        saveData();
+    });
+
+    document.getElementById('generateSummaryBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '생성 중...';
+        btn.disabled = true;
+        const summaryP = document.getElementById('aiSummary');
+        summaryP.textContent = 'AI가 제안서를 요약하고 있습니다...';
+
+        const resultData = calculate();
+        const prompt = `아래의 모든 데이터를 종합하여, 투자자에게 보내는 투자 제안서의 핵심 요약(Executive Summary)을 3~4문장의 전문적인 톤으로 작성해줘. 프로젝트의 매력과 높은 수익성을 강조해줘.
+
+- 프로젝트명: ${mainForm.elements.projectName.value}
+- 아티스트: ${mainForm.elements.artist.value}
+- 프로젝트 개요: ${mainForm.elements.projectOverview.value}
+- 총 투자 요청 금액: ${mainForm.elements.requestAmount.value}만원
+- 예상 총 수익: ${(resultData.totalRevenue / 10000).toLocaleString()}만원
+- 예상 순수익: ${(resultData.netProfit / 10000).toLocaleString()}만원
+- 예상 ROI: ${resultData.ROI}%
+`;
+        const summary = await callGemini(prompt);
+        summaryP.textContent = summary;
+        btn.textContent = '✨ AI로 요약 생성하기';
+        btn.disabled = false;
+    });
+
+
+    // --- Init & Event Listeners ---
+    const init = () => {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+            loadData(JSON.parse(savedData));
+        } else {
+            addListItem(document.getElementById('costList'), '기타 비용', 'costname', '금액', 'costval');
+            addListItem(document.getElementById('revList'), '기타 수익', 'revname', '금액', 'revval');
+            addTicketItem();
+        }
+    };
+    init();
+
+    mainForm.addEventListener('input', saveData);
+    document.getElementById('addCostBtn').addEventListener('click', () => { addListItem(document.getElementById('costList'), '기타 비용', 'costname', '금액', 'costval'); saveData(); });
+    document.getElementById('addRevBtn').addEventListener('click', () => { addListItem(document.getElementById('revList'), '기타 수익', 'revname', '금액', 'revval'); saveData(); });
+    document.getElementById('addTicketBtn').addEventListener('click', () => { addTicketItem(); saveData(); });
+    document.getElementById('savePdfBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('savePdfBtn');
+        btn.innerText = "PDF 생성중...";
+        btn.disabled = true;
+        
+        const card = document.getElementById('main-card');
+        card.classList.add('pdf-export-mode');
+
+        displayFinalResults();
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            const pdfContent = document.getElementById('pdf-content');
+            const canvas = await html2canvas(pdfContent, { 
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            const projectName = document.querySelector('input[name="projectName"]').value || '투자제안서';
+            pdf.save(`${projectName}.pdf`);
+        } catch (error) {
+            console.error("PDF 생성 중 오류 발생:", error);
+            alert("PDF를 생성하는 중에 오류가 발생했습니다. 다시 시도해주세요.");
+        } finally {
+            card.classList.remove('pdf-export-mode');
+            btn.innerText = "PDF로 저장";
+            btn.disabled = false;
+        }
+    });
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const submissionSuccessScreen = document.getElementById('submission-success');
+    const submissionMessage = document.getElementById('submission-message');
+    const startNewBtn = document.getElementById('startNewBtn');
+    const progressBar = document.querySelector('.progress-bar');
+
+    submitBtn.addEventListener('click', () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const timestamp = `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분 ${seconds}초`;
+        submissionMessage.textContent = `약식 투자제안서는, ${timestamp}에 정상적으로 제출되었습니다.`;
+
+        mainForm.style.display = 'none';
+        progressBar.style.display = 'none';
+        submissionSuccessScreen.style.display = 'block';
+    });
+
+    startNewBtn.addEventListener('click', () => {
+        localStorage.removeItem(STORAGE_KEY);
+        window.location.reload();
+    });
+
+    [document.getElementById('costList'), document.getElementById('revList'), document.getElementById('ticketList')].forEach(list => {
+        list.addEventListener('click', function(e) {
+            if (e.target.classList.contains('del-btn')) {
+                e.target.parentElement.remove();
+                saveData();
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
