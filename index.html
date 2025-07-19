@@ -1,321 +1,2519 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>엔터테인먼트 투자제안 - 미니멀 3D 인터랙션</title>
-  <meta name="viewport" content="width=900, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0; background: #f8fafc;
-      font-family: 'Noto Sans KR', sans-serif; color: #222;
-      min-height: 100vh;
-    }
-    .main-wrap {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 36px 10px;
-    }
-    .title {
-      font-size: 2.1rem; font-weight: bold; letter-spacing: -1.2px; margin: 36px 0 22px 0;
-      background: linear-gradient(90deg, #2176ff, #33c6ff); color: transparent; background-clip: text; -webkit-background-clip: text;
-    }
-    .card-3d {
-      background: #fff; border-radius: 28px; box-shadow: 0 10px 40px #2176ff20, 0 1.5px 7px #2222;
-      max-width: 670px; width: 100%; padding: 40px 40px 28px 40px; margin-bottom: 30px;
-      transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.3s;
-      will-change: transform;
-      perspective: 900px;
-      position: relative;
-      overflow: visible;
-    }
-    .card-3d:hover {
-      transform: rotateY(9deg) scale(1.03) translateY(-6px);
-      box-shadow: 0 16px 64px #33c6ff44, 0 4px 22px #0001;
-      cursor: pointer;
-    }
-    .form-section { margin-bottom: 26px; }
-    .form-row {
-      display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .form-label { min-width: 94px; font-size: 1.07rem; }
-    input, select, button, textarea {
-      font-family: inherit; font-size: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;
-      padding: 9px 12px; background: #f9fbff; transition: box-shadow 0.2s, border 0.2s;
-    }
-    input:focus, textarea:focus {
-      outline: none; border-color: #33c6ff; box-shadow: 0 0 0 2px #ccefff;
-    }
-    input[type="number"] { width: 88px; }
-    input[type="text"], input[type="date"] { width: 150px; }
-    .ticket-list input[type="text"] { width: 66px; }
-    .ticket-list input[type="number"] { width: 66px; }
-    .cost-list input, .rev-list input { width: 110px; }
-    .add-btn, .del-btn {
-      background: linear-gradient(90deg,#2176ff 60%,#33c6ff 100%);
-      color: #fff; border: none; padding: 6px 18px; border-radius: 9px; font-size: 1rem; font-weight: bold;
-      box-shadow: 0 1.5px 7px #2176ff20;
-      transition: transform 0.12s, box-shadow 0.22s;
-    }
-    .add-btn:hover { background: linear-gradient(90deg,#33c6ff 70%,#2176ff 100%); transform: scale(1.08); }
-    .del-btn {
-      background: #f96e51; margin-left: 8px; font-size: .93rem; padding: 6px 13px;
-      box-shadow: none;
-    }
-    .del-btn:hover { background: #c81c18; transform: scale(1.1);}
-    .result, .mailResult {
-      background: #e4f8ff; border-radius: 13px; padding: 16px 18px; margin-top: 22px;
-      font-size: 1.13rem; color: #2176ff; box-shadow: 0 2px 10px #33c6ff20;
-      opacity: 0; transform: translateY(40px); pointer-events: none;
-      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
-    }
-    .result.visible, .mailResult.visible { opacity: 1; transform: none; pointer-events: auto;}
-    /* 스크롤 애니메이션 */
-    .fade-in { opacity: 0; transform: translateY(45px); transition: opacity 0.85s, transform 0.85s;}
-    .fade-in.visible { opacity: 1; transform: none;}
-    /* 체크박스, 파일 커스텀 */
-    input[type="checkbox"] { accent-color: #2176ff; margin-right: 2px;}
-    input[type="file"] { border: none; background: none;}
-    /* 미니멀 */
-    button:active { opacity: 0.8;}
-    @media (max-width: 600px) {
-      .card-3d { padding: 18px 5vw 12px 5vw; }
-      .form-label { min-width: 80px; font-size: 1rem;}
-    }
-  </style>
-</head>
-<body>
-  <div class="main-wrap">
-    <div class="title">엔터테인먼트 투자제안 자동계산</div>
-    <div class="card-3d fade-in">
-      <form id="mainForm">
-        <!-- 1. 사업정보 -->
-        <div class="form-section">
-          <div class="form-row"><span class="form-label">사업명</span><input name="projectName" required></div>
-          <div class="form-row"><span class="form-label">사업유형</span>
-            <input type="checkbox" name="type" value="콘서트">콘서트
-            <input type="checkbox" name="type" value="팬미팅">팬미팅
-            <input type="checkbox" name="type" value="MD수입">MD수입
-            <input type="checkbox" name="type" value="굿즈">굿즈
-            <input type="checkbox" name="type" value="기타">기타
-          </div>
-          <div class="form-row"><span class="form-label">아티스트명</span><input name="artist" required></div>
-          <div class="form-row"><span class="form-label">콘서트장 위치</span><input name="venue" required></div>
-          <div class="form-row"><span class="form-label">좌석수</span><input type="number" name="seatCount" required></div>
-        </div>
-        <!-- 2. 티켓 -->
-        <div class="form-section">
-          <div class="form-row"><span class="form-label">티켓정보</span>
-            <div class="ticket-list" id="ticketList"></div>
-            <button type="button" class="add-btn" onclick="addTicket()">+ 티켓추가</button>
-          </div>
-        </div>
-        <!-- 3. 투자요청 -->
-        <div class="form-section">
-          <div class="form-row"><span class="form-label">투자요청금액</span><input type="number" name="requestAmount" required>원</div>
-          <div class="form-row">
-            <span class="form-label">콘서트일정</span>
-            <input type="date" name="showStart"> ~ <input type="date" name="showEnd">
-          </div>
-          <div class="form-row"><span class="form-label">투자금 운용</span>
-            <input type="date" name="investStart"> ~ <input type="date" name="investEnd">
-          </div>
-          <div class="form-row"><span class="form-label">원금회수</span>
-            <input type="date" name="principalReturnStart"> ~ <input type="date" name="principalReturnEnd">
-          </div>
-          <div class="form-row"><span class="form-label">수익분배</span>
-            <input type="date" name="profitDistStart"> ~ <input type="date" name="profitDistEnd">
-          </div>
-          <div class="form-row">
-            <span class="form-label">수익배분</span>
-            투자자 <input type="number" name="investorShare" min="0" max="100" value="70" style="width:54px;">%
-            사업주체 <input type="number" name="ownerShare" min="0" max="100" value="30" style="width:54px;">%
-          </div>
-        </div>
-        <!-- 4. 비용/수익 -->
-        <div class="form-section">
-          <div class="form-row"><span class="form-label">비용내역</span>
-            <div class="cost-list" id="costList"></div>
-            <button type="button" class="add-btn" onclick="addCost()">+ 비용추가</button>
-          </div>
-          <div class="form-row"><span class="form-label">수익내역</span>
-            <div class="rev-list" id="revList"></div>
-            <button type="button" class="add-btn" onclick="addRev()">+ 수익추가</button>
-          </div>
-        </div>
-        <!-- 5. 첨부 -->
-        <div class="form-section">
-          <div class="form-row"><span class="form-label">첨부파일</span>
-            <input type="file" id="fileInput" name="files" multiple>
-          </div>
-        </div>
-        <!-- 버튼 -->
-        <div class="form-section">
-          <button type="button" class="add-btn" onclick="calculate()">자동계산</button>
-          <button type="submit" class="add-btn" id="submitBtn">접수</button>
-        </div>
-      </form>
-      <div class="result" id="result"></div>
-      <div class="mailResult" id="mailResult"></div>
-    </div>
-  </div>
-  <script>
-    // 동적 행 추가/삭제
-    function addCost() {
-      const d = document.createElement("div");
-      d.innerHTML = `
-        <input placeholder="비용명" class="costname">
-        <input type="number" class="costval" placeholder="금액">
-        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
-      `;
-      document.getElementById("costList").appendChild(d);
-    }
-    function addRev() {
-      const d = document.createElement("div");
-      d.innerHTML = `
-        <input placeholder="수익명" class="revname">
-        <input type="number" class="revval" placeholder="금액">
-        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
-      `;
-      document.getElementById("revList").appendChild(d);
-    }
-    function addTicket() {
-      const d = document.createElement("div");
-      d.innerHTML = `
-        <input type="text" placeholder="종류" class="ticketType">
-        <input type="number" placeholder="좌석수" class="ticketCount">
-        <input type="number" placeholder="금액" class="ticketPrice">
-        <button type="button" class="del-btn" title="삭제" onclick="this.parentElement.remove()">삭제</button>
-      `;
-      document.getElementById("ticketList").appendChild(d);
-    }
-    // 기본 한행
-    window.onload = function() {
-      document.querySelectorAll('.fade-in').forEach((el, i) => {
-        setTimeout(() => el.classList.add('visible'), 100 + 120 * i);
-      });
-      addCost(); addRev(); addTicket();
-    }
-    // 스크롤 애니메이션
-    window.addEventListener('scroll', function() {
-      document.querySelectorAll('.fade-in').forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if(rect.top < window.innerHeight-90) el.classList.add('visible');
-      });
-    });
+```html 
+    엔터테인먼트 투자제안 v2.0 - 프로페셔널널 
+        :root {
+            /* Enhanced Color System */
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+            
+            --accent-400: #fb7185;
+            --accent-500: #f43f5e;
+            --accent-600: #e11d48;
+            
+            --success-400: #4ade80;
+            --success-500: #22c55e;
+            --success-600: #16a34a;
+            
+            --warning-400: #fbbf24;
+            --warning-500: #f59e0b;
+            --warning-600: #d97706;
+            
+            --neutral-0: #ffffff;
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-400: #94a3b8;
+            --neutral-500: #64748b;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            --neutral-900: #0f172a;
+            
+            /* Dynamic Theme Variables */
+            --bg-primary: var(--neutral-50);
+            --bg-secondary: var(--neutral-0);
+            --bg-accent: var(--primary-50);
+            --text-primary: var(--neutral-900);
+            --text-secondary: var(--neutral-600);
+            --text-accent: var(--primary-600);
+            --border-color: var(--neutral-200);
+            
+            /* Enhanced Shadows */
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-600) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
+            --gradient-warning: linear-gradient(135deg, var(--warning-500) 0%, var(--warning-600) 100%);
+            
+            /* Enhanced Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-elastic: 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-    // 자동계산
-    function calculate() {
-      let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
-      document.querySelectorAll('.costval').forEach(x => totalCost += Number(x.value || 0));
-      document.querySelectorAll('.revval').forEach(x => totalRevenue += Number(x.value || 0));
-      document.querySelectorAll('.ticketCount').forEach((el, i) => {
-        const price = Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
-        const count = Number(el.value || 0);
-        ticketRevenue += price * count;
-      });
-      totalRevenue += ticketRevenue;
-      let ROI = totalCost > 0 ? (((totalRevenue - totalCost) / totalCost) * 100).toFixed(2) : "0";
-      let seatSum = 0, priceSum = 0;
-      document.querySelectorAll('.ticketCount').forEach((el, i) => {
-        seatSum += Number(el.value || 0);
-        priceSum += Number(document.querySelectorAll('.ticketPrice')[i].value || 0);
-      });
-      let BEP = priceSum > 0 ? Math.ceil(totalCost / priceSum) : "0";
-      const investorShare = Number(document.querySelector('input[name=investorShare]').value || 0);
-      const ownerShare = 100 - investorShare;
-      document.querySelector('input[name=ownerShare]').value = ownerShare;
-      const investorProfit = Math.floor(totalRevenue * investorShare / 100);
-      const ownerProfit = Math.floor(totalRevenue * ownerShare / 100);
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --bg-primary: var(--neutral-900);
+            --bg-secondary: var(--neutral-800);
+            --bg-accent: var(--neutral-800);
+            --text-primary: var(--neutral-50);
+            --text-secondary: var(--neutral-300);
+            --text-accent: var(--primary-400);
+            --border-color: var(--neutral-700);
+        }
 
-      let html = `
-        총비용: <b>${totalCost.toLocaleString()}원</b><br>
-        총수익: <b>${totalRevenue.toLocaleString()}원</b><br>
-        ROI: <b>${ROI}%</b><br>
-        BEP(손익분기점): <b>${BEP}매(티켓단가별)</b><br>
-        투자자몫: <b>${investorProfit.toLocaleString()}원</b> / 사업주체몫: <b>${ownerProfit.toLocaleString()}원</b>
-      `;
-      let r = document.getElementById("result");
-      r.innerHTML = html;
-      r.classList.add("visible");
-    }
+        /* High Contrast Mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --bg-primary: #ffffff;
+                --border-color: #000000;
+                --primary-600: #0066cc;
+            }
+            
+            [data-theme="dark"] {
+                --text-primary: #ffffff;
+                --bg-primary: #000000;
+                --border-color: #ffffff;
+            }
+        }
 
-    // EmailJS (옵션) - 미설정시 삭제가능
-    // emailjs.init("YOUR_PUBLIC_KEY");
-    document.getElementById("mainForm").onsubmit = async function(ev) {
-      ev.preventDefault();
-      let mailBox = document.getElementById("mailResult");
-      mailBox.innerHTML = "";
-      // 입력 정리
-      const f = ev.target;
-      let types = [];
-      f.querySelectorAll("input[name=type]:checked").forEach(x=>types.push(x.value));
-      let costs = [], revs = [], tickets = [];
-      f.querySelectorAll('.cost-list div').forEach(d=>{
-        let name = d.querySelector('.costname').value, val = d.querySelector('.costval').value;
-        if(name && val) costs.push(name+": "+val+"원");
-      });
-      f.querySelectorAll('.rev-list div').forEach(d=>{
-        let name = d.querySelector('.revname').value, val = d.querySelector('.revval').value;
-        if(name && val) revs.push(name+": "+val+"원");
-      });
-      f.querySelectorAll('.ticket-list div').forEach(d=>{
-        let t = d.querySelector('.ticketType').value,
-            c = d.querySelector('.ticketCount').value,
-            p = d.querySelector('.ticketPrice').value;
-        if(t && c && p) tickets.push(`${t} - ${c}석 × ${p}원`);
-      });
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
 
-      calculate();
-      let calcRes = document.getElementById("result").innerHTML.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      // 실제 이메일 전송 연동 필요시 EmailJS 활성화
-      /*
-      const files = document.getElementById("fileInput").files;
-      const templateParams = {
-        message: `
-[사업명] ${f.projectName.value}
-[사업유형] ${types.join(",")}
-[아티스트] ${f.artist.value}
-[콘서트장] ${f.venue.value} (좌석수: ${f.seatCount.value})
-[티켓종류] ${tickets.join(";")}
-[투자요청금액] ${f.requestAmount.value}원
-[기간]
-- 콘서트: ${f.showStart.value} ~ ${f.showEnd.value}
-- 투자금 운용: ${f.investStart.value} ~ ${f.investEnd.value}
-- 원금회수: ${f.principalReturnStart.value} ~ ${f.principalReturnEnd.value}
-- 수익분배: ${f.profitDistStart.value} ~ ${f.profitDistEnd.value}
-[수익배분] 투자자 ${f.investorShare.value}%, 사업주체 ${f.ownerShare.value}%
-[비용] ${costs.join(";")}
-[수익] ${revs.join(";")}
-----------------
-[자동계산]
-${calcRes}
-----------------
-        `
-      };
-      let formData = new FormData();
-      formData.append("message", templateParams.message);
-      for(let i=0; i<files.length; i++) {
-        formData.append(`file${i+1}`, files[i], files[i].name);
-      }
-      document.getElementById("submitBtn").innerText = "전송중...";
-      document.getElementById("submitBtn").disabled = true;
-      try {
-        await emailjs.sendForm(
-          "YOUR_SERVICE_ID",  // EmailJS 서비스 ID
-          "YOUR_TEMPLATE_ID", // EmailJS 템플릿 ID
-          f // HTML Form 객체 (input[file] 자동 첨부됨)
-        );
-        mailBox.innerHTML = "<b>접수완료!</b> 입력내용이 이메일로 전송되었습니다.";
-      } catch(e) {
-        mailBox.innerHTML = "<b>오류:</b> "+e.text;
-      }
-      document.getElementById("submitBtn").innerText = "접수";
-      document.getElementById("submitBtn").disabled = false;
-      */
-      mailBox.innerHTML = "<b>접수 시 이메일로 자동전송됩니다.<br>(EmailJS 연동시 활성화)</b>";
-      mailBox.classList.add("visible");
-    }
-  </script>
-</body>
-</html>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color var(--transition-base), color var(--transition-base);
+            overflow-x: hidden;
+            font-feature-settings: 'liga' 1, 'kern' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Enhanced Layout */
+        .main-wrap {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            contain: layout style paint;
+        }
+
+        /* Background Effects with GPU Acceleration */
+        .main-wrap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, var(--primary-100) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--accent-100) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, var(--success-100) 0%, transparent 50%);
+            opacity: 0.3;
+            z-index: -1;
+            transform: translateZ(0);
+            will-change: transform;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { 
+                transform: translateZ(0) scale(1) rotate(0deg); 
+            }
+            50% { 
+                transform: translateZ(0) scale(1.05) rotate(1deg); 
+            }
+        }
+
+        /* Enhanced Typography */
+        .title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            letter-spacing: -0.025em;
+            margin-bottom: 3rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            position: relative;
+            transform: translateZ(0);
+            animation: titleSlideIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes titleSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-40px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-accent);
+            border-radius: 2px;
+            animation: lineExpand 0.8s ease-out 0.5s both;
+        }
+
+        @keyframes lineExpand {
+            from { width: 0; }
+            to { width: 80px; }
+        }
+
+        /* Theme Toggle Enhancement */
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-elastic);
+            backdrop-filter: blur(12px);
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .theme-toggle:hover {
+            transform: translateZ(0) scale(1.1);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--primary-600);
+        }
+
+        .theme-toggle:active {
+            transform: translateZ(0) scale(0.95);
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--text-accent);
+            transition: all var(--transition-base);
+        }
+
+        /* Enhanced Glass Card */
+        .glass-card {
+            background: var(--bg-secondary);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 2px solid var(--border-color);
+            border-radius: 32px;
+            max-width: 900px;
+            width: 100%;
+            padding: 3.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-2xl);
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+            will-change: transform;
+            animation: cardSlideUp 1s ease-out 0.3s both;
+            contain: layout style paint;
+        }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 32px 32px 0 0;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-12px) translateZ(0);
+            box-shadow: 0 40px 80px -16px rgba(0, 0, 0, 0.25);
+            border-color: var(--primary-300);
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 3rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--transition-slow);
+        }
+
+        .form-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            animation: sectionIndicator 0.6s ease-out;
+        }
+
+        @keyframes sectionIndicator {
+            from { height: 0; }
+            to { height: 32px; }
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+            color: var(--text-accent);
+        }
+
+        /* Enhanced Form Elements */
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .form-label {
+            min-width: 140px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label .required {
+            color: var(--accent-500);
+            font-size: 0.875rem;
+        }
+
+        /* Input Group System */
+        .input-group {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            position: relative;
+            will-change: transform, box-shadow;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+            background: var(--bg-secondary);
+        }
+
+        input:hover, textarea:hover, select:hover {
+            border-color: var(--primary-300);
+            transform: translateY(-1px);
+        }
+
+        /* Input States */
+        .input-group.success input {
+            border-color: var(--success-500);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+        }
+
+        .input-group.error input {
+            border-color: var(--accent-600);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Error Messages */
+        .error-message {
+            position: absolute;
+            bottom: -28px;
+            left: 0;
+            color: var(--accent-600);
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: errorSlideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes errorSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-message i {
+            font-size: 0.75rem;
+        }
+
+        /* Success Messages */
+        .success-message {
+            position: absolute;
+            bottom: -28px;
+            left: 0;
+            color: var(--success-600);
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: successSlideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes successSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Button System */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 16px;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            white-space: nowrap;
+            transform: translateZ(0);
+            will-change: transform;
+            min-height: 56px;
+        }
+
+        /* Button Ripple Effect */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) translateZ(0);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) translateZ(0);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px) translateZ(0);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-warning {
+            background: var(--gradient-warning);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px) translateZ(0);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-danger {
+            background: var(--gradient-accent);
+            color: white;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.25rem;
+            margin-left: 0.75rem;
+            min-height: 48px;
+        }
+
+        .btn-danger:hover {
+            transform: scale(1.05) translateZ(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Loading State */
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Checkbox System */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            min-width: 300px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transition: all var(--transition-base);
+            position: relative;
+            transform: translateZ(0);
+        }
+
+        .checkbox-item:hover {
+            background: var(--bg-accent);
+            transform: translateY(-2px) translateZ(0);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-600);
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        .checkbox-item label {
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* Dynamic Lists Enhancement */
+        .dynamic-list {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            transition: all var(--transition-base);
+        }
+
+        .dynamic-list:hover {
+            border-color: var(--primary-300);
+            box-shadow: var(--shadow-md);
+        }
+
+        .dynamic-list-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all var(--transition-base);
+            transform: translateZ(0);
+            animation: itemSlideIn 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes itemSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateZ(0);
+            }
+        }
+
+        .dynamic-list-item:hover {
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-300);
+        }
+
+        .dynamic-list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Enhanced Result Display */
+        .result {
+            background: var(--bg-accent);
+            border: 3px solid var(--primary-200);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+            contain: layout style paint;
+        }
+
+        .result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .result.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: resultReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes resultReveal {
+            0% { 
+                opacity: 0;
+                transform: translateY(40px) scale(0.95); 
+            }
+            60% { 
+                transform: translateY(-5px) scale(1.02); 
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .result-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            color: var(--text-primary);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            transition: all var(--transition-base);
+            transform: translateZ(0);
+            animation: resultItemAppear 0.6s ease-out var(--delay, 0s) both;
+        }
+
+        @keyframes resultItemAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        .result-item:hover {
+            transform: translateY(-3px) translateZ(0);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-400);
+        }
+
+        .result-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-value {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-accent);
+            text-align: right;
+        }
+
+        .result-value.positive {
+            color: var(--success-600);
+        }
+
+        .result-value.negative {
+            color: var(--accent-600);
+        }
+
+        /* Chart Container */
+        .chart-section {
+            margin-top: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--transition-slow);
+        }
+
+        .chart-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all var(--transition-base);
+            transform: translateZ(0);
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px) translateZ(0);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Button Groups */
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        /* Progress System */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--neutral-200);
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width var(--transition-base);
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0 2rem 0;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neutral-300);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-dot.active {
+            background: var(--primary-600);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .progress-dot.completed {
+            background: var(--success-600);
+        }
+
+        /* Auto Save Indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success-500);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-base);
+            z-index: 1000;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-xl);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform var(--transition-elastic);
+            backdrop-filter: blur(12px);
+        }
+
+        .notification.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.success {
+            border-color: var(--success-500);
+            color: var(--success-600);
+        }
+
+        .notification.error {
+            border-color: var(--accent-500);
+            color: var(--accent-600);
+        }
+
+        .notification.warning {
+            border-color: var(--warning-500);
+            color: var(--warning-600);
+        }
+
+        /* Tooltip Styling */
+        .tippy-box[data-theme~='custom'] {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(12px);
+        }
+
+        .tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
+            border-top-color: var(--border-color);
+        }
+
+        /* Enhanced Mobile Styles */
+        @media (max-width: 768px) {
+            .main-wrap {
+                padding: 1rem 0.5rem;
+            }
+
+            .glass-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                border-radius: 24px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .form-label {
+                min-width: auto;
+                font-weight: 600;
+            }
+
+            .input-group {
+                min-width: 100%;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .result-content {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Touch Enhancements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                min-height: 48px;
+            }
+
+            input, select, textarea {
+                min-height: 48px;
+            }
+
+            .checkbox-item {
+                min-height: 48px;
+            }
+        }
+
+        /* PDF Export Styles */
+        .pdf-mode {
+            background: white !important;
+            color: black !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            transform: none !important;
+            border: none !important;
+        }
+
+        .pdf-mode * {
+            background: white !important;
+            color: black !important;
+            border-color: #ccc !important;
+        }
+
+        .pdf-mode .title {
+            background: none !important;
+            color: #2563eb !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+        }
+
+        .pdf-mode .result {
+            background: #f8f9fa !important;
+            color: #333 !important;
+            border-color: #dee2e6 !important;
+        }
+
+        .pdf-mode .result-value {
+            color: #2563eb !important;
+        }
+
+        /* Print Optimization */
+        @media print {
+            .theme-toggle,
+            .save-indicator,
+            .notification,
+            .btn-group {
+                display: none !important;
+            }
+
+            .glass-card {
+                box-shadow: none !important;
+                border: 2px solid #ccc !important;
+            }
+        }
+
+        /* Scroll Optimizations */
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+
+        .scroll-container {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* Focus Management */
+        :focus-visible {
+            outline: 3px solid var(--primary-600) !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--primary-600);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+    
+
+
+    
+    메인 콘텐츠로 바로가기
+
+    
+    
+        
+    
+
+    
+    
+        
+    
+
+    
+    
+        
+        자동 저장됨
+    
+
+    
+    
+        
+        알림 메시지
+    
+
+    
+        엔터테인먼트 투자제안 v2.0
+        
+        
+            
+                
+                
+                    
+                        
+                        사업 정보
+                    
+                    
+                    
+                        
+                            사업명 *
+                        
+                        
+                            
+                            프로젝트의 공식 명칭을 입력하세요
+                        
+                    
+                    
+                    
+                        사업유형 *
+                        
+                            
+                                
+                                콘서트
+                                라이브 콘서트 공연
+                            
+                            
+                                
+                                팬미팅
+                            
+                            
+                                
+                                MD수입
+                            
+                            
+                                
+                                굿즈
+                            
+                            
+                                
+                                기타
+                            
+                        
+                    
+                    
+                    
+                        아티스트명 *
+                        
+                            
+                        
+                    
+                    
+                    
+                        콘서트장 *
+                        
+                            
+                        
+                    
+                    
+                    
+                        총 좌석수 *
+                        
+                            
+                        
+                    
+                
+
+                
+                
+                    
+                        
+                        티켓 정보
+                    
+                    
+                    
+                        
+                        
+                            
+                            티켓 추가
+                        
+                    
+                
+
+                
+                
+                    
+                        
+                        투자 정보
+                    
+                    
+                    
+                        투자요청금액 *
+                        
+                            
+                            원
+                        
+                    
+                    
+                    
+                        콘서트 일정
+                        
+                            
+                        
+                        ~
+                        
+                            
+                        
+                    
+                    
+                    
+                        투자금 운용
+                        
+                            
+                        
+                        ~
+                        
+                            
+                        
+                    
+                    
+                    
+                        원금 회수
+                        
+                            
+                        
+                        ~
+                        
+                            
+                        
+                    
+                    
+                    
+                        수익 분배
+                        
+                            
+                        
+                        ~
+                        
+                            
+                        
+                    
+                    
+                    
+                        수익 배분
+                        
+                            
+                                투자자
+                                
+                                %
+                            
+                            
+                                사업주체
+                                
+                                %
+                            
+                        
+                    
+                
+
+                
+                
+                    
+                        
+                        비용 및 수익
+                    
+                    
+                    
+                        비용 내역
+                        
+                            
+                            
+                                
+                                비용 추가
+                            
+                        
+                    
+                    
+                    
+                        수익 내역
+                        
+                            
+                            
+                                
+                                수익 추가
+                            
+                        
+                    
+                
+
+                
+                
+                    
+                        
+                        자동 계산
+                    
+                    
+                        
+                        PDF 다운로드
+                    
+                    
+                        
+                        Excel 내보내기
+                    
+                
+            
+
+            
+            
+                
+            
+
+            
+            
+                
+                    
+                    투자 분석 차트
+                
+                
+                    
+                        
+                            
+                            비용 구성
+                        
+                        
+                    
+                    
+                        
+                            
+                            수익 vs 비용
+                        
+                        
+                    
+                    
+                        
+                            
+                            ROI 분석
+                        
+                        
+                    
+                
+            
+        
+
+        
+        
+            
+            
+            
+        
+    
+
+    
+        // ============================================
+        // Global Variables and Configuration
+        // ============================================
+        
+        let jsPDF = jspdf.jsPDF;
+        let costPieChart, revenueChart, roiChart;
+        
+        const CONFIG = {
+            STORAGE_KEY: 'investment_proposal_v2',
+            DEBOUNCE_DELAY: 500,
+            ANIMATION_DURATION: 300,
+            CHART_COLORS: [
+                '#3b82f6', '#f43f5e', '#22c55e', '#f59e0b', 
+                '#8b5cf6', '#06b6d4', '#ef4444', '#10b981'
+            ]
+        };
+
+        // ============================================
+        // Memory Manager Class
+        // ============================================
+        
+        class MemoryManager {
+            constructor() {
+                this.eventListeners = new Map();
+                this.intervals = new Set();
+                this.timeouts = new Set();
+                this.observers = new Set();
+                this.setupAutoCleanup();
+            }
+
+            addEventListener(element, event, handler, options) {
+                const key = `${element.id || 'anonymous'}_${event}_${Date.now()}`;
+                
+                if (this.eventListeners.has(key)) {
+                    const { el, evt, fn } = this.eventListeners.get(key);
+                    el.removeEventListener(evt, fn);
+                }
+                
+                element.addEventListener(event, handler, options);
+                this.eventListeners.set(key, { el: element, evt: event, fn: handler });
+            }
+
+            setTimeout(callback, delay) {
+                const timeoutId = setTimeout(() => {
+                    callback();
+                    this.timeouts.delete(timeoutId);
+                }, delay);
+                
+                this.timeouts.add(timeoutId);
+                return timeoutId;
+            }
+
+            setInterval(callback, interval) {
+                const intervalId = setInterval(callback, interval);
+                this.intervals.add(intervalId);
+                return intervalId;
+            }
+
+            addObserver(observer) {
+                this.observers.add(observer);
+                return observer;
+            }
+
+            cleanup() {
+                this.eventListeners.forEach(({ el, evt, fn }) => {
+                    try {
+                        el.removeEventListener(evt, fn);
+                    } catch (e) {
+                        console.warn('Error removing event listener:', e);
+                    }
+                });
+                this.eventListeners.clear();
+
+                this.intervals.forEach(id => clearInterval(id));
+                this.timeouts.forEach(id => clearTimeout(id));
+                this.intervals.clear();
+                this.timeouts.clear();
+
+                this.observers.forEach(observer => {
+                    try {
+                        observer.disconnect();
+                    } catch (e) {
+                        console.warn('Error disconnecting observer:', e);
+                    }
+                });
+                this.observers.clear();
+            }
+
+            setupAutoCleanup() {
+                window.addEventListener('beforeunload', () => {
+                    this.cleanup();
+                });
+            }
+        }
+
+        // ============================================
+        // Auto Save System
+        // ============================================
+        
+        class AutoSave {
+            constructor(formId, storageKey) {
+                this.form = document.getElementById(formId);
+                this.storageKey = storageKey;
+                this.lastSave = Date.now();
+                this.init();
+            }
+
+            init() {
+                this.loadData();
+                this.bindEvents();
+            }
+
+            saveData = debounce(() => {
+                try {
+                    const data = this.collectFormData();
+                    data.timestamp = Date.now();
+                    data.version = '2.0';
+                    
+                    localStorage.setItem(this.storageKey, JSON.stringify(data));
+                    this.showSaveIndicator();
+                    this.lastSave = Date.now();
+                } catch (error) {
+                    console.error('Save error:', error);
+                    showNotification('저장 중 오류가 발생했습니다.', 'error');
+                }
+            }, CONFIG.DEBOUNCE_DELAY);
+
+            collectFormData() {
+                const formData = new FormData(this.form);
+                const data = {};
+                
+                // 기본 폼 데이터 수집
+                for (let [key, value] of formData.entries()) {
+                    if (data[key]) {
+                        if (!Array.isArray(data[key])) {
+                            data[key] = [data[key]];
+                        }
+                        data[key].push(value);
+                    } else {
+                        data[key] = value;
+                    }
+                }
+
+                // 체크박스 데이터 수집
+                const checkboxes = this.form.querySelectorAll('input[type="checkbox"]:checked');
+                data.selectedTypes = Array.from(checkboxes).map(cb => cb.value);
+                
+                // 동적 리스트 데이터 수집
+                data.tickets = this.collectDynamicData('ticketList', ['ticketType', 'ticketCount', 'ticketPrice']);
+                data.costs = this.collectDynamicData('costList', ['costname', 'costval']);
+                data.revenues = this.collectDynamicData('revList', ['revname', 'revval']);
+                
+                return data;
+            }
+
+            collectDynamicData(containerId, fieldClasses) {
+                const container = document.getElementById(containerId);
+                const items = container.querySelectorAll('.dynamic-list-item');
+                
+                return Array.from(items).map(item => {
+                    const itemData = {};
+                    fieldClasses.forEach(className => {
+                        const field = item.querySelector(`.${className}`);
+                        if (field) {
+                            itemData[className] = field.value;
+                        }
+                    });
+                    return itemData;
+                }).filter(item => Object.values(item).some(val => val.trim() !== ''));
+            }
+
+            loadData() {
+                try {
+                    const savedData = localStorage.getItem(this.storageKey);
+                    if (!savedData) return false;
+                    
+                    const data = JSON.parse(savedData);
+                    if (!data.version || data.version !== '2.0') {
+                        console.warn('Version mismatch, clearing old data');
+                        localStorage.removeItem(this.storageKey);
+                        return false;
+                    }
+                    
+                    this.populateForm(data);
+                    showNotification('이전 작업 내용을 복원했습니다.', 'success');
+                    return true;
+                } catch (error) {
+                    console.error('Load error:', error);
+                    return false;
+                }
+            }
+
+            populateForm(data) {
+                // 기본 input 필드 채우기
+                Object.keys(data).forEach(key => {
+                    const field = this.form.querySelector(`[name="${key}"]`);
+                    if (field && !['tickets', 'costs', 'revenues', 'selectedTypes'].includes(key)) {
+                        field.value = data[key];
+                    }
+                });
+
+                // 체크박스 복원
+                if (data.selectedTypes) {
+                    data.selectedTypes.forEach(type => {
+                        const checkbox = this.form.querySelector(`input[type="checkbox"][value="${type}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+
+                // 동적 리스트 복원
+                if (data.tickets) {
+                    document.getElementById('ticketList').innerHTML = '';
+                    data.tickets.forEach(ticket => {
+                        addTicket();
+                        const item = document.querySelector('#ticketList .dynamic-list-item:last-child');
+                        if (item) {
+                            item.querySelector('.ticketType').value = ticket.ticketType || '';
+                            item.querySelector('.ticketCount').value = ticket.ticketCount || '';
+                            item.querySelector('.ticketPrice').value = ticket.ticketPrice || '';
+                        }
+                    });
+                }
+
+                if (data.costs) {
+                    document.getElementById('costList').innerHTML = '';
+                    data.costs.forEach(cost => {
+                        addCost();
+                        const item = document.querySelector('#costList .dynamic-list-item:last-child');
+                        if (item) {
+                            item.querySelector('.costname').value = cost.costname || '';
+                            item.querySelector('.costval').value = cost.costval || '';
+                        }
+                    });
+                }
+
+                if (data.revenues) {
+                    document.getElementById('revList').innerHTML = '';
+                    data.revenues.forEach(revenue => {
+                        addRev();
+                        const item = document.querySelector('#revList .dynamic-list-item:last-child');
+                        if (item) {
+                            item.querySelector('.revname').value = revenue.revname || '';
+                            item.querySelector('.revval').value = revenue.revval || '';
+                        }
+                    });
+                }
+            }
+
+            showSaveIndicator() {
+                const indicator = document.getElementById('saveIndicator');
+                indicator.classList.add('visible');
+                setTimeout(() => {
+                    indicator.classList.remove('visible');
+                }, 2000);
+            }
+
+            bindEvents() {
+                const inputs = this.form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    memoryManager.addEventListener(input, 'input', this.saveData);
+                    memoryManager.addEventListener(input, 'change', this.saveData);
+                });
+            }
+        }
+
+        // ============================================
+        // Smart Validator Class
+        // ============================================
+        
+        class SmartValidator {
+            constructor() {
+                this.rules = new Map();
+                this.errors = new Map();
+                this.init();
+            }
+
+            init() {
+                this.defineRules();
+                this.bindValidationEvents();
+            }
+
+            defineRules() {
+                this.rules.set('projectName', {
+                    required: true,
+                    minLength: 2,
+                    message: '프로젝트명은 2자 이상 입력해주세요.'
+                });
+                
+                this.rules.set('artist', {
+                    required: true,
+                    minLength: 1,
+                    message: '아티스트명을 입력해주세요.'
+                });
+
+                this.rules.set('venue', {
+                    required: true,
+                    minLength: 2,
+                    message: '콘서트장을 입력해주세요.'
+                });
+                
+                this.rules.set('seatCount', {
+                    required: true,
+                    type: 'number',
+                    min: 1,
+                    message: '좌석수는 1 이상의 숫자여야 합니다.'
+                });
+
+                this.rules.set('requestAmount', {
+                    required: true,
+                    type: 'number',
+                    min: 1,
+                    message: '투자요청금액은 1원 이상이어야 합니다.'
+                });
+            }
+
+            validateField = debounce((field, value) => {
+                const rule = this.rules.get(field.name);
+                if (!rule) return true;
+
+                const isValid = this.checkRule(value, rule);
+                this.displayValidation(field, isValid, rule.message);
+                
+                return isValid;
+            }, 300);
+
+            checkRule(value, rule) {
+                if (rule.required && (!value || value.toString().trim() === '')) {
+                    return false;
+                }
+                
+                if (rule.type === 'number') {
+                    const numValue = Number(value);
+                    if (isNaN(numValue) || (rule.min !== undefined && numValue  올바르게 입력되었습니다.`;
+                    inputGroup.appendChild(successDiv);
+                } else {
+                    inputGroup.classList.add('error');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = ` ${message}`;
+                    inputGroup.appendChild(errorDiv);
+                }
+            }
+
+            validateForm() {
+                const requiredFields = document.querySelectorAll('input[required]');
+                let isValid = true;
+
+                requiredFields.forEach(field => {
+                    const fieldValid = this.validateField(field, field.value);
+                    if (!fieldValid) isValid = false;
+                });
+
+                // 사업 유형 체크박스 검증
+                const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
+                if (typeCheckboxes.length === 0) {
+                    showNotification('사업 유형을 하나 이상 선택해주세요.', 'error');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            bindValidationEvents() {
+                const form = document.getElementById('mainForm');
+                const inputs = form.querySelectorAll('input[required]');
+                
+                inputs.forEach(input => {
+                    memoryManager.addEventListener(input, 'blur', (e) => {
+                        this.validateField(e.target, e.target.value);
+                    });
+                    
+                    memoryManager.addEventListener(input, 'input', (e) => {
+                        if (e.target.classList.contains('error')) {
+                            this.validateField(e.target, e.target.value);
+                        }
+                    });
+                });
+            }
+        }
+
+        // ============================================
+        // Touch Gesture Handler
+        // ============================================
+        
+        class TouchGestureHandler {
+            constructor() {
+                this.touchStartX = 0;
+                this.touchStartY = 0;
+                this.touchStartTime = 0;
+                this.init();
+            }
+
+            init() {
+                const mainWrap = document.querySelector('.main-wrap');
+                memoryManager.addEventListener(mainWrap, 'touchstart', this.handleTouchStart.bind(this), { passive: false });
+                memoryManager.addEventListener(mainWrap, 'touchmove', this.handleTouchMove.bind(this), { passive: false });
+                memoryManager.addEventListener(mainWrap, 'touchend', this.handleTouchEnd.bind(this), { passive: false });
+            }
+
+            handleTouchStart(e) {
+                const touch = e.touches[0];
+                this.touchStartX = touch.pageX;
+                this.touchStartY = touch.pageY;
+                this.touchStartTime = Date.now();
+                
+                // 터치 피드백
+                if (e.target.closest('.btn') || e.target.closest('.dynamic-list-item')) {
+                    this.addTouchFeedback(e.target.closest('.btn') || e.target.closest('.dynamic-list-item'));
+                }
+            }
+
+            handleTouchMove(e) {
+                // 필요한 경우 스크롤 방지
+                if (this.shouldPreventScroll(e)) {
+                    e.preventDefault();
+                }
+            }
+
+            handleTouchEnd(e) {
+                const touch = e.changedTouches[0];
+                const deltaX = touch.pageX - this.touchStartX;
+                const deltaY = touch.pageY - this.touchStartY;
+                const deltaTime = Date.now() - this.touchStartTime;
+                
+                // 스와이프 제스처 감지 (빠른 움직임, 최소 50px 이동)
+                if (deltaTime  50 && Math.abs(deltaY)  0 ? 'right' : 'left');
+                }
+                
+                // 터치 피드백 제거
+                if (e.target.closest('.btn') || e.target.closest('.dynamic-list-item')) {
+                    this.removeTouchFeedback(e.target.closest('.btn') || e.target.closest('.dynamic-list-item'));
+                }
+            }
+
+            shouldPreventScroll(e) {
+                // 특정 요소에서만 스크롤 방지
+                return e.target.closest('.chart-container') || e.target.closest('.result-content');
+            }
+
+            addTouchFeedback(element) {
+                if (element) {
+                    element.style.transform = 'scale(0.98)';
+                    element.style.transition = 'transform 0.1s ease';
+                }
+            }
+
+            removeTouchFeedback(element) {
+                if (element) {
+                    setTimeout(() => {
+                        element.style.transform = '';
+                    }, 150);
+                }
+            }
+
+            handleSwipe(direction) {
+                // 스와이프 제스처에 따른 액션
+                if (direction === 'left') {
+                    // 왼쪽 스와이프: 다음 단계
+                    updateProgressDots(2);
+                } else if (direction === 'right') {
+                    // 오른쪽 스와이프: 이전 단계
+                    updateProgressDots(1);
+                }
+            }
+        }
+
+        // ============================================
+        // Performance Optimizer
+        // ============================================
+        
+        class PerformanceOptimizer {
+            constructor() {
+                this.observer = null;
+                this.rafId = null;
+                this.init();
+            }
+
+            init() {
+                this.setupIntersectionObserver();
+                this.optimizeAnimations();
+                this.monitorPerformance();
+            }
+
+            setupIntersectionObserver() {
+                const options = {
+                    root: null,
+                    rootMargin: '50px',
+                    threshold: 0.1
+                };
+
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            // 차트 지연 로딩
+                            if (entry.target.id === 'chartSection') {
+                                this.loadCharts();
+                            }
+                        }
+                    });
+                }, options);
+
+                document.querySelectorAll('.form-section, .chart-section').forEach(section => {
+                    this.observer.observe(section);
+                });
+
+                memoryManager.addObserver(this.observer);
+            }
+
+            optimizeAnimations() {
+                // will-change 속성 동적 적용
+                const animatedElements = document.querySelectorAll('.glass-card, .btn, .dynamic-list-item');
+                
+                animatedElements.forEach(el => {
+                    memoryManager.addEventListener(el, 'mouseenter', () => {
+                        el.style.willChange = 'transform';
+                    });
+                    
+                    memoryManager.addEventListener(el, 'mouseleave', () => {
+                        el.style.willChange = 'auto';
+                    });
+                    
+                    memoryManager.addEventListener(el, 'animationend', () => {
+                        el.style.willChange = 'auto';
+                    });
+
+                    memoryManager.addEventListener(el, 'transitionend', () => {
+                        el.style.willChange = 'auto';
+                    });
+                });
+            }
+
+            loadCharts() {
+                // 차트가 뷰포트에 들어올 때만 로딩
+                if (typeof Chart !== 'undefined') {
+                    Chart.defaults.font.family = 'Inter';
+                    Chart.defaults.color = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--text-secondary').trim();
+                }
+            }
+
+            monitorPerformance() {
+                // 성능 모니터링
+                if ('memory' in performance) {
+                    memoryManager.setInterval(() => {
+                        const memoryInfo = performance.memory;
+                        if (memoryInfo.usedJSHeapSize > memoryInfo.jsHeapSizeLimit * 0.9) {
+                            console.warn('High memory usage detected');
+                            this.performCleanup();
+                        }
+                    }, 30000); // 30초마다 체크
+                }
+            }
+
+            performCleanup() {
+                // 불필요한 DOM 요소 제거
+                document.querySelectorAll('.error-message, .success-message').forEach(msg => {
+                    if (!msg.closest('.input-group.error, .input-group.success')) {
+                        msg.remove();
+                    }
+                });
+
+                // 차트 정리
+                if (costPieChart) {
+                    costPieChart.destroy();
+                    costPieChart = null;
+                }
+                if (revenueChart) {
+                    revenueChart.destroy();
+                    revenueChart = null;
+                }
+                if (roiChart) {
+                    roiChart.destroy();
+                    roiChart = null;
+                }
+            }
+        }
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('ko-KR', {
+                style: 'currency',
+                currency: 'KRW',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(num);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notification.className = `notification ${type}`;
+            notificationText.textContent = message;
+            
+            // 아이콘 변경
+            const icon = notification.querySelector('i');
+            icon.className = type === 'success' ? 'fas fa-check-circle' :
+                           type === 'error' ? 'fas fa-exclamation-circle' :
+                           type === 'warning' ? 'fas fa-exclamation-triangle' :
+                           'fas fa-info-circle';
+            
+            notification.classList.add('visible');
+            
+            memoryManager.setTimeout(() => {
+                notification.classList.remove('visible');
+            }, 4000);
+        }
+
+        function updateProgressBar(progress) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function updateProgressDots(activeStep) {
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, index) => {
+                const step = index + 1;
+                dot.classList.remove('active', 'completed');
+                
+                if (step  {
+                document.body.style.transition = '';
+            }, 300);
+
+            // 차트 색상 업데이트
+            updateChartColors(newTheme);
+            
+            showNotification(`${newTheme === 'dark' ? '다크' : '라이트'} 모드로 전환되었습니다.`, 'success');
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 
+                              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const icon = document.getElementById('theme-icon');
+            
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function updateChartColors(theme) {
+            const textColor = theme === 'dark' ? '#f1f5f9' : '#334155';
+            
+            if (Chart) {
+                Chart.defaults.color = textColor;
+                Chart.defaults.borderColor = theme === 'dark' ? '#334155' : '#e2e8f0';
+                
+                // 기존 차트 업데이트
+                [costPieChart, revenueChart, roiChart].forEach(chart => {
+                    if (chart) {
+                        chart.options.plugins.legend.labels.color = textColor;
+                        chart.options.scales && Object.keys(chart.options.scales).forEach(scaleKey => {
+                            chart.options.scales[scaleKey].ticks.color = textColor;
+                            chart.options.scales[scaleKey].grid.color = theme === 'dark' ? '#334155' : '#e2e8f0';
+                        });
+                        chart.update();
+                    }
+                });
+            }
+        }
+
+        // ============================================
+        // Dynamic List Management
+        // ============================================
+        
+        function addCost() {
+            const item = document.createElement("div");
+            item.className = 'dynamic-list-item';
+            item.innerHTML = `
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+            `;
+            
+            document.getElementById("costList").appendChild(item);
+            animateNewItem(item);
+            initTooltips(item);
+            autoSave.saveData();
+        }
+
+        function addRev() {
+            const item = document.createElement("div");
+            item.className = 'dynamic-list-item';
+            item.innerHTML = `
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+            `;
+            
+            document.getElementById("revList").appendChild(item);
+            animateNewItem(item);
+            initTooltips(item);
+            autoSave.saveData();
+        }
+
+        function addTicket() {
+            const item = document.createElement("div");
+            item.className = 'dynamic-list-item';
+            item.innerHTML = `
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+            `;
+            
+            document.getElementById("ticketList").appendChild(item);
+            animateNewItem(item);
+            initTooltips(item);
+            autoSave.saveData();
+        }
+
+        function removeItem(button) {
+            const item = button.closest('.dynamic-list-item');
+            item.style.animation = 'itemSlideOut 0.3s ease-in forwards';
+            
+            memoryManager.setTimeout(() => {
+                item.remove();
+                autoSave.saveData();
+            }, 300);
+        }
+
+        function animateNewItem(item) {
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-30px)';
+            
+            memoryManager.setTimeout(() => {
+                item.style.transition = 'all 0.4s ease-out';
+                item.style.opacity = '1';
+                item.style.transform = 'translateX(0)';
+            }, 10);
+        }
+
+        // ============================================
+        // Calculation Logic
+        // ============================================
+        
+        function calculate() {
+            // 유효성 검사
+            if (!validator.validateForm()) {
+                showNotification('입력 정보를 확인해주세요.', 'error');
+                return;
+            }
+
+            try {
+                const results = performCalculation();
+                displayResults(results);
+                createCharts(results);
+                updateProgressDots(2);
+                showNotification('계산이 완료되었습니다.', 'success');
+            } catch (error) {
+                console.error('Calculation error:', error);
+                showNotification('계산 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        function performCalculation() {
+            let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
+
+            // 비용 계산
+            document.querySelectorAll('.costval').forEach(input => {
+                const value = Number(input.value || 0);
+                if (value > 0) totalCost += value;
+            });
+
+            // 기타 수익 계산
+            document.querySelectorAll('.revval').forEach(input => {
+                const value = Number(input.value || 0);
+                if (value > 0) totalRevenue += value;
+            });
+
+            // 티켓 수익 계산
+            const ticketData = [];
+            document.querySelectorAll('.ticketCount').forEach((countInput, i) => {
+                const priceInput = document.querySelectorAll('.ticketPrice')[i];
+                const typeInput = document.querySelectorAll('.ticketType')[i];
+                
+                const count = Number(countInput.value || 0);
+                const price = Number(priceInput.value || 0);
+                const type = typeInput.value || `티켓 ${i + 1}`;
+                
+                if (count > 0 && price > 0) {
+                    const revenue = count * price;
+                    ticketRevenue += revenue;
+                    ticketData.push({ type, count, price, revenue });
+                }
+            });
+
+            totalRevenue += ticketRevenue;
+
+            // 주요 지표 계산
+            const netProfit = totalRevenue - totalCost;
+            const ROI = totalCost > 0 ? ((netProfit / totalCost) * 100) : 0;
+            
+            // BEP 계산 (개선된 로직)
+            const totalTickets = ticketData.reduce((sum, ticket) => sum + ticket.count, 0);
+            const avgTicketPrice = totalTickets > 0 ? ticketRevenue / totalTickets : 0;
+            const BEP = avgTicketPrice > 0 ? Math.ceil(totalCost / avgTicketPrice) : 0;
+
+            // 수익 배분 계산
+            const investorShare = Number(document.querySelector('input[name=investorShare]').value || 70);
+            const ownerShare = 100 - investorShare;
+            
+            const investorProfit = netProfit > 0 ? Math.floor(netProfit * investorShare / 100) : 0;
+            const ownerProfit = netProfit > 0 ? Math.floor(netProfit * ownerShare / 100) : 0;
+
+            // 투자 회수 기간 계산 (단순화)
+            const requestAmount = Number(document.querySelector('input[name=requestAmount]').value || 0);
+            const monthlyProfit = investorProfit / 12; // 연간 수익을 월간으로 나눔
+            const paybackPeriod = monthlyProfit > 0 ? Math.ceil(requestAmount / monthlyProfit) : Infinity;
+
+            return {
+                totalCost,
+                totalRevenue,
+                ticketRevenue,
+                netProfit,
+                ROI,
+                BEP,
+                investorShare,
+                ownerShare,
+                investorProfit,
+                ownerProfit,
+                requestAmount,
+                paybackPeriod,
+                ticketData
+            };
+        }
+
+        function displayResults(results) {
+            const resultContent = document.getElementById("resultContent");
+            const delay = 100; // 애니메이션 지연 시간
+            
+            resultContent.innerHTML = `
+                
+                    
+                        
+                        총 비용
+                    
+                    ${formatCurrency(results.totalCost)}
+                
+                
+                    
+                        
+                        총 수익
+                    
+                    ${formatCurrency(results.totalRevenue)}
+                
+                
+                    
+                        
+                        순 수익
+                    
+                    = 0 ? 'positive' : 'negative'}">
+                        ${formatCurrency(results.netProfit)}
+                    
+                
+                
+                    
+                        
+                        ROI
+                    
+                    = 0 ? 'positive' : 'negative'}">
+                        ${results.ROI.toFixed(2)}%
+                    
+                
+                
+                    
+                        
+                        손익분기점
+                    
+                    ${formatNumber(results.BEP)}매
+                
+                
+                    
+                        
+                        투자자 수익
+                    
+                    
+                        ${formatCurrency(results.investorProfit)} (${results.investorShare}%)
+                    
+                
+                
+                    
+                        
+                        사업주체 수익
+                    
+                    
+                        ${formatCurrency(results.ownerProfit)} (${results.ownerShare}%)
+                    
+                
+                ${results.paybackPeriod !== Infinity ? `
+                
+                    
+                        
+                        투자 회수 기간
+                    
+                    
+                        약 ${results.paybackPeriod}개월
+                    
+                
+                ` : ''}
+            `;
+
+            const resultDiv = document.getElementById("result");
+            resultDiv.classList.add("visible");
+            
+            // 차트 섹션 표시
+            const chartSection = document.getElementById("chartSection");
+            memoryManager.setTimeout(() => {
+                chartSection.classList.add("visible");
+            }, 500);
+        }
+
+        // ============================================
+        // Chart Creation
+        // ============================================
+        
+        function createCharts(results) {
+            createCostPieChart(results);
+            createRevenueChart(results);
+            createROIChart(results);
+        }
+
+        function createCostPieChart(results) {
+            const ctx = document.getElementById('costPieChart').getContext('2d');
+            
+            // 기존 차트 삭제
+            if (costPieChart) {
+                costPieChart.destroy();
+            }
+
+            const costData = [];
+            const costLabels = [];
+            const costColors = [];
+
+            // 비용 데이터 수집
+            document.querySelectorAll('.costval').forEach((input, index) => {
+                const nameInput = document.querySelectorAll('.costname')[index];
+                const value = Number(input.value || 0);
+                const name = nameInput ? nameInput.value || `비용 ${index + 1}` : `비용 ${index + 1}`;
+                
+                if (value > 0) {
+                    costData.push(value);
+                    costLabels.push(name);
+                    costColors.push(CONFIG.CHART_COLORS[index % CONFIG.CHART_COLORS.length]);
+                }
+            });
+
+            costPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: costLabels,
+                    datasets: [{
+                        data: costData,
+                        backgroundColor: costColors,
+                        borderColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
+                        borderWidth: 3,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = formatCurrency(context.raw);
+                                    const percentage = ((context.raw / results.totalCost) * 100).toFixed(1);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1000
+                    }
+                }
+            });
+        }
+
+        function createRevenueChart(results) {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+
+            revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['총 비용', '총 수익', '순 수익'],
+                    datasets: [{
+                        label: '금액 (원)',
+                        data: [results.totalCost, results.totalRevenue, results.netProfit],
+                        backgroundColor: [
+                            '#f43f5e',
+                            '#22c55e', 
+                            results.netProfit >= 0 ? '#3b82f6' : '#ef4444'
+                        ],
+                        borderColor: [
+                            '#e11d48',
+                            '#16a34a',
+                            results.netProfit >= 0 ? '#2563eb' : '#dc2626'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${formatCurrency(context.raw)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            },
+                            grid: {
+                                color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e2e8f0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1
