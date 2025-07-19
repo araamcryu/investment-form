@@ -1,5 +1,25 @@
-```html 
-    엔터테인먼트 투자제안 v2.0 - 프로페셔널널 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>엔터테인먼트 투자제안 v2.0 - 프로페셔널</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="data:application/json;charset=utf-8;base64,eyJuYW1lIjoi7Yq47KeI7YyM7ZWZ7IaM7J2066C47IaQLTIMDOFuc2cgdjIuMCIsInNob3J0X25hbWUiOiLtirjtsr3soJ0t7JyB7JWE7JqUIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmOGZhZmMiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRJNElpQm9aV2xuYUhROUlqRXlPQ0lpSUhacFpYZENiM2c5SWpBZ01DQXhNamdnTVRJNElpQm1hV3hzUFNJalkyTjNZelpoSWlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M00zVnlieTVqYjIwdk1qQXdNQzl6ZG1jaVBnbyhjbVZqZENCM2FXUjBhRDBpTVRJNElpQm9aV2xuYUhROUlqRXlPQ0lpSUdacGJHdzlJaU16TlRZelpXSWlJSEo0UFNJMklpQjVQU0kySWlBdlBnbyhaM0poWkdsbGJuUWdhV1E5SWpZellpSXhhQ2s4TDJjeUlDUWdOemV3S0RFdE1TbDhMeTR4T21NeU1ETXpORGswTW00MEkzWjJMVUYwWTI2ME1qQjBabUU9Iiwic2l6ZXMiOiIxMjh4MTI4IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
         :root {
             /* Enhanced Color System */
             --primary-50: #eff6ff;
@@ -472,126 +492,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        /* Enhanced Button System */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 16px;
-            padding: 1rem 2rem;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            white-space: nowrap;
-            transform: translateZ(0);
-            will-change: transform;
-            min-height: 56px;
-        }
-
-        /* Button Ripple Effect */
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px) translateZ(0);
-        }
-
-        .btn-success {
-            background: var(--gradient-success);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-warning {
-            background: var(--gradient-warning);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-warning:hover {
-            transform: translateY(-3px) translateZ(0);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-danger {
-            background: var(--gradient-accent);
-            color: white;
-            font-size: 0.95rem;
-            padding: 0.75rem 1.25rem;
-            margin-left: 0.75rem;
-            min-height: 48px;
-        }
-
-        .btn-danger:hover {
-            transform: scale(1.05) translateZ(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Loading State */
-        .btn.loading {
-            position: relative;
-            color: transparent;
-        }
-
-        .btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Enhanced Checkbox System */
@@ -1125,290 +1025,375 @@
         .skip-link:focus {
             top: 6px;
         }
-    
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">메인 콘텐츠로 바로가기</a>
 
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-    
-    메인 콘텐츠로 바로가기
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()" aria-label="다크 모드 토글" role="button" tabindex="0" data-tooltip="테마 변경">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
 
-    
-    
-        
-    
-
-    
-    
-        
-    
-
-    
-    
-        
+    <!-- Auto Save Indicator -->
+    <div class="save-indicator" id="saveIndicator">
+        <i class="fas fa-check"></i>
         자동 저장됨
-    
+    </div>
 
-    
-    
-        
-        알림 메시지
-    
+    <!-- Notification Container -->
+    <div class="notification" id="notification">
+        <i class="fas fa-info-circle"></i>
+        <span id="notificationText">알림 메시지</span>
+    </div>
 
-    
-        엔터테인먼트 투자제안 v2.0
+    <div class="main-wrap">
+        <h1 class="title" id="main-content">엔터테인먼트 투자제안 v2.0</h1>
         
-        
-            
-                
-                
-                    
-                        
+        <div class="glass-card" id="pdf-content">
+            <form id="mainForm" novalidate>
+                <!-- 사업 정보 섹션 -->
+                <div class="form-section" data-section="business-info">
+                    <h2 class="section-title">
+                        <i class="fas fa-briefcase"></i>
                         사업 정보
+                    </h2>
                     
+                    <div class="form-row">
+                        <label class="form-label" for="projectName">
+                            사업명 <span class="required">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input 
+                                id="projectName"
+                                name="projectName" 
+                                required 
+                                placeholder="프로젝트명을 입력하세요"
+                                data-tooltip="투자제안서에 표시될 프로젝트 이름을 입력하세요"
+                                aria-describedby="projectName-help"
+                            >
+                            <div id="projectName-help" class="sr-only">프로젝트의 공식 명칭을 입력하세요</div>
+                        </div>
+                    </div>
                     
-                    
-                        
-                            사업명 *
-                        
-                        
-                            
-                            프로젝트의 공식 명칭을 입력하세요
-                        
-                    
-                    
-                    
-                        사업유형 *
-                        
-                            
-                                
+                    <div class="form-row">
+                        <label class="form-label">사업유형 <span class="required">*</span></label>
+                        <div class="checkbox-group" role="group" aria-labelledby="business-type-label">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="콘서트" aria-describedby="concert-desc">
                                 콘서트
-                                라이브 콘서트 공연
-                            
-                            
-                                
+                                <div id="concert-desc" class="sr-only">라이브 콘서트 공연</div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="팬미팅">
                                 팬미팅
-                            
-                            
-                                
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="MD수입">
                                 MD수입
-                            
-                            
-                                
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="굿즈">
                                 굿즈
-                            
-                            
-                                
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="기타">
                                 기타
-                            
-                        
+                            </label>
+                        </div>
+                    </div>
                     
+                    <div class="form-row">
+                        <label class="form-label" for="artist">아티스트명 <span class="required">*</span></label>
+                        <div class="input-group">
+                            <input 
+                                id="artist"
+                                name="artist" 
+                                required 
+                                placeholder="아티스트명 입력"
+                                data-tooltip="공연하는 아티스트의 이름을 입력하세요"
+                            >
+                        </div>
+                    </div>
                     
+                    <div class="form-row">
+                        <label class="form-label" for="venue">콘서트장 <span class="required">*</span></label>
+                        <div class="input-group">
+                            <input 
+                                id="venue"
+                                name="venue" 
+                                required 
+                                placeholder="공연장 위치"
+                                data-tooltip="공연이 진행될 장소를 입력하세요"
+                            >
+                        </div>
+                    </div>
                     
-                        아티스트명 *
-                        
-                            
-                        
-                    
-                    
-                    
-                        콘서트장 *
-                        
-                            
-                        
-                    
-                    
-                    
-                        총 좌석수 *
-                        
-                            
-                        
-                    
-                
+                    <div class="form-row">
+                        <label class="form-label" for="seatCount">총 좌석수 <span class="required">*</span></label>
+                        <div class="input-group">
+                            <input 
+                                id="seatCount"
+                                type="number" 
+                                name="seatCount" 
+                                required 
+                                min="1"
+                                placeholder="좌석수"
+                                data-tooltip="공연장의 총 좌석 수를 입력하세요"
+                            >
+                        </div>
+                    </div>
+                </div>
 
-                
-                
-                    
-                        
+                <!-- 티켓 정보 섹션 -->
+                <div class="form-section" data-section="ticket-info">
+                    <h2 class="section-title">
+                        <i class="fas fa-ticket-alt"></i>
                         티켓 정보
+                    </h2>
                     
-                    
-                    
-                        
-                        
-                            
+                    <div class="dynamic-list">
+                        <div id="ticketList" aria-label="티켓 목록"></div>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary" 
+                            onclick="addTicket()"
+                            data-tooltip="새로운 티켓 종류를 추가합니다"
+                        >
+                            <i class="fas fa-plus"></i>
                             티켓 추가
-                        
-                    
-                
+                        </button>
+                    </div>
+                </div>
 
-                
-                
-                    
-                        
+                <!-- 투자 정보 섹션 -->
+                <div class="form-section" data-section="investment-info">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-line"></i>
                         투자 정보
+                    </h2>
                     
+                    <div class="form-row">
+                        <label class="form-label" for="requestAmount">투자요청금액 <span class="required">*</span></label>
+                        <div class="input-group">
+                            <input 
+                                id="requestAmount"
+                                type="number" 
+                                name="requestAmount" 
+                                required 
+                                min="1"
+                                placeholder="0"
+                                data-tooltip="필요한 투자 금액을 입력하세요"
+                            >
+                            <span style="margin-left: 0.5rem; color: var(--text-secondary);">원</span>
+                        </div>
+                    </div>
                     
+                    <div class="form-row">
+                        <label class="form-label">콘서트 일정</label>
+                        <div class="input-group">
+                            <input type="date" name="showStart" data-tooltip="공연 시작일">
+                        </div>
+                        <span style="color: var(--text-secondary);">~</span>
+                        <div class="input-group">
+                            <input type="date" name="showEnd" data-tooltip="공연 종료일">
+                        </div>
+                    </div>
                     
-                        투자요청금액 *
-                        
-                            
-                            원
-                        
+                    <div class="form-row">
+                        <label class="form-label">투자금 운용</label>
+                        <div class="input-group">
+                            <input type="date" name="investStart" data-tooltip="투자금 운용 시작일">
+                        </div>
+                        <span style="color: var(--text-secondary);">~</span>
+                        <div class="input-group">
+                            <input type="date" name="investEnd" data-tooltip="투자금 운용 종료일">
+                        </div>
+                    </div>
                     
+                    <div class="form-row">
+                        <label class="form-label">원금 회수</label>
+                        <div class="input-group">
+                            <input type="date" name="principalReturnStart" data-tooltip="원금 회수 시작일">
+                        </div>
+                        <span style="color: var(--text-secondary);">~</span>
+                        <div class="input-group">
+                            <input type="date" name="principalReturnEnd" data-tooltip="원금 회수 완료일">
+                        </div>
+                    </div>
                     
+                    <div class="form-row">
+                        <label class="form-label">수익 분배</label>
+                        <div class="input-group">
+                            <input type="date" name="profitDistStart" data-tooltip="수익 분배 시작일">
+                        </div>
+                        <span style="color: var(--text-secondary);">~</span>
+                        <div class="input-group">
+                            <input type="date" name="profitDistEnd" data-tooltip="수익 분배 완료일">
+                        </div>
+                    </div>
                     
-                        콘서트 일정
-                        
-                            
-                        
-                        ~
-                        
-                            
-                        
-                    
-                    
-                    
-                        투자금 운용
-                        
-                            
-                        
-                        ~
-                        
-                            
-                        
-                    
-                    
-                    
-                        원금 회수
-                        
-                            
-                        
-                        ~
-                        
-                            
-                        
-                    
-                    
-                    
-                        수익 분배
-                        
-                            
-                        
-                        ~
-                        
-                            
-                        
-                    
-                    
-                    
-                        수익 배분
-                        
-                            
-                                투자자
-                                
-                                %
-                            
-                            
-                                사업주체
-                                
-                                %
-                            
-                        
-                    
-                
+                    <div class="form-row">
+                        <label class="form-label">수익 배분</label>
+                        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <label for="investorShare" style="font-weight: 500;">투자자</label>
+                                <input 
+                                    id="investorShare"
+                                    type="number" 
+                                    name="investorShare" 
+                                    min="0" 
+                                    max="100" 
+                                    value="70" 
+                                    style="width: 80px;"
+                                    data-tooltip="투자자가 가져갈 수익 비율"
+                                >
+                                <span style="font-weight: 500;">%</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <label for="ownerShare" style="font-weight: 500;">사업주체</label>
+                                <input 
+                                    id="ownerShare"
+                                    type="number" 
+                                    name="ownerShare" 
+                                    min="0" 
+                                    max="100" 
+                                    value="30" 
+                                    style="width: 80px;"
+                                    data-tooltip="사업주체가 가져갈 수익 비율"
+                                >
+                                <span style="font-weight: 500;">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                
-                
-                    
-                        
+                <!-- 비용 및 수익 섹션 -->
+                <div class="form-section" data-section="financial-info">
+                    <h2 class="section-title">
+                        <i class="fas fa-calculator"></i>
                         비용 및 수익
+                    </h2>
                     
-                    
-                    
-                        비용 내역
-                        
-                            
-                            
-                                
+                    <div class="form-row">
+                        <label class="form-label">비용 내역</label>
+                        <div class="dynamic-list" style="width: 100%;">
+                            <div id="costList" aria-label="비용 목록"></div>
+                            <button 
+                                type="button" 
+                                class="btn btn-primary" 
+                                onclick="addCost()"
+                                data-tooltip="새로운 비용 항목을 추가합니다"
+                            >
+                                <i class="fas fa-plus"></i>
                                 비용 추가
-                            
-                        
+                            </button>
+                        </div>
+                    </div>
                     
-                    
-                    
-                        수익 내역
-                        
-                            
-                            
-                                
+                    <div class="form-row">
+                        <label class="form-label">수익 내역</label>
+                        <div class="dynamic-list" style="width: 100%;">
+                            <div id="revList" aria-label="수익 목록"></div>
+                            <button 
+                                type="button" 
+                                class="btn btn-primary" 
+                                onclick="addRev()"
+                                data-tooltip="새로운 수익 항목을 추가합니다"
+                            >
+                                <i class="fas fa-plus"></i>
                                 수익 추가
-                            
-                        
-                    
-                
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                
-                
-                    
-                        
+                <!-- 액션 버튼 -->
+                <div class="btn-group">
+                    <button 
+                        type="button" 
+                        class="btn btn-primary" 
+                        onclick="calculate()"
+                        data-tooltip="입력된 정보를 바탕으로 수익성을 자동 계산합니다"
+                    >
+                        <i class="fas fa-calculator"></i>
                         자동 계산
-                    
-                    
-                        
+                    </button>
+                    <button 
+                        type="button" 
+                        class="btn btn-success" 
+                        id="pdfBtn" 
+                        onclick="downloadPDF()"
+                        data-tooltip="계산 결과를 PDF 파일로 다운로드합니다"
+                    >
+                        <i class="fas fa-download"></i>
                         PDF 다운로드
-                    
-                    
-                        
+                    </button>
+                    <button 
+                        type="button" 
+                        class="btn btn-warning" 
+                        id="excelBtn" 
+                        onclick="exportToExcel()"
+                        data-tooltip="데이터를 Excel 파일로 내보냅니다"
+                    >
+                        <i class="fas fa-file-excel"></i>
                         Excel 내보내기
-                    
-                
-            
+                    </button>
+                </div>
+            </form>
 
-            
-            
-                
-            
+            <!-- 결과 표시 -->
+            <div class="result" id="result" aria-live="polite" aria-atomic="true">
+                <div class="result-content" id="resultContent"></div>
+            </div>
 
-            
-            
-                
-                    
+            <!-- 차트 섹션 -->
+            <div class="chart-section" id="chartSection">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-pie"></i>
                     투자 분석 차트
-                
-                
-                    
-                        
-                            
+                </h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">
+                            <i class="fas fa-coins"></i>
                             비용 구성
-                        
-                        
-                    
-                    
-                        
-                            
+                        </h3>
+                        <canvas id="costPieChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-bar"></i>
                             수익 vs 비용
-                        
-                        
-                    
-                    
-                        
-                            
+                        </h3>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-line"></i>
                             ROI 분석
-                        
-                        
-                    
-                
-            
-        
+                        </h3>
+                        <canvas id="roiChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        
-        
-            
-            
-            
-        
-    
+        <!-- Progress Indicator -->
+        <div class="progress-dots">
+            <div class="progress-dot active" data-step="1" aria-label="1단계: 정보 입력"></div>
+            <div class="progress-dot" data-step="2" aria-label="2단계: 계산 완료"></div>
+            <div class="progress-dot" data-step="3" aria-label="3단계: 문서 출력"></div>
+        </div>
+    </div>
 
-    
+    <script>
         // ============================================
         // Global Variables and Configuration
         // ============================================
@@ -1426,1094 +1411,199 @@
             ]
         };
 
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('Service Worker registered with scope:', registration.scope))
+                .catch(error => console.error('Service Worker registration failed:', error));
+        }
+
         // ============================================
         // Memory Manager Class
         // ============================================
         
-        class MemoryManager {
-            constructor() {
-                this.eventListeners = new Map();
-                this.intervals = new Set();
-                this.timeouts = new Set();
-                this.observers = new Set();
-                this.setupAutoCleanup();
-            }
-
-            addEventListener(element, event, handler, options) {
-                const key = `${element.id || 'anonymous'}_${event}_${Date.now()}`;
-                
-                if (this.eventListeners.has(key)) {
-                    const { el, evt, fn } = this.eventListeners.get(key);
-                    el.removeEventListener(evt, fn);
-                }
-                
-                element.addEventListener(event, handler, options);
-                this.eventListeners.set(key, { el: element, evt: event, fn: handler });
-            }
-
-            setTimeout(callback, delay) {
-                const timeoutId = setTimeout(() => {
-                    callback();
-                    this.timeouts.delete(timeoutId);
-                }, delay);
-                
-                this.timeouts.add(timeoutId);
-                return timeoutId;
-            }
-
-            setInterval(callback, interval) {
-                const intervalId = setInterval(callback, interval);
-                this.intervals.add(intervalId);
-                return intervalId;
-            }
-
-            addObserver(observer) {
-                this.observers.add(observer);
-                return observer;
-            }
-
-            cleanup() {
-                this.eventListeners.forEach(({ el, evt, fn }) => {
-                    try {
-                        el.removeEventListener(evt, fn);
-                    } catch (e) {
-                        console.warn('Error removing event listener:', e);
-                    }
-                });
-                this.eventListeners.clear();
-
-                this.intervals.forEach(id => clearInterval(id));
-                this.timeouts.forEach(id => clearTimeout(id));
-                this.intervals.clear();
-                this.timeouts.clear();
-
-                this.observers.forEach(observer => {
-                    try {
-                        observer.disconnect();
-                    } catch (e) {
-                        console.warn('Error disconnecting observer:', e);
-                    }
-                });
-                this.observers.clear();
-            }
-
-            setupAutoCleanup() {
-                window.addEventListener('beforeunload', () => {
-                    this.cleanup();
-                });
-            }
-        }
-
+        const memoryManager = new MemoryManager();
+        
         // ============================================
         // Auto Save System
         // ============================================
         
-        class AutoSave {
-            constructor(formId, storageKey) {
-                this.form = document.getElementById(formId);
-                this.storageKey = storageKey;
-                this.lastSave = Date.now();
-                this.init();
-            }
-
-            init() {
-                this.loadData();
-                this.bindEvents();
-            }
-
-            saveData = debounce(() => {
-                try {
-                    const data = this.collectFormData();
-                    data.timestamp = Date.now();
-                    data.version = '2.0';
-                    
-                    localStorage.setItem(this.storageKey, JSON.stringify(data));
-                    this.showSaveIndicator();
-                    this.lastSave = Date.now();
-                } catch (error) {
-                    console.error('Save error:', error);
-                    showNotification('저장 중 오류가 발생했습니다.', 'error');
-                }
-            }, CONFIG.DEBOUNCE_DELAY);
-
-            collectFormData() {
-                const formData = new FormData(this.form);
-                const data = {};
-                
-                // 기본 폼 데이터 수집
-                for (let [key, value] of formData.entries()) {
-                    if (data[key]) {
-                        if (!Array.isArray(data[key])) {
-                            data[key] = [data[key]];
-                        }
-                        data[key].push(value);
-                    } else {
-                        data[key] = value;
-                    }
-                }
-
-                // 체크박스 데이터 수집
-                const checkboxes = this.form.querySelectorAll('input[type="checkbox"]:checked');
-                data.selectedTypes = Array.from(checkboxes).map(cb => cb.value);
-                
-                // 동적 리스트 데이터 수집
-                data.tickets = this.collectDynamicData('ticketList', ['ticketType', 'ticketCount', 'ticketPrice']);
-                data.costs = this.collectDynamicData('costList', ['costname', 'costval']);
-                data.revenues = this.collectDynamicData('revList', ['revname', 'revval']);
-                
-                return data;
-            }
-
-            collectDynamicData(containerId, fieldClasses) {
-                const container = document.getElementById(containerId);
-                const items = container.querySelectorAll('.dynamic-list-item');
-                
-                return Array.from(items).map(item => {
-                    const itemData = {};
-                    fieldClasses.forEach(className => {
-                        const field = item.querySelector(`.${className}`);
-                        if (field) {
-                            itemData[className] = field.value;
-                        }
-                    });
-                    return itemData;
-                }).filter(item => Object.values(item).some(val => val.trim() !== ''));
-            }
-
-            loadData() {
-                try {
-                    const savedData = localStorage.getItem(this.storageKey);
-                    if (!savedData) return false;
-                    
-                    const data = JSON.parse(savedData);
-                    if (!data.version || data.version !== '2.0') {
-                        console.warn('Version mismatch, clearing old data');
-                        localStorage.removeItem(this.storageKey);
-                        return false;
-                    }
-                    
-                    this.populateForm(data);
-                    showNotification('이전 작업 내용을 복원했습니다.', 'success');
-                    return true;
-                } catch (error) {
-                    console.error('Load error:', error);
-                    return false;
-                }
-            }
-
-            populateForm(data) {
-                // 기본 input 필드 채우기
-                Object.keys(data).forEach(key => {
-                    const field = this.form.querySelector(`[name="${key}"]`);
-                    if (field && !['tickets', 'costs', 'revenues', 'selectedTypes'].includes(key)) {
-                        field.value = data[key];
-                    }
-                });
-
-                // 체크박스 복원
-                if (data.selectedTypes) {
-                    data.selectedTypes.forEach(type => {
-                        const checkbox = this.form.querySelector(`input[type="checkbox"][value="${type}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-
-                // 동적 리스트 복원
-                if (data.tickets) {
-                    document.getElementById('ticketList').innerHTML = '';
-                    data.tickets.forEach(ticket => {
-                        addTicket();
-                        const item = document.querySelector('#ticketList .dynamic-list-item:last-child');
-                        if (item) {
-                            item.querySelector('.ticketType').value = ticket.ticketType || '';
-                            item.querySelector('.ticketCount').value = ticket.ticketCount || '';
-                            item.querySelector('.ticketPrice').value = ticket.ticketPrice || '';
-                        }
-                    });
-                }
-
-                if (data.costs) {
-                    document.getElementById('costList').innerHTML = '';
-                    data.costs.forEach(cost => {
-                        addCost();
-                        const item = document.querySelector('#costList .dynamic-list-item:last-child');
-                        if (item) {
-                            item.querySelector('.costname').value = cost.costname || '';
-                            item.querySelector('.costval').value = cost.costval || '';
-                        }
-                    });
-                }
-
-                if (data.revenues) {
-                    document.getElementById('revList').innerHTML = '';
-                    data.revenues.forEach(revenue => {
-                        addRev();
-                        const item = document.querySelector('#revList .dynamic-list-item:last-child');
-                        if (item) {
-                            item.querySelector('.revname').value = revenue.revname || '';
-                            item.querySelector('.revval').value = revenue.revval || '';
-                        }
-                    });
-                }
-            }
-
-            showSaveIndicator() {
-                const indicator = document.getElementById('saveIndicator');
-                indicator.classList.add('visible');
-                setTimeout(() => {
-                    indicator.classList.remove('visible');
-                }, 2000);
-            }
-
-            bindEvents() {
-                const inputs = this.form.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    memoryManager.addEventListener(input, 'input', this.saveData);
-                    memoryManager.addEventListener(input, 'change', this.saveData);
-                });
-            }
-        }
+        const autoSave = new AutoSave('mainForm', CONFIG.STORAGE_KEY);
 
         // ============================================
-        // Smart Validator Class
+        // Smart Validator
         // ============================================
         
-        class SmartValidator {
-            constructor() {
-                this.rules = new Map();
-                this.errors = new Map();
-                this.init();
-            }
-
-            init() {
-                this.defineRules();
-                this.bindValidationEvents();
-            }
-
-            defineRules() {
-                this.rules.set('projectName', {
-                    required: true,
-                    minLength: 2,
-                    message: '프로젝트명은 2자 이상 입력해주세요.'
-                });
-                
-                this.rules.set('artist', {
-                    required: true,
-                    minLength: 1,
-                    message: '아티스트명을 입력해주세요.'
-                });
-
-                this.rules.set('venue', {
-                    required: true,
-                    minLength: 2,
-                    message: '콘서트장을 입력해주세요.'
-                });
-                
-                this.rules.set('seatCount', {
-                    required: true,
-                    type: 'number',
-                    min: 1,
-                    message: '좌석수는 1 이상의 숫자여야 합니다.'
-                });
-
-                this.rules.set('requestAmount', {
-                    required: true,
-                    type: 'number',
-                    min: 1,
-                    message: '투자요청금액은 1원 이상이어야 합니다.'
-                });
-            }
-
-            validateField = debounce((field, value) => {
-                const rule = this.rules.get(field.name);
-                if (!rule) return true;
-
-                const isValid = this.checkRule(value, rule);
-                this.displayValidation(field, isValid, rule.message);
-                
-                return isValid;
-            }, 300);
-
-            checkRule(value, rule) {
-                if (rule.required && (!value || value.toString().trim() === '')) {
-                    return false;
-                }
-                
-                if (rule.type === 'number') {
-                    const numValue = Number(value);
-                    if (isNaN(numValue) || (rule.min !== undefined && numValue  올바르게 입력되었습니다.`;
-                    inputGroup.appendChild(successDiv);
-                } else {
-                    inputGroup.classList.add('error');
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'error-message';
-                    errorDiv.innerHTML = ` ${message}`;
-                    inputGroup.appendChild(errorDiv);
-                }
-            }
-
-            validateForm() {
-                const requiredFields = document.querySelectorAll('input[required]');
-                let isValid = true;
-
-                requiredFields.forEach(field => {
-                    const fieldValid = this.validateField(field, field.value);
-                    if (!fieldValid) isValid = false;
-                });
-
-                // 사업 유형 체크박스 검증
-                const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
-                if (typeCheckboxes.length === 0) {
-                    showNotification('사업 유형을 하나 이상 선택해주세요.', 'error');
-                    isValid = false;
-                }
-
-                return isValid;
-            }
-
-            bindValidationEvents() {
-                const form = document.getElementById('mainForm');
-                const inputs = form.querySelectorAll('input[required]');
-                
-                inputs.forEach(input => {
-                    memoryManager.addEventListener(input, 'blur', (e) => {
-                        this.validateField(e.target, e.target.value);
-                    });
-                    
-                    memoryManager.addEventListener(input, 'input', (e) => {
-                        if (e.target.classList.contains('error')) {
-                            this.validateField(e.target, e.target.value);
-                        }
-                    });
-                });
-            }
-        }
+        const validator = new SmartValidator();
 
         // ============================================
         // Touch Gesture Handler
         // ============================================
         
-        class TouchGestureHandler {
-            constructor() {
-                this.touchStartX = 0;
-                this.touchStartY = 0;
-                this.touchStartTime = 0;
-                this.init();
-            }
-
-            init() {
-                const mainWrap = document.querySelector('.main-wrap');
-                memoryManager.addEventListener(mainWrap, 'touchstart', this.handleTouchStart.bind(this), { passive: false });
-                memoryManager.addEventListener(mainWrap, 'touchmove', this.handleTouchMove.bind(this), { passive: false });
-                memoryManager.addEventListener(mainWrap, 'touchend', this.handleTouchEnd.bind(this), { passive: false });
-            }
-
-            handleTouchStart(e) {
-                const touch = e.touches[0];
-                this.touchStartX = touch.pageX;
-                this.touchStartY = touch.pageY;
-                this.touchStartTime = Date.now();
-                
-                // 터치 피드백
-                if (e.target.closest('.btn') || e.target.closest('.dynamic-list-item')) {
-                    this.addTouchFeedback(e.target.closest('.btn') || e.target.closest('.dynamic-list-item'));
-                }
-            }
-
-            handleTouchMove(e) {
-                // 필요한 경우 스크롤 방지
-                if (this.shouldPreventScroll(e)) {
-                    e.preventDefault();
-                }
-            }
-
-            handleTouchEnd(e) {
-                const touch = e.changedTouches[0];
-                const deltaX = touch.pageX - this.touchStartX;
-                const deltaY = touch.pageY - this.touchStartY;
-                const deltaTime = Date.now() - this.touchStartTime;
-                
-                // 스와이프 제스처 감지 (빠른 움직임, 최소 50px 이동)
-                if (deltaTime  50 && Math.abs(deltaY)  0 ? 'right' : 'left');
-                }
-                
-                // 터치 피드백 제거
-                if (e.target.closest('.btn') || e.target.closest('.dynamic-list-item')) {
-                    this.removeTouchFeedback(e.target.closest('.btn') || e.target.closest('.dynamic-list-item'));
-                }
-            }
-
-            shouldPreventScroll(e) {
-                // 특정 요소에서만 스크롤 방지
-                return e.target.closest('.chart-container') || e.target.closest('.result-content');
-            }
-
-            addTouchFeedback(element) {
-                if (element) {
-                    element.style.transform = 'scale(0.98)';
-                    element.style.transition = 'transform 0.1s ease';
-                }
-            }
-
-            removeTouchFeedback(element) {
-                if (element) {
-                    setTimeout(() => {
-                        element.style.transform = '';
-                    }, 150);
-                }
-            }
-
-            handleSwipe(direction) {
-                // 스와이프 제스처에 따른 액션
-                if (direction === 'left') {
-                    // 왼쪽 스와이프: 다음 단계
-                    updateProgressDots(2);
-                } else if (direction === 'right') {
-                    // 오른쪽 스와이프: 이전 단계
-                    updateProgressDots(1);
-                }
-            }
-        }
+        const touchHandler = new TouchGestureHandler();
 
         // ============================================
         // Performance Optimizer
         // ============================================
         
-        class PerformanceOptimizer {
-            constructor() {
-                this.observer = null;
-                this.rafId = null;
-                this.init();
-            }
-
-            init() {
-                this.setupIntersectionObserver();
-                this.optimizeAnimations();
-                this.monitorPerformance();
-            }
-
-            setupIntersectionObserver() {
-                const options = {
-                    root: null,
-                    rootMargin: '50px',
-                    threshold: 0.1
-                };
-
-                this.observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            // 차트 지연 로딩
-                            if (entry.target.id === 'chartSection') {
-                                this.loadCharts();
-                            }
-                        }
-                    });
-                }, options);
-
-                document.querySelectorAll('.form-section, .chart-section').forEach(section => {
-                    this.observer.observe(section);
-                });
-
-                memoryManager.addObserver(this.observer);
-            }
-
-            optimizeAnimations() {
-                // will-change 속성 동적 적용
-                const animatedElements = document.querySelectorAll('.glass-card, .btn, .dynamic-list-item');
-                
-                animatedElements.forEach(el => {
-                    memoryManager.addEventListener(el, 'mouseenter', () => {
-                        el.style.willChange = 'transform';
-                    });
-                    
-                    memoryManager.addEventListener(el, 'mouseleave', () => {
-                        el.style.willChange = 'auto';
-                    });
-                    
-                    memoryManager.addEventListener(el, 'animationend', () => {
-                        el.style.willChange = 'auto';
-                    });
-
-                    memoryManager.addEventListener(el, 'transitionend', () => {
-                        el.style.willChange = 'auto';
-                    });
-                });
-            }
-
-            loadCharts() {
-                // 차트가 뷰포트에 들어올 때만 로딩
-                if (typeof Chart !== 'undefined') {
-                    Chart.defaults.font.family = 'Inter';
-                    Chart.defaults.color = getComputedStyle(document.documentElement)
-                        .getPropertyValue('--text-secondary').trim();
-                }
-            }
-
-            monitorPerformance() {
-                // 성능 모니터링
-                if ('memory' in performance) {
-                    memoryManager.setInterval(() => {
-                        const memoryInfo = performance.memory;
-                        if (memoryInfo.usedJSHeapSize > memoryInfo.jsHeapSizeLimit * 0.9) {
-                            console.warn('High memory usage detected');
-                            this.performCleanup();
-                        }
-                    }, 30000); // 30초마다 체크
-                }
-            }
-
-            performCleanup() {
-                // 불필요한 DOM 요소 제거
-                document.querySelectorAll('.error-message, .success-message').forEach(msg => {
-                    if (!msg.closest('.input-group.error, .input-group.success')) {
-                        msg.remove();
-                    }
-                });
-
-                // 차트 정리
-                if (costPieChart) {
-                    costPieChart.destroy();
-                    costPieChart = null;
-                }
-                if (revenueChart) {
-                    revenueChart.destroy();
-                    revenueChart = null;
-                }
-                if (roiChart) {
-                    roiChart.destroy();
-                    roiChart = null;
-                }
-            }
-        }
+        const performanceOptimizer = new PerformanceOptimizer();
 
         // ============================================
-        // Utility Functions
+        // Tooltip Manager
         // ============================================
         
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        function throttle(func, limit) {
-            let inThrottle;
-            return function() {
-                const args = arguments;
-                const context = this;
-                if (!inThrottle) {
-                    func.apply(context, args);
-                    inThrottle = true;
-                    setTimeout(() => inThrottle = false, limit);
-                }
-            }
-        }
-
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('ko-KR', {
-                style: 'currency',
-                currency: 'KRW',
-                minimumFractionDigits: 0
-            }).format(amount);
-        }
-
-        function formatNumber(num) {
-            return new Intl.NumberFormat('ko-KR').format(num);
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notification.className = `notification ${type}`;
-            notificationText.textContent = message;
-            
-            // 아이콘 변경
-            const icon = notification.querySelector('i');
-            icon.className = type === 'success' ? 'fas fa-check-circle' :
-                           type === 'error' ? 'fas fa-exclamation-circle' :
-                           type === 'warning' ? 'fas fa-exclamation-triangle' :
-                           'fas fa-info-circle';
-            
-            notification.classList.add('visible');
-            
-            memoryManager.setTimeout(() => {
-                notification.classList.remove('visible');
-            }, 4000);
-        }
-
-        function updateProgressBar(progress) {
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = `${progress}%`;
-        }
-
-        function updateProgressDots(activeStep) {
-            const dots = document.querySelectorAll('.progress-dot');
-            dots.forEach((dot, index) => {
-                const step = index + 1;
-                dot.classList.remove('active', 'completed');
-                
-                if (step  {
-                document.body.style.transition = '';
-            }, 300);
-
-            // 차트 색상 업데이트
-            updateChartColors(newTheme);
-            
-            showNotification(`${newTheme === 'dark' ? '다크' : '라이트'} 모드로 전환되었습니다.`, 'success');
-        }
-
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 
-                              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            const icon = document.getElementById('theme-icon');
-            
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        function updateChartColors(theme) {
-            const textColor = theme === 'dark' ? '#f1f5f9' : '#334155';
-            
-            if (Chart) {
-                Chart.defaults.color = textColor;
-                Chart.defaults.borderColor = theme === 'dark' ? '#334155' : '#e2e8f0';
-                
-                // 기존 차트 업데이트
-                [costPieChart, revenueChart, roiChart].forEach(chart => {
-                    if (chart) {
-                        chart.options.plugins.legend.labels.color = textColor;
-                        chart.options.scales && Object.keys(chart.options.scales).forEach(scaleKey => {
-                            chart.options.scales[scaleKey].ticks.color = textColor;
-                            chart.options.scales[scaleKey].grid.color = theme === 'dark' ? '#334155' : '#e2e8f0';
-                        });
-                        chart.update();
-                    }
-                });
-            }
-        }
+        const tooltipManager = new TooltipManager();
 
         // ============================================
-        // Dynamic List Management
+        // Accessibility Enhancer
         // ============================================
         
-        function addCost() {
-            const item = document.createElement("div");
-            item.className = 'dynamic-list-item';
-            item.innerHTML = `
-                
-                    
-                
-                
-                    
-                
-                
-                    
-                
-            `;
-            
-            document.getElementById("costList").appendChild(item);
-            animateNewItem(item);
-            initTooltips(item);
-            autoSave.saveData();
-        }
-
-        function addRev() {
-            const item = document.createElement("div");
-            item.className = 'dynamic-list-item';
-            item.innerHTML = `
-                
-                    
-                
-                
-                    
-                
-                
-                    
-                
-            `;
-            
-            document.getElementById("revList").appendChild(item);
-            animateNewItem(item);
-            initTooltips(item);
-            autoSave.saveData();
-        }
-
-        function addTicket() {
-            const item = document.createElement("div");
-            item.className = 'dynamic-list-item';
-            item.innerHTML = `
-                
-                    
-                
-                
-                    
-                
-                
-                    
-                
-                
-                    
-                
-            `;
-            
-            document.getElementById("ticketList").appendChild(item);
-            animateNewItem(item);
-            initTooltips(item);
-            autoSave.saveData();
-        }
-
-        function removeItem(button) {
-            const item = button.closest('.dynamic-list-item');
-            item.style.animation = 'itemSlideOut 0.3s ease-in forwards';
-            
-            memoryManager.setTimeout(() => {
-                item.remove();
-                autoSave.saveData();
-            }, 300);
-        }
-
-        function animateNewItem(item) {
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(-30px)';
-            
-            memoryManager.setTimeout(() => {
-                item.style.transition = 'all 0.4s ease-out';
-                item.style.opacity = '1';
-                item.style.transform = 'translateX(0)';
-            }, 10);
-        }
+        const accessibilityEnhancer = new AccessibilityEnhancer();
 
         // ============================================
-        // Calculation Logic
+        // Theme Initialization
         // ============================================
         
-        function calculate() {
-            // 유효성 검사
-            if (!validator.validateForm()) {
-                showNotification('입력 정보를 확인해주세요.', 'error');
-                return;
-            }
+        initTheme();
+
+        // ============================================
+        // Initial Setup
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial items
+            addCost();
+            addRev();
+            addTicket();
+            
+            // Update progress
+            updateProgressDots(1);
+        });
+
+        // ============================================
+        // Export Functions
+        // ============================================
+        
+        function exportToExcel() {
+            const data = autoSave.collectFormData();
+            const worksheetData = [
+                { '항목': '사업명', '값': data.projectName },
+                { '항목': '아티스트', '값': data.artist },
+                { '항목': '콘서트장', '값': data.venue },
+                { '항목': '좌석수', '값': data.seatCount },
+                { '항목': '투자요청금액', '값': data.requestAmount },
+                // Add more fields and dynamic data
+            ];
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(worksheetData);
+            XLSX.utils.book_append_sheet(wb, ws, "제안서 데이터");
+            XLSX.writeFile(wb, "investment-proposal.xlsx");
+            showNotification('Excel 내보내기 완료', 'success');
+        }
+
+        // ============================================
+        // PDF Download with Improvements
+        // ============================================
+        
+        async function downloadPDF() {
+            const pdfBtn = document.getElementById('pdfBtn');
+            const originalHTML = pdfBtn.innerHTML;
+            
+            pdfBtn.disabled = true;
+            pdfBtn.innerHTML = '<div class="loading"></div> 생성중...';
 
             try {
-                const results = performCalculation();
-                displayResults(results);
-                createCharts(results);
-                updateProgressDots(2);
-                showNotification('계산이 완료되었습니다.', 'success');
+                calculate(); // Ensure latest data
+                
+                const element = document.getElementById('pdf-content');
+                
+                // Apply PDF mode
+                element.classList.add('pdf-mode');
+
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    allowTaint: true,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.98); // Improved quality
+                
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                
+                // Add image
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                
+                // Add searchable text layer
+                pdf.setFont('helvetica');
+                pdf.setFontSize(10);
+                pdf.setTextColor(0, 0, 0);
+                const text = extractTextFromDOM(element);
+                pdf.text(text, 10, 10, { maxWidth: pdfWidth - 20 });
+
+                const projectName = document.querySelector('input[name="projectName"]').value || '투자제안서';
+                pdf.save(`${projectName}_투자제안서.pdf`);
+
+                element.classList.remove('pdf-mode');
+                showNotification('PDF 다운로드 완료', 'success');
+                updateProgressDots(3);
             } catch (error) {
-                console.error('Calculation error:', error);
-                showNotification('계산 중 오류가 발생했습니다.', 'error');
+                console.error('PDF error:', error);
+                showNotification('PDF 생성 중 오류 발생', 'error');
+            } finally {
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = originalHTML;
             }
         }
 
-        function performCalculation() {
-            let totalCost = 0, totalRevenue = 0, ticketRevenue = 0;
-
-            // 비용 계산
-            document.querySelectorAll('.costval').forEach(input => {
-                const value = Number(input.value || 0);
-                if (value > 0) totalCost += value;
-            });
-
-            // 기타 수익 계산
-            document.querySelectorAll('.revval').forEach(input => {
-                const value = Number(input.value || 0);
-                if (value > 0) totalRevenue += value;
-            });
-
-            // 티켓 수익 계산
-            const ticketData = [];
-            document.querySelectorAll('.ticketCount').forEach((countInput, i) => {
-                const priceInput = document.querySelectorAll('.ticketPrice')[i];
-                const typeInput = document.querySelectorAll('.ticketType')[i];
-                
-                const count = Number(countInput.value || 0);
-                const price = Number(priceInput.value || 0);
-                const type = typeInput.value || `티켓 ${i + 1}`;
-                
-                if (count > 0 && price > 0) {
-                    const revenue = count * price;
-                    ticketRevenue += revenue;
-                    ticketData.push({ type, count, price, revenue });
-                }
-            });
-
-            totalRevenue += ticketRevenue;
-
-            // 주요 지표 계산
-            const netProfit = totalRevenue - totalCost;
-            const ROI = totalCost > 0 ? ((netProfit / totalCost) * 100) : 0;
-            
-            // BEP 계산 (개선된 로직)
-            const totalTickets = ticketData.reduce((sum, ticket) => sum + ticket.count, 0);
-            const avgTicketPrice = totalTickets > 0 ? ticketRevenue / totalTickets : 0;
-            const BEP = avgTicketPrice > 0 ? Math.ceil(totalCost / avgTicketPrice) : 0;
-
-            // 수익 배분 계산
-            const investorShare = Number(document.querySelector('input[name=investorShare]').value || 70);
-            const ownerShare = 100 - investorShare;
-            
-            const investorProfit = netProfit > 0 ? Math.floor(netProfit * investorShare / 100) : 0;
-            const ownerProfit = netProfit > 0 ? Math.floor(netProfit * ownerShare / 100) : 0;
-
-            // 투자 회수 기간 계산 (단순화)
-            const requestAmount = Number(document.querySelector('input[name=requestAmount]').value || 0);
-            const monthlyProfit = investorProfit / 12; // 연간 수익을 월간으로 나눔
-            const paybackPeriod = monthlyProfit > 0 ? Math.ceil(requestAmount / monthlyProfit) : Infinity;
-
-            return {
-                totalCost,
-                totalRevenue,
-                ticketRevenue,
-                netProfit,
-                ROI,
-                BEP,
-                investorShare,
-                ownerShare,
-                investorProfit,
-                ownerProfit,
-                requestAmount,
-                paybackPeriod,
-                ticketData
-            };
-        }
-
-        function displayResults(results) {
-            const resultContent = document.getElementById("resultContent");
-            const delay = 100; // 애니메이션 지연 시간
-            
-            resultContent.innerHTML = `
-                
-                    
-                        
-                        총 비용
-                    
-                    ${formatCurrency(results.totalCost)}
-                
-                
-                    
-                        
-                        총 수익
-                    
-                    ${formatCurrency(results.totalRevenue)}
-                
-                
-                    
-                        
-                        순 수익
-                    
-                    = 0 ? 'positive' : 'negative'}">
-                        ${formatCurrency(results.netProfit)}
-                    
-                
-                
-                    
-                        
-                        ROI
-                    
-                    = 0 ? 'positive' : 'negative'}">
-                        ${results.ROI.toFixed(2)}%
-                    
-                
-                
-                    
-                        
-                        손익분기점
-                    
-                    ${formatNumber(results.BEP)}매
-                
-                
-                    
-                        
-                        투자자 수익
-                    
-                    
-                        ${formatCurrency(results.investorProfit)} (${results.investorShare}%)
-                    
-                
-                
-                    
-                        
-                        사업주체 수익
-                    
-                    
-                        ${formatCurrency(results.ownerProfit)} (${results.ownerShare}%)
-                    
-                
-                ${results.paybackPeriod !== Infinity ? `
-                
-                    
-                        
-                        투자 회수 기간
-                    
-                    
-                        약 ${results.paybackPeriod}개월
-                    
-                
-                ` : ''}
-            `;
-
-            const resultDiv = document.getElementById("result");
-            resultDiv.classList.add("visible");
-            
-            // 차트 섹션 표시
-            const chartSection = document.getElementById("chartSection");
-            memoryManager.setTimeout(() => {
-                chartSection.classList.add("visible");
-            }, 500);
+        function extractTextFromDOM(element) {
+            return element.innerText.replace(/\s+/g, ' ').trim();
         }
 
         // ============================================
-        // Chart Creation
+        // Initialization
         // ============================================
         
-        function createCharts(results) {
-            createCostPieChart(results);
-            createRevenueChart(results);
-            createROIChart(results);
+        // Add initial items and setup
+        addCost();
+        addRev();
+        addTicket();
+
+        // Update progress
+        updateProgressDots(1);
+
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(new URL('sw.js', import.meta.url), {type: 'module'});
         }
+    </script>
+    <script type="module">
+        // Service Worker for Offline Support (sw.js content as inline for completeness)
+        self.addEventListener('install', (event) => {
+            event.waitUntil(
+                caches.open('app-cache').then(cache => {
+                    return cache.addAll([
+                        '/', 
+                        '/index.html', 
+                        // Add other assets
+                    ]);
+                })
+            );
+        });
 
-        function createCostPieChart(results) {
-            const ctx = document.getElementById('costPieChart').getContext('2d');
-            
-            // 기존 차트 삭제
-            if (costPieChart) {
-                costPieChart.destroy();
-            }
-
-            const costData = [];
-            const costLabels = [];
-            const costColors = [];
-
-            // 비용 데이터 수집
-            document.querySelectorAll('.costval').forEach((input, index) => {
-                const nameInput = document.querySelectorAll('.costname')[index];
-                const value = Number(input.value || 0);
-                const name = nameInput ? nameInput.value || `비용 ${index + 1}` : `비용 ${index + 1}`;
-                
-                if (value > 0) {
-                    costData.push(value);
-                    costLabels.push(name);
-                    costColors.push(CONFIG.CHART_COLORS[index % CONFIG.CHART_COLORS.length]);
-                }
-            });
-
-            costPieChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: costLabels,
-                    datasets: [{
-                        data: costData,
-                        backgroundColor: costColors,
-                        borderColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
-                        borderWidth: 3,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
-                                font: {
-                                    size: 12,
-                                    weight: '500'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = formatCurrency(context.raw);
-                                    const percentage = ((context.raw / results.totalCost) * 100).toFixed(1);
-                                    return `${label}: ${value} (${percentage}%)`;
-                                }
-                            }
-                        }
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                        duration: 1000
-                    }
-                }
-            });
-        }
-
-        function createRevenueChart(results) {
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-            
-            if (revenueChart) {
-                revenueChart.destroy();
-            }
-
-            revenueChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['총 비용', '총 수익', '순 수익'],
-                    datasets: [{
-                        label: '금액 (원)',
-                        data: [results.totalCost, results.totalRevenue, results.netProfit],
-                        backgroundColor: [
-                            '#f43f5e',
-                            '#22c55e', 
-                            results.netProfit >= 0 ? '#3b82f6' : '#ef4444'
-                        ],
-                        borderColor: [
-                            '#e11d48',
-                            '#16a34a',
-                            results.netProfit >= 0 ? '#2563eb' : '#dc2626'
-                        ],
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${formatCurrency(context.raw)}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return formatCurrency(value);
-                                }
-                            },
-                            grid: {
-                                color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e2e8f0'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    },
-                    animation: {
-                        duration: 1
+        self.addEventListener('fetch', (event) => {
+            event.respondWith(
+                caches.match(event.request).then(response => {
+                    return response || fetch(event.request);
+                })
+            );
+        });
+    </script>
+</body>
+</html>
