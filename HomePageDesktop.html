@@ -9,3 +9,38 @@
     </ul>
   </nav>
 </header>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Calculator</title>
+    <script>
+        function calculateInvestment() {
+            var principal = parseFloat(document.getElementById('principal').value);
+            var interestRate = parseFloat(document.getElementById('rate').value) / 100;
+            var years = parseFloat(document.getElementById('years').value);
+            var finalAmount = principal * Math.pow((1 + interestRate), years);
+            document.getElementById('result').innerText = 'Final Amount: $' + finalAmount.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <h1>Investment Calculator</h1>
+    <div>
+        <label for="principal">Principal Amount:</label>
+        <input type="number" id="principal" required>
+    </div>
+    <div>
+        <label for="rate">Annual Interest Rate (%):</label>
+        <input type="number" id="rate" required>
+    </div>
+    <div>
+        <label for="years">Number of Years:</label>
+        <input type="number" id="years" required>
+    </div>
+    <button onclick="calculateInvestment()">Calculate</button>
+    <p id="result"></p>
+</body>
+</html>
